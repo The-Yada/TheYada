@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TheYada.iml" filepath="$PROJECT_DIR$/.idea/modules/TheYada.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TheYada_main.iml" filepath="$PROJECT_DIR$/.idea/modules/TheYada_main.iml" group="TheYada" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TheYada_test.iml" filepath="$PROJECT_DIR$/.idea/modules/TheYada_test.iml" group="TheYada" />
+    </modules>
+  </component>
+</project>
