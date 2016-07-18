@@ -19,7 +19,7 @@ public class User {
     @Column
     int karma;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     public List<YadaUserJoin> yadaUserJoinList;
 
     public int getId() {
@@ -50,6 +50,14 @@ public class User {
 
         this.username = username;
         this.karma = karma;
+    }
+
+    public List<YadaUserJoin> getYadaUserJoinList() {
+        return yadaUserJoinList;
+    }
+
+    public void setYadaUserJoinList(List<YadaUserJoin> yadaUserJoinList) {
+        this.yadaUserJoinList = yadaUserJoinList;
     }
 
     public User(int id, String username, int karma) {
