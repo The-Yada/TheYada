@@ -1,6 +1,7 @@
 package com.theironyard.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by jonathandavidblack on 7/18/16.
@@ -12,11 +13,14 @@ public class User {
     @GeneratedValue
     int id;
 
-    @Column
+    @Column(nullable = false)
     String username;
 
     @Column
     int karma;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    public List<YadaUserJoin> yadaUserJoinList;
 
     public int getId() {
         return id;
