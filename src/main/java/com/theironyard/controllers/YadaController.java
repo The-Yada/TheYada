@@ -1,5 +1,6 @@
 package com.theironyard.controllers;
 
+import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
@@ -32,11 +33,11 @@ public class YadaController {
 
     @PostConstruct
     public void init() throws SQLException, FileNotFoundException {
-        Server.createWebServer().start();
         if (yadas.count() == 0) {
             parseYadas("yadas.csv");
         }
     }
+    //parsing yada file for dummy data
     public void parseYadas(String fileName) throws FileNotFoundException {
         if (yadas.count() == 0) {
             File yadaFile = new File(fileName);
@@ -44,9 +45,10 @@ public class YadaController {
             fileScanner.nextLine();
             while (fileScanner.hasNext()) {
                 String[] columns = fileScanner.nextLine().split(",");
-                Yada yada = new Yada();
+                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), columns[2], LocalDateTime.now(), Double.valueOf(columns[3]), users.findOne(Integer.valueOf(columns[4])));
                 yadas.save(yada);
 
             }
-
+        }
+    }
 }

@@ -1,0 +1,12 @@
+string content,int karma,string url,double weight,userId
+first Yada!!!,0,http://www.nytimes.com/2016/07/18/us/baton-rouge-shooting.html?ref=todayspaper,0.5,0
+this is the second Yada,0,,0.1,1
+THIRD,2,,0.2,2
+FOURTH,4,,0.3,3
+FIFTH,10,,0.4,4
+SIXTH,0,,0.5,5
+SEVENTH,0,,0.6,6
+EIGHTH,45,,0.7,7
+NINTH,100,,0.8,8
+TENTH,55,,0.9,9
+ELEVENTH,111,,1,10
