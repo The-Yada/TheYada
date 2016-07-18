@@ -3,6 +3,7 @@ package com.theironyard.controllers;
 import com.theironyard.entities.Yada;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
+import com.theironyard.services.YadaUserJoinRepository;
 import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,9 @@ public class YadaRestController {
     @Autowired
     YadaRepository yadas;
 
+    @Autowired
+    YadaUserJoinRepository yadaUserJoinRepo;
+
     // start h2 database
     @PostConstruct
     public void init() throws SQLException {
@@ -33,15 +37,15 @@ public class YadaRestController {
     }
 
     // get route for yadas
-    @RequestMapping(path = "/yadas", method = RequestMethod.GET)
-    public Page<Yada> getYadas(Integer page, double weight) {
-
-        page = (page == null) ? 0 : page;
-        PageRequest pageRequest = new PageRequest(page, 10);
-
-        Page<Yada> pageOfYadas;
-        pageOfYadas = yadas.findByWeightDesc(pageRequest, weight);
-
-        return pageOfYadas;
-    }
+//    @RequestMapping(path = "/yadas", method = RequestMethod.GET)
+//    public Page<Yada> getYadas(Integer page, double weight) {
+//
+//        page = (page == null) ? 0 : page;
+//        PageRequest pageRequest = new PageRequest(page, 10);
+//
+//        Page<Yada> pageOfYadas;
+//        pageOfYadas = yadas.findByWeightDesc(pageRequest, weight);
+//
+//        return pageOfYadas;
+//    }
 }
