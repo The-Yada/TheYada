@@ -7,7 +7,8 @@ import javax.persistence.*;
 /**
  * Created by jonathandavidblack on 7/18/16.
  */
-@Table(name = "yadaUserJoins")
+@Entity
+@Table(name = "yada_user_joins")
 public class YadaUserJoin {
 
     @Id
@@ -15,7 +16,7 @@ public class YadaUserJoin {
     int id;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     User user;
 
     @ManyToOne

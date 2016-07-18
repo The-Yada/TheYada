@@ -1,6 +1,6 @@
 string content,int karma,string url,double weight,userId
 first Yada!!!,0,http://www.nytimes.com/2016/07/18/us/baton-rouge-shooting.html?ref=todayspaper,0.5,0
-this is the second Yada,0,http://www.nytimes.com/interactive/2016/07/07/opinion/campaign-stops/donald-trumps-convention-day-1.html?list_item=security-moms-who-could-vote-for-trump&action=click&pgtype=Homepage&clickSource=story-heading&module=opinion-c-col-left-region&region=opinion-c-col-left-region&WT.nav=opinion-c-col-left-region,0.1,1
+this is the second Yada,0, //www.nytimes.com
 THIRD,2,http://www.nytimes.com/2016/07/19/sports/report-confirms-state-sponsored-doping-by-russia-at-olympics.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news,0.2,2
 FOURTH,4,http://www.nytimes.com/2016/07/17/magazine/the-mysterious-metamorphosis-of-chuck-close.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=mini-moth&region=top-stories-below&WT.nav=top-stories-below,0.3,3
 FIFTH,10,http://www.nytimes.com/2016/07/19/movies/so-thats-who-you-call-the-politics-of-the-new-ghostbusters.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=mini-moth&region=top-stories-below&WT.nav=top-stories-below,0.4,4
