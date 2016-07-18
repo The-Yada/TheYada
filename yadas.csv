@@ -1,12 +1,12 @@
 string content,int karma,string url,double weight,userId
 first Yada!!!,0,http://www.nytimes.com/2016/07/18/us/baton-rouge-shooting.html?ref=todayspaper,0.5,0
-this is the second Yada,0,,0.1,1
-THIRD,2,,0.2,2
-FOURTH,4,,0.3,3
-FIFTH,10,,0.4,4
-SIXTH,0,,0.5,5
-SEVENTH,0,,0.6,6
-EIGHTH,45,,0.7,7
-NINTH,100,,0.8,8
-TENTH,55,,0.9,9
-ELEVENTH,111,,1,10
+this is the second Yada,0,http://www.nytimes.com/interactive/2016/07/07/opinion/campaign-stops/donald-trumps-convention-day-1.html?list_item=security-moms-who-could-vote-for-trump&action=click&pgtype=Homepage&clickSource=story-heading&module=opinion-c-col-left-region&region=opinion-c-col-left-region&WT.nav=opinion-c-col-left-region,0.1,1
+THIRD,2,http://www.nytimes.com/2016/07/19/sports/report-confirms-state-sponsored-doping-by-russia-at-olympics.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news,0.2,2
+FOURTH,4,http://www.nytimes.com/2016/07/17/magazine/the-mysterious-metamorphosis-of-chuck-close.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=mini-moth&region=top-stories-below&WT.nav=top-stories-below,0.3,3
+FIFTH,10,http://www.nytimes.com/2016/07/19/movies/so-thats-who-you-call-the-politics-of-the-new-ghostbusters.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=mini-moth&region=top-stories-below&WT.nav=top-stories-below,0.4,4
+SIXTH,0,http://www.bbc.com/news/live/election-us-2016-35404043,0.5,5
+SEVENTH,0,http://www.bbc.com/news/world-europe-36829574,0.6,6
+EIGHTH,45,http://www.cnn.com/2016/07/18/europe/turkey-president-erdogan-interview-coup/index.html,0.7,7
+NINTH,100,http://www.cnn.com/2016/07/15/tennis/milos-raonic-olympics-tennis-zika/index.html,0.8,8
+TENTH,55,http://www.cnn.com/2016/07/18/politics/rnc-procedural-votes-rules-committee/index.html,0.9,9
+ELEVENTH,111,http://www.cnn.com/2016/07/17/politics/obama-baton-rouge-shootings-of-police/index.html,1,10
