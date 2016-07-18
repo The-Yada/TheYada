@@ -1,6 +1,7 @@
 package com.theironyard.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by jonathandavidblack on 7/18/16.
@@ -12,11 +13,14 @@ public class User {
     @GeneratedValue
     int id;
 
-    @Column
+    @Column(nullable = false)
     String username;
 
     @Column
     int karma;
+
+    @OneToMany(mappedBy = "user")
+    public List<YadaUserJoin> yadaUserJoinList;
 
     public int getId() {
         return id;
@@ -46,6 +50,14 @@ public class User {
 
         this.username = username;
         this.karma = karma;
+    }
+
+    public List<YadaUserJoin> getYadaUserJoinList() {
+        return yadaUserJoinList;
+    }
+
+    public void setYadaUserJoinList(List<YadaUserJoin> yadaUserJoinList) {
+        this.yadaUserJoinList = yadaUserJoinList;
     }
 
     public User(int id, String username, int karma) {
