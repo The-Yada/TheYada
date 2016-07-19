@@ -31,10 +31,28 @@ public class YadaController {
     @Autowired
     YadaUserJoinRepository yadaUserJoinRepo;
 
+
     @PostConstruct
     public void init() throws SQLException, FileNotFoundException {
+        if(users.count() == 0) {
+            parseUsers("users.csv");
+        }
+
         if (yadas.count() == 0) {
             parseYadas("yadas.csv");
+        }
+    }
+    public void parseUsers(String fileName) throws FileNotFoundException {
+        if (users.count() == 0) {
+            File usersFile = new File(fileName);
+            Scanner fileScanner = new Scanner(usersFile);
+            fileScanner.nextLine();
+            while (fileScanner.hasNext()) {
+                String[] columns = fileScanner.nextLine().split(",");
+                User user = new User(columns[0], Integer.valueOf(columns[1]));
+                users.save(user);
+
+            }
         }
     }
     //parsing yada file for dummy data

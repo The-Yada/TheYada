@@ -5,6 +5,10 @@ import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
 import org.h2.tools.Server;
+import org.hibernate.jpa.event.internal.core.JpaSaveOrUpdateEventListener;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -32,28 +37,26 @@ public class YadaRestController {
     YadaUserJoinRepository yadaUserJoinRepo;
 
     // start h2 database
-//    @PostConstruct
-//    public void init() throws SQLException, InterruptedException {
-//        Server.createWebServer().start();
-//
+    @PostConstruct
+    public void init() throws SQLException {
+        Server.createWebServer().start();
+        soupThatSite("http://www.npr.org/2016/07/18/486543063/trump-campaign-outlines-how-to-make-america-safe-again-on-first-night-of-rnc");
+
 //        while (true) {
 //            // sort posts, wait 1 second, infinitely
 //            // sortPosts();
 //            // Thread.sleep(1000);
 //        }
-//
-//
-//    }
-//
-//    public void sortYadasByScore() {
+    }
+
+    public void sortYadasByScore() {
 //        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAll();
 //        yadaList.parallelStream()
 //
 //    }
 
 
-
-    // get route for yadas
+        // get route for yadas
 //    @RequestMapping(path = "/yadas", method = RequestMethod.GET)
 //    public Page<Yada> getYadas(Integer page, double weight) {
 //
@@ -65,4 +68,32 @@ public class YadaRestController {
 //
 //        return pageOfYadas;
 //    }
+
+    public String soupThatSite(String url) throws IOException {
+
+        Document doc = Jsoup.connect(url).get();
+        String text = "";
+
+        for (Element element1 : doc.select("h1")) {
+
+            if (element1.hasText()) {
+                text.concat(element1.text());
+
+            }
+        }
+
+        for( Element element : doc.select("p")) {
+
+            if( element.hasText()) {
+                text.concat((element.text()));
+                System.out.println(element);
+            }
+        }
+
+        return text;
+    }
 }
+//    String fileToServe = "";
+//doc.select("h1").stream().filter(Element::hasText).forEach(element -> fileToServe.concat(element.text()));
+//        doc.select("p").stream().filter(Element::hasText).forEach(element -> fileToServe.concat(element.text()));
+//        System.out.println(fileToServe);

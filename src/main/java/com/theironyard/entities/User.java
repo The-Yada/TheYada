@@ -22,6 +22,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     public List<YadaUserJoin> yadaUserJoinList;
 
+    public User() {
+    }
+
     public int getId() {
         return id;
     }
@@ -66,4 +69,5 @@ public class User {
         this.username = username;
         this.karma = karma;
     }
+
 }
