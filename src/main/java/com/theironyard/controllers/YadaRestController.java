@@ -89,4 +89,16 @@ public class YadaRestController {
 
         return parsedDoc;
     }
+
+    // algo attempt 1
+
+//    public ArrayList<Yada> getYadas() {
+//        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAll();
+//        yadaList.parallelStream()
+//
+//
+//    }
+
+
+
 }
