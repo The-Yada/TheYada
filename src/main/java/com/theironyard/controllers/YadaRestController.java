@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by will on 7/18/16.
@@ -31,10 +32,26 @@ public class YadaRestController {
     YadaUserJoinRepository yadaUserJoinRepo;
 
     // start h2 database
-    @PostConstruct
-    public void init() throws SQLException {
-        Server.createWebServer().start();
-    }
+//    @PostConstruct
+//    public void init() throws SQLException, InterruptedException {
+//        Server.createWebServer().start();
+//
+//        while (true) {
+//            // sort posts, wait 1 second, infinitely
+//            // sortPosts();
+//            // Thread.sleep(1000);
+//        }
+//
+//
+//    }
+//
+//    public void sortYadasByScore() {
+//        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAll();
+//        yadaList.parallelStream()
+//
+//    }
+
+
 
     // get route for yadas
 //    @RequestMapping(path = "/yadas", method = RequestMethod.GET)

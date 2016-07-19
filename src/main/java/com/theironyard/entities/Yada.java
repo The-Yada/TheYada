@@ -26,7 +26,7 @@ public class Yada {
     LocalDateTime time;
 
     @Column(nullable = false)
-    double weight;
+    int score;
 
     @ManyToOne
     User user;
@@ -34,12 +34,12 @@ public class Yada {
     public Yada() {
     }
 
-    public Yada(String content, int karma, String url, LocalDateTime time, double weight, User user) {
+    public Yada(String content, int karma, String url, LocalDateTime time, int score, User user) {
         this.content = content;
         this.karma = karma;
         this.url = url;
         this.time = time;
-        this.weight = weight;
+        this.score = score;
         this.user = user;
     }
 
@@ -83,12 +83,12 @@ public class Yada {
         this.time = time;
     }
 
-    public double getWeight() {
-        return weight;
+    public double getScore() {
+        return score;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public User getUser() {
