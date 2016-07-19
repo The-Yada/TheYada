@@ -63,7 +63,7 @@ public class YadaController {
             fileScanner.nextLine();
             while (fileScanner.hasNext()) {
                 String[] columns = fileScanner.nextLine().split(",");
-                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), columns[2], LocalDateTime.now(), Double.valueOf(columns[3]), users.findOne(Integer.valueOf(columns[4])));
+                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), columns[2], LocalDateTime.now(), Integer.valueOf(columns[3]), users.findOne(Integer.valueOf(columns[4])));
                 yadas.save(yada);
 
             }

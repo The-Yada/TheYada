@@ -38,10 +38,11 @@ public class YadaRestController {
 
     // start h2 database
     @PostConstruct
-    public void init() throws SQLException {
+    public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.npr.org/2016/07/18/486543063/trump-campaign-outlines-how-to-make-america-safe-again-on-first-night-of-rnc");
 
+        // in progress
 //        while (true) {
 //            // sort posts, wait 1 second, infinitely
 //            // sortPosts();
@@ -49,14 +50,15 @@ public class YadaRestController {
 //        }
     }
 
-    public void sortYadasByScore() {
+    // in progress
+//    public void sortYadasByScore() {
 //        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAll();
 //        yadaList.parallelStream()
 //
 //    }
 
 
-        // get route for yadas
+    // get route for yadas
 //    @RequestMapping(path = "/yadas", method = RequestMethod.GET)
 //    public Page<Yada> getYadas(Integer page, double weight) {
 //
@@ -68,32 +70,4 @@ public class YadaRestController {
 //
 //        return pageOfYadas;
 //    }
-
-    public String soupThatSite(String url) throws IOException {
-
-        Document doc = Jsoup.connect(url).get();
-        String text = "";
-
-        for (Element element1 : doc.select("h1")) {
-
-            if (element1.hasText()) {
-                text.concat(element1.text());
-
-            }
-        }
-
-        for( Element element : doc.select("p")) {
-
-            if( element.hasText()) {
-                text.concat((element.text()));
-                System.out.println(element);
-            }
-        }
-
-        return text;
-    }
 }
-//    String fileToServe = "";
-//doc.select("h1").stream().filter(Element::hasText).forEach(element -> fileToServe.concat(element.text()));
-//        doc.select("p").stream().filter(Element::hasText).forEach(element -> fileToServe.concat(element.text()));
-//        System.out.println(fileToServe);

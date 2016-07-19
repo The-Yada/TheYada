@@ -9,5 +9,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * Created by will on 7/18/16.
  */
 public interface YadaRepository extends PagingAndSortingRepository<Yada, Integer> {
-   Page<Yada> findByScoreDesc(Pageable pageable, int score);
+//   Page<Yada> findByScoreDesc(Pageable pageable, int score);
 }
