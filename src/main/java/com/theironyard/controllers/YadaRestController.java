@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by will on 7/18/16.
@@ -56,31 +57,22 @@ public class YadaRestController {
 //        return pageOfYadas;
 //    }
 
-    public String soupThatSite(String url) throws IOException {
+    public ArrayList<String> soupThatSite(String url) throws IOException {
 
         Document doc = Jsoup.connect(url).get();
-        String text = "";
 
-        for (Element element1 : doc.select("h1")) {
+        ArrayList<String> parsedDoc = new ArrayList<>();
+        doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
+            String str = element1.text();
+            parsedDoc.add(str);
+        });
 
-            if (element1.hasText()) {
-                text.concat(element1.text());
+        doc.select("p").stream().filter(Element::hasText).forEach(element -> {
+            String str = element.text();
+            parsedDoc.add(str);
+        });
 
-            }
-        }
-
-        for( Element element : doc.select("p")) {
-
-            if( element.hasText()) {
-                text.concat((element.text()));
-                System.out.println(element);
-            }
-        }
-
-        return text;
+        System.out.println(parsedDoc);
+        return parsedDoc;
     }
 }
-//    String fileToServe = "";
-//doc.select("h1").stream().filter(Element::hasText).forEach(element -> fileToServe.concat(element.text()));
-//        doc.select("p").stream().filter(Element::hasText).forEach(element -> fileToServe.concat(element.text()));
-//        System.out.println(fileToServe);
