@@ -40,8 +40,7 @@ public class YadaRestController {
     @PostConstruct
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
-        soupThatSite("http://www.npr.org/2016/07/18/486543063/trump-campaign-outlines-how-to-make-america-safe-again-on-first-night-of-rnc");
-
+        soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
     }
 
     // get route for yadas
@@ -56,23 +55,38 @@ public class YadaRestController {
 //
 //        return pageOfYadas;
 //    }
-
+    //solid start to scraping
+    //should come up with a list of sites that work and cover bases accordingly
     public ArrayList<String> soupThatSite(String url) throws IOException {
-
+        ArrayList<String> parsedDoc = new ArrayList<>();
         Document doc = Jsoup.connect(url).get();
 
-        ArrayList<String> parsedDoc = new ArrayList<>();
-        doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
-            String str = element1.text();
-            parsedDoc.add(str);
-        });
+        if (url.contains("cnn.com")) {
 
-        doc.select("p").stream().filter(Element::hasText).forEach(element -> {
-            String str = element.text();
-            parsedDoc.add(str);
-        });
+            doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
+                String str = element1.text();
+                parsedDoc.add(str);
+            });
 
+            doc.select(".zn-body__paragraph").stream().filter(Element::hasText).forEach(element1 -> {
+                String str = element1.text();
+                parsedDoc.add(str);
+            });
+        }
+            else {
+
+            doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
+                String str = element1.text();
+                parsedDoc.add(str);
+            });
+
+            doc.select("p").stream().filter(Element::hasText).forEach(element -> {
+                String str = element.text();
+                parsedDoc.add(str);
+            });
+        }
         System.out.println(parsedDoc);
+
         return parsedDoc;
     }
 }
