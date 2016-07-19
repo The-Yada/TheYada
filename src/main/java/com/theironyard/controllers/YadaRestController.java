@@ -27,6 +27,8 @@ import java.util.ArrayList;
 @RestController
 public class YadaRestController {
 
+    static final String WEBSITE_URL = "http://www.foxnews.com/politics/2016/07/19/trump-eyes-prize-as-republicans-start-roll-call-for-nomination.html";
+
     @Autowired
     UserRepository users;
 
@@ -40,7 +42,6 @@ public class YadaRestController {
     @PostConstruct
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
-        soupThatSite("http://www.npr.org/2016/07/18/486543063/trump-campaign-outlines-how-to-make-america-safe-again-on-first-night-of-rnc");
 
         // in progress
 //        while (true) {
@@ -71,22 +72,5 @@ public class YadaRestController {
 //        return pageOfYadas;
 //    }
 
-    public ArrayList<String> soupThatSite(String url) throws IOException {
 
-        Document doc = Jsoup.connect(url).get();
-
-        ArrayList<String> parsedDoc = new ArrayList<>();
-        doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
-            String str = element1.text();
-            parsedDoc.add(str);
-        });
-
-        doc.select("p").stream().filter(Element::hasText).forEach(element -> {
-            String str = element.text();
-            parsedDoc.add(str);
-        });
-
-        System.out.println(parsedDoc);
-        return parsedDoc;
-    }
 }
