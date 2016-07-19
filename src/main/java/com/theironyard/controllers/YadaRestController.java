@@ -27,8 +27,6 @@ import java.util.ArrayList;
 @RestController
 public class YadaRestController {
 
-    static final String WEBSITE_URL = "http://www.foxnews.com/politics/2016/07/19/trump-eyes-prize-as-republicans-start-roll-call-for-nomination.html";
-
     @Autowired
     UserRepository users;
 
@@ -42,22 +40,8 @@ public class YadaRestController {
     @PostConstruct
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
-
-        // in progress
-//        while (true) {
-//            // sort posts, wait 1 second, infinitely
-//            // sortPosts();
-//            // Thread.sleep(1000);
-//        }
+        soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
     }
-
-    // in progress
-//    public void sortYadasByScore() {
-//        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAll();
-//        yadaList.parallelStream()
-//
-//    }
-
 
     // get route for yadas
 //    @RequestMapping(path = "/yadas", method = RequestMethod.GET)
@@ -71,6 +55,38 @@ public class YadaRestController {
 //
 //        return pageOfYadas;
 //    }
+    //solid start to scraping
+    //should come up with a list of sites that work and cover bases accordingly
+    public ArrayList<String> soupThatSite(String url) throws IOException {
+        ArrayList<String> parsedDoc = new ArrayList<>();
+        Document doc = Jsoup.connect(url).get();
 
+        if (url.contains("cnn.com")) {
 
+            doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
+                String str = element1.text();
+                parsedDoc.add(str);
+            });
+
+            doc.select(".zn-body__paragraph").stream().filter(Element::hasText).forEach(element1 -> {
+                String str = element1.text();
+                parsedDoc.add(str);
+            });
+        }
+            else {
+
+            doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
+                String str = element1.text();
+                parsedDoc.add(str);
+            });
+
+            doc.select("p").stream().filter(Element::hasText).forEach(element -> {
+                String str = element.text();
+                parsedDoc.add(str);
+            });
+        }
+        System.out.println(parsedDoc);
+
+        return parsedDoc;
+    }
 }
