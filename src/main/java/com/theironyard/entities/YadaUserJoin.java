@@ -22,6 +22,9 @@ public class YadaUserJoin {
     @ManyToOne
     Yada yada;
 
+    public YadaUserJoin() {
+    }
+
     public YadaUserJoin(int id, User user, Yada yada) {
         this.id = id;
         this.user = user;
