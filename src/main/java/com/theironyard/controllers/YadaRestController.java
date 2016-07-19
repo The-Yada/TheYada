@@ -70,4 +70,23 @@ public class YadaRestController {
 //
 //        return pageOfYadas;
 //    }
+
+    public ArrayList<String> soupThatSite(String url) throws IOException {
+
+        Document doc = Jsoup.connect(url).get();
+
+        ArrayList<String> parsedDoc = new ArrayList<>();
+        doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
+            String str = element1.text();
+            parsedDoc.add(str);
+        });
+
+        doc.select("p").stream().filter(Element::hasText).forEach(element -> {
+            String str = element.text();
+            parsedDoc.add(str);
+        });
+
+        System.out.println(parsedDoc);
+        return parsedDoc;
+    }
 }
