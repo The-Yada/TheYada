@@ -21,9 +21,18 @@ public class Link {
     @Column(nullable = false)
     LocalDateTime timeOfCreation;
 
+    @Column(nullable = false)
+    double linkScore;
+
     @OneToMany(mappedBy = "link")
     List<Yada> yadaList;
 
     public Link() {
+    }
+
+    public Link(String url, LocalDateTime timeOfCreation, double linkScore) {
+        this.url = url;
+        this.timeOfCreation = timeOfCreation;
+        this.linkScore = linkScore;
     }
 }
