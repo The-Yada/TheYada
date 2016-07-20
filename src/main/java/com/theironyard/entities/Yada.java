@@ -1,5 +1,7 @@
 package com.theironyard.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -31,16 +33,37 @@ public class Yada {
     @ManyToOne
     User user;
 
+    //@JsonIgnore
+    @ManyToOne
+    Link link;
+
     public Yada() {
     }
-
-    public Yada(String content, int karma, String url, LocalDateTime time, int score, User user) {
+    public Yada(String content, int karma, String url, LocalDateTime time, int score, User user, Link link) {
         this.content = content;
         this.karma = karma;
         this.url = url;
         this.time = time;
         this.score = score;
         this.user = user;
+        this.link = link;
+    }
+
+    public Yada(String content, int karma, String url, LocalDateTime time, int score, Link link) {
+        this.content = content;
+        this.karma = karma;
+        this.url = url;
+        this.time = time;
+        this.score = score;
+        this.link = link;
+    }
+
+    public Link getLink() {
+        return link;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
     }
 
     public int getId() {
