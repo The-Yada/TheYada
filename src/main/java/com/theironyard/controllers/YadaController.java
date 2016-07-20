@@ -2,6 +2,7 @@ package com.theironyard.controllers;
 
 import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
+import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
@@ -30,6 +31,9 @@ public class YadaController {
 
     @Autowired
     YadaUserJoinRepository yadaUserJoinRepo;
+
+    @Autowired
+    LinkRepository links;
 
 
     @PostConstruct
@@ -63,7 +67,7 @@ public class YadaController {
             fileScanner.nextLine();
             while (fileScanner.hasNext()) {
                 String[] columns = fileScanner.nextLine().split(",");
-                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), columns[2], LocalDateTime.now(), Integer.valueOf(columns[3]), users.findOne(Integer.valueOf(columns[4])));
+                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), columns[2], LocalDateTime.now(), Integer.valueOf(columns[3]), links.findOne(Integer.valueOf(columns[4])));
                 yadas.save(yada);
 
             }

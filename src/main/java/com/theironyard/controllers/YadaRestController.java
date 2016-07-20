@@ -1,6 +1,8 @@
 package com.theironyard.controllers;
 
+import com.theironyard.entities.Link;
 import com.theironyard.entities.Yada;
+import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by will on 7/18/16.
@@ -36,27 +40,34 @@ public class YadaRestController {
     @Autowired
     YadaUserJoinRepository yadaUserJoinRepo;
 
+    @Autowired
+    LinkRepository links;
+
     // start h2 database
     @PostConstruct
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
+
+
     }
 
-    // get route for yadas
-//    @RequestMapping(path = "/yadas", method = RequestMethod.GET)
-//    public Page<Yada> getYadas(Integer page, double weight) {
-//
-//        page = (page == null) ? 0 : page;
-//        PageRequest pageRequest = new PageRequest(page, 10);
-//
-//        Page<Yada> pageOfYadas;
-//        pageOfYadas = yadas.findByWeightDesc(pageRequest, weight);
-//
-//        return pageOfYadas;
-//    }
-    //solid start to scraping
-    //should come up with a list of sites that work and cover bases accordingly
+    //route which returns a sorted(by highest score) list of all yadaLists(based on url)
+    @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
+    public ArrayList<ArrayList<Yada>> getYadaList() {
+
+        //sorted List of
+        ArrayList<ArrayList<Yada>> sortedListOfYadaLists = new ArrayList<>();
+        //get all urls
+        ArrayList<Yada> allYadas = (ArrayList<Yada>) yadas.findAll();
+        HashMap<Link, ArrayList<Yada>> yadaMap = new HashMap<>();
+        for(Yada yada : allYadas) {
+           // ArrayList<Yada> yadaListByUrl = yadaMap.get( );
+        }
+        return sortedListOfYadaLists;
+    }
+
+    //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
     public ArrayList<String> soupThatSite(String url) throws IOException {
         ArrayList<String> parsedDoc = new ArrayList<>();
         Document doc = Jsoup.connect(url).get();
@@ -85,19 +96,14 @@ public class YadaRestController {
                 parsedDoc.add(str);
             });
         }
-        System.out.println(parsedDoc);
+        //System.out.println(parsedDoc);
 
         return parsedDoc;
     }
 
-    // algo attempt 1
 
-//    public ArrayList<Yada> getYadas() {
-//        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAll();
-//        yadaList.parallelStream()
-//
-//
-//    }
+
+
 
 
 

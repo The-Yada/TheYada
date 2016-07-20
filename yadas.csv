@@ -1,12 +1,12 @@
 string content,int karma,string url,int score,userId
 first Yada!!!,0,http://www.nytimes.com/2016/07/18/us/baton-rouge-shooting.html?ref=todayspaper,5,0
-this is the second Yada,0,//www.nytimes.com,8,0
+this is the second Yada,0,//www.nytimes.com,8,1
 THIRD,2,http://www.nytimes.com/2016/07/19/sports/report-confirms-state-sponsored-doping-by-russia-at-olympics.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news,2,0
 FOURTH,4,http://www.nytimes.com/2016/07/17/magazine/the-mysterious-metamorphosis-of-chuck-close.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=mini-moth&region=top-stories-below&WT.nav=top-stories-below,3,0
 FIFTH,10,http://www.nytimes.com/2016/07/19/movies/so-thats-who-you-call-the-politics-of-the-new-ghostbusters.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=mini-moth&region=top-stories-below&WT.nav=top-stories-below,4,0
-SIXTH,0,http://www.bbc.com/news/live/election-us-2016-35404043,5,0
+SIXTH,0,http://www.bbc.com/news/live/election-us-2016-35404043,5,2
 SEVENTH,0,http://www.bbc.com/news/world-europe-36829574,6,0
-EIGHTH,45,http://www.cnn.com/2016/07/18/europe/turkey-president-erdogan-interview-coup/index.html,7,0
+EIGHTH,45,http://www.cnn.com/2016/07/18/europe/turkey-president-erdogan-interview-coup/index.html,7,6
 NINTH,100,http://www.cnn.com/2016/07/15/tennis/milos-raonic-olympics-tennis-zika/index.html,8,0
 TENTH,55,http://www.cnn.com/2016/07/18/politics/rnc-procedural-votes-rules-committee/index.html,9,0
 ELEVENTH,111,http://www.cnn.com/2016/07/17/politics/obama-baton-rouge-shootings-of-police/index.html,16,0
