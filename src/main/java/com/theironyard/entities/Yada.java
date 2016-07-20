@@ -83,7 +83,7 @@ public class Yada {
         this.time = time;
     }
 
-    public double getScore() {
+    public int getScore() {
         return score;
     }
 
