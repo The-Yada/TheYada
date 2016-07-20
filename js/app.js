@@ -1,14 +1,14 @@
 /*******************************
-* The Yada App
+* The Yada Web App
 * Date: 7-18-2016
-* 
+*
 ********************************/
 
 
 (function() {
 "use strict"
 
-let app = angular.module('YadaApp', ['ngRoute'])
+let app = angular.module('YadaWebApp', ['ngRoute'])
 
 
 

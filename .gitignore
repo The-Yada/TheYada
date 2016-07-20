@@ -48,3 +48,6 @@ fabric.properties
 *.db
 
 node_modules/
+
+dist
+dist.crx
