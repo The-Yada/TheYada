@@ -21,9 +21,6 @@ public class Yada {
     @Column(nullable = false)
     int karma;
 
-    @Column
-    String url;
-
     @Column(nullable = false)
     LocalDateTime time;
 
@@ -39,20 +36,18 @@ public class Yada {
 
     public Yada() {
     }
-    public Yada(String content, int karma, String url, LocalDateTime time, int score, User user, Link link) {
+    public Yada(String content, int karma, LocalDateTime time, int score, User user, Link link) {
         this.content = content;
         this.karma = karma;
-        this.url = url;
         this.time = time;
         this.score = score;
         this.user = user;
         this.link = link;
     }
 
-    public Yada(String content, int karma, String url, LocalDateTime time, int score, Link link) {
+    public Yada(String content, int karma, LocalDateTime time, int score, Link link) {
         this.content = content;
         this.karma = karma;
-        this.url = url;
         this.time = time;
         this.score = score;
         this.link = link;
@@ -88,14 +83,6 @@ public class Yada {
 
     public void setKarma(int karma) {
         this.karma = karma;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public LocalDateTime getTime() {
