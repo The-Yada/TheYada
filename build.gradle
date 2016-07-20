@@ -33,6 +33,8 @@ dependencies {
 	compile('com.h2database:h2')
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile('org.jsoup:jsoup:1.9.2')
+	compile('org.hibernate:hibernate-java8:5.0.9.Final')
 }
 
 
