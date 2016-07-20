@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Created by will on 7/18/16.
@@ -41,6 +42,8 @@ public class YadaRestController {
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
+
+//        getYadas(yadaList);
     }
 
     // get route for yadas
@@ -72,8 +75,7 @@ public class YadaRestController {
                 String str = element1.text();
                 parsedDoc.add(str);
             });
-        }
-            else {
+        } else {
 
             doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
                 String str = element1.text();
@@ -90,15 +92,9 @@ public class YadaRestController {
         return parsedDoc;
     }
 
-    // algo attempt 1
-
-//    public ArrayList<Yada> getYadas() {
-//        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAll();
-//        yadaList.parallelStream()
-//
-//
-//    }
-
-
-
 }
+
+
+
+
+
