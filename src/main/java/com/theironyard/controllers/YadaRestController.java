@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.util.HashMap;
 
 /**
@@ -48,8 +49,6 @@ public class YadaRestController {
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
-
-
     }
 
     //route which returns a sorted(by highest score) list of all yadaLists(based on url)
@@ -83,8 +82,7 @@ public class YadaRestController {
                 String str = element1.text();
                 parsedDoc.add(str);
             });
-        }
-            else {
+        } else {
 
             doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
                 String str = element1.text();
@@ -101,10 +99,11 @@ public class YadaRestController {
         return parsedDoc;
     }
 
-
-
-
-
-
-
 }
+
+
+
+
+
+
+

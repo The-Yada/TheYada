@@ -15,4 +15,5 @@ public interface YadaRepository extends CrudRepository<Yada, Integer> {
 //   Page<Yada> findByScoreDesc(Pageable pageable, int score);
   // Iterable<Yada> findByScoreDesc(int score);
   //  List<Yada> findByUrl(String url);
+//   Iterable<Yada> findByScoreAsc(int score);
 }
