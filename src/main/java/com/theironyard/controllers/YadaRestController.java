@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.HashMap;
 
@@ -66,6 +67,7 @@ public class YadaRestController {
         return sortedListOfYadaLists;
     }
 
+
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
     public ArrayList<String> soupThatSite(String url) throws IOException {
         ArrayList<String> parsedDoc = new ArrayList<>();
@@ -97,6 +99,13 @@ public class YadaRestController {
         //System.out.println(parsedDoc);
 
         return parsedDoc;
+    }
+    public List<Link> sortLinkList() {
+        List<Link> sortedLinkList = new ArrayList<>();
+        List<Link> linksToSort = (List<Link>) links.findAll();
+
+
+        return sortedLinkList;
     }
 
 }
