@@ -113,18 +113,10 @@ public class YadaRestController {
         List<Link> linkList = (List<Link>) links.findAll();
 
         for (Link link : linkList) {
-            double score = link.getLinkScore();
-            int totalVotes = link.getTotalVotes();
-            int numberofYadas = link.getNumberOfYadas();
-            LocalDateTime timeCreated = link.getTimeOfCreation();
-            // below line seems to round and save as "P#D"
-            // Period x = Period.between(LocalDate.from(timeCreated), LocalDate.now());
-            long difference = ChronoUnit.SECONDS.between(timeCreated, LocalDateTime.now());
+            long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
             link.setTimeDiffInSeconds(difference);
-            //double numerator = totalVotes - link.getNumberOfYadas();
             long denominator = (difference + SECONDS_IN_TWO_HOURS);
-            double finalDenominator = Math.pow(denominator, 1.8);
-            link.setLinkScore(totalVotes/finalDenominator);
+            link.setLinkScore(((link.getTotalVotes() - link.getNumberOfYadas())/(Math.pow(denominator, GRAVITY))));
             links.save(link);
         }
         return linkList;
