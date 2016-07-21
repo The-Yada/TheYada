@@ -1,0 +1,22 @@
+body {
+  background-color: #85ECFF;
+  margin: 0;
+}
+
+#pops {
+  font-weight: bold;
+  background-color: transparent;
+  color: #5A3745;
+  width: 90%;
+  border-bottom: 4px;
+  display: block;
+  margin: 0 auto;
+}
+
+h2 {
+  font-size: 2em;
+}
+
+span {
+  font-size: .5em;
+}
