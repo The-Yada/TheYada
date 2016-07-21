@@ -6,7 +6,7 @@ request.addEventListener('load', function() {
   var author = JSON.parse(this.responseText);
   console.log(author);
   var name = document.createElement('SPAN');
-  var iframe = document.getElementById('pops')
+  var iframe = document.getElementById('yadaText')
   name.innerText = author[0].name;
   iframe.appendChild(name);
 })
@@ -16,16 +16,14 @@ request.send();
 
 
 
-
-
-
 function postIt() {
-
-  var request = new XMLHttpRequest();
+  let name = document.getElementById('editorName');
+  let text = document.getElementById('editorText');
+  let request = new XMLHttpRequest();
 
   request.open('POST', 'https://tiny-tiny.herokuapp.com/collections/cbgrid');
   request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  request.send(JSON.stringify({name:"John Rambo", score: 156, playerType:"light"}));
+  request.send(JSON.stringify({name: `${name.value}`, yada: `${text.value}`}));
 }
 
 // Add a click handler to the new button we just made.

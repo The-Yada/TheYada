@@ -2,18 +2,18 @@ var x = false;
 // disableBrowserAction();
 
 function disableBrowserAction(tab){
-    chrome.browserAction.setIcon({path:"inactive.png"});
+    chrome.browserAction.setIcon({path:"assets/inactive.png"});
 
     console.log('toggling ' + tab.url);
 
-    chrome.tabs.executeScript(null, {file: "togglecontent.js"});
+    chrome.tabs.executeScript(null, {file: "js/togglecontent.js"});
 }
 
 function enableBrowserAction(tab){
-    chrome.browserAction.setIcon({path:"active.png"});
+    chrome.browserAction.setIcon({path:"assets/active.png"});
 
     console.log('Creating ' + tab.url + ' yada!');
-    chrome.tabs.executeScript(null, {file: "content.js"});
+    chrome.tabs.executeScript(null, {file: "js/content.js"});
 
     chrome.tabs.sendMessage(1, "hello from the bG");
 }

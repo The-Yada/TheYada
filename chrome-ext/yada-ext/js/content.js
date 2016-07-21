@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(showUrl)
 
 var f = document.createElement('iframe'),
     frameStyleElement = document.createElement('link'),
-    frameStyleHref = chrome.runtime.getURL('frame.css');
+    frameStyleHref = chrome.runtime.getURL('css/frame.css');
 
 // Inject the frame styles programmatically in order to avoid flickering:
 frameStyleElement.href = frameStyleHref;
