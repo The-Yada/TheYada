@@ -125,10 +125,10 @@ public class YadaRestController {
         return sortedLinkList;
     }
 
-    public ArrayList<Yada> sortYadasFromLink() {
+    public ArrayList<Yada> sortYadasFromLink(Integer id) {
         ArrayList<Yada> sortedYadas = new ArrayList<>();
 
-        Link linkFromWhichTo
+        Link linkFromWhichTo = links.findOne(id);
 
 
 
