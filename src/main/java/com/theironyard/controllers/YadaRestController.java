@@ -1,24 +1,32 @@
 package com.theironyard.controllers;
 
+import com.google.api.client.json.JsonFactory;
 import com.theironyard.entities.Link;
+import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
+import com.theironyard.utilities.PasswordStorage;
 import org.h2.tools.Server;
 import org.hibernate.jpa.event.internal.core.JpaSaveOrUpdateEventListener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.sql.SQLException;
@@ -32,6 +40,9 @@ import java.util.HashMap;
 /**
  * Created by will on 7/18/16.
  */
+@Configuration
+@ComponentScan
+@EnableAutoConfiguration
 @RestController
 public class YadaRestController {
 
@@ -134,7 +145,20 @@ public class YadaRestController {
 
         return sortedYadas;
     }
-
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public User login(@RequestBody User user, HttpSession session) throws Exception {
+        User userFromDB = users.findFirstByUsername(user.getUsername());
+        if (userFromDB == null) {
+            user.setPassword(PasswordStorage.createHash(user.getPassword()));
+            user.setUsername(user.getUsername());
+            users.save(user);
+        }
+        else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDB.getPassword())) {
+            throw new Exception("BAD PASS");
+        }
+        session.setAttribute("username", user.getUsername());
+        return user;
+    }
 }
 
 
