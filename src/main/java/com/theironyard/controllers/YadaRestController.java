@@ -111,7 +111,6 @@ public class YadaRestController {
     // algo attempt 1
     public List<Link> sortLinks() {
         List<Link> linkList = (List<Link>) links.findAll();
-
         for (Link link : linkList) {
             long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
             link.setTimeDiffInSeconds(difference);
@@ -120,7 +119,6 @@ public class YadaRestController {
             links.save(link);
         }
         return linkList;
-
     }
 }
 
