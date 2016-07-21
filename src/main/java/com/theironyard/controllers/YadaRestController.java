@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.HashMap;
 
@@ -50,6 +52,8 @@ public class YadaRestController {
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
+        ArrayList<Link> sortedLinkList = (ArrayList<Link>) links.findAll();
+        sortLinkList(sortedLinkList);
     }
 
     //route which returns a sorted(by highest score) list of all yadaLists(based on url)
@@ -100,12 +104,35 @@ public class YadaRestController {
 
         return parsedDoc;
     }
-    public List<Link> sortLinkList() {
-        List<Link> sortedLinkList = new ArrayList<>();
-        List<Link> linksToSort = (List<Link>) links.findAll();
+    public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
+        ArrayList<Link> sortedLinkList = new ArrayList<>();
 
+        int yadaCountIterator = 1;
+        int minimum = 0;
+        int maximum = 700;
 
+        for (Link link : list) {
+
+            Random r = new Random();
+            int yadaTotalVotesIterator = minimum + r.nextInt((maximum - minimum) + 1);
+            link.setYadaCount(yadaCountIterator);
+            link.setTotalVotes(yadaTotalVotesIterator);
+            link.setLinkScore(link.getTotalVotes()/link.getYadaCount());
+            yadaCountIterator++;
+            links.save(link);
+            sortedLinkList.add(link);
+        }
         return sortedLinkList;
+    }
+
+    public ArrayList<Yada> sortYadasFromLink() {
+        ArrayList<Yada> sortedYadas = new ArrayList<>();
+
+        Link linkFromWhichTo
+
+
+
+        return sortedYadas;
     }
 
 }
