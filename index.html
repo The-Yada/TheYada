@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="YadaWebApp">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Watch</title>
+    <link  rel="icon" href="./assets/tree-favicon.png" media="screen" title="no title" charset="utf-8">
+
+    <!-- import STYLES & SCRIPTS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+    <link href='https://fonts.googleapis.com/css?family=Aldrich' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav class="nav" ng-controller="NavController">
+        <div class="jumbo">
+          <img class="logo" src="./assets/fs-logo.png" alt="LOGO" />
+          <h1>The Yada</h1>
+          <span ng-show="logStatus.status">Thanks for keeping it brief <u>{{vol.firstname}}!</u></span>
+        </div>
+
+        <ul id="nav-list">
+            <li><a href="#/">Home</a></li>
+            <li><a href="#/about">Yada Yada</a></li>
+            <li id='log'>
+              <a ng-show="!logStatus.status" href="#/login">Login</a>
+              <a ng-show="logStatus.status" href="#/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <section class="main-container">
+        <main class="views" ng-view id="view">
+
+
+
+        </main>
+        <footer>
+            <h6>by: Caleb Will Jon</h6>
+        </footer>
+    </section>
+
+
+    <!--MY SCRIPTS-->
+    <script src="app.js" charset="utf-8"></script>
+</body>
+
+</html>

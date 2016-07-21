@@ -1,0 +1,27 @@
+{
+  "name": "The Yada",
+  "description": "pop over news article summaries",
+  "version": "2.0",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "http://tiny-tiny.herokuapp.com/*/*",
+    "contextMenus"
+  ],
+  "background": {
+    "scripts": ["background.js","context-menu.js"],
+    "persistent": false
+  },
+  "icons": {
+    "16": "yada-icon.png",
+    "48": "yada-icon.png",
+    "128": "yada-icon.png"
+  },
+  "browser_action": {
+    "default_title": "The Yada",
+    "default_icon": "yada-icon.png"
+  },
+  "manifest_version": 2,
+  "web_accessible_resources": ["yada.html","frame.css","app.js"]
+
+}
