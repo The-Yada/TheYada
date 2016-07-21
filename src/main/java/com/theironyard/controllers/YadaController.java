@@ -1,5 +1,6 @@
 package com.theironyard.controllers;
 
+import com.theironyard.entities.Link;
 import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
 import com.theironyard.services.LinkRepository;
@@ -42,9 +43,15 @@ public class YadaController {
             parseUsers("users.csv");
         }
 
+        if (links.count() == 0) {
+            parseLinks("links.csv");
+        }
+
         if (yadas.count() == 0) {
             parseYadas("yadas.csv");
         }
+
+
     }
     public void parseUsers(String fileName) throws FileNotFoundException {
         if (users.count() == 0) {
@@ -59,6 +66,21 @@ public class YadaController {
             }
         }
     }
+    //parsing links file
+    public void parseLinks(String fileName) throws FileNotFoundException {
+        if (links.count() == 0) {
+            File linkFile = new File(fileName);
+            Scanner linkScanner = new Scanner(linkFile);
+            linkScanner.nextLine();
+            long i = 0;
+            while (linkScanner.hasNext()) {
+                String[] columns = linkScanner.nextLine().split(",");
+                Link link = new Link(columns[0], LocalDateTime.now().minusDays(i), 1);
+                links.save(link);
+                i++;
+            }
+        }
+    }
     //parsing yada file for dummy data
     public void parseYadas(String fileName) throws FileNotFoundException {
         if (yadas.count() == 0) {
@@ -67,7 +89,7 @@ public class YadaController {
             fileScanner.nextLine();
             while (fileScanner.hasNext()) {
                 String[] columns = fileScanner.nextLine().split(",");
-                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), LocalDateTime.now(), Integer.valueOf(columns[2]), users.findOne(Integer.valueOf(columns[3])),links.findOne(Integer.valueOf(columns[4])));
+                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), LocalDateTime.now(), Integer.valueOf(columns[2]), users.findOne(Integer.valueOf(columns[3])), links.findOne(Integer.valueOf(columns[4])));
                 yadas.save(yada);
 
             }
