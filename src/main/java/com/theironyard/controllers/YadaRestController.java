@@ -21,8 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.HashMap;
 
@@ -31,6 +36,9 @@ import java.util.HashMap;
  */
 @RestController
 public class YadaRestController {
+
+    static final double GRAVITY = 1.8;
+    static final int SECONDS_IN_TWO_HOURS = 7200;
 
     @Autowired
     UserRepository users;
@@ -49,6 +57,7 @@ public class YadaRestController {
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
+        sortLinks();
     }
 
     //route which returns a sorted(by highest score) list of all yadaLists(based on url)
@@ -60,8 +69,8 @@ public class YadaRestController {
         //get all urls
         ArrayList<Yada> allYadas = (ArrayList<Yada>) yadas.findAll();
         HashMap<Link, ArrayList<Yada>> yadaMap = new HashMap<>();
-        for(Yada yada : allYadas) {
-           // ArrayList<Yada> yadaListByUrl = yadaMap.get( );
+        for (Yada yada : allYadas) {
+            // ArrayList<Yada> yadaListByUrl = yadaMap.get( );
         }
         return sortedListOfYadaLists;
     }
@@ -99,6 +108,28 @@ public class YadaRestController {
         return parsedDoc;
     }
 
+    // algo attempt 1
+    public List<Link> sortLinks() {
+        List<Link> linkList = (List<Link>) links.findAll();
+
+        for (Link link : linkList) {
+            double score = link.getLinkScore();
+            int totalVotes = link.getTotalVotes();
+            int numberofYadas = link.getNumberOfYadas();
+            LocalDateTime timeCreated = link.getTimeOfCreation();
+            // below line seems to round and save as "P#D"
+            // Period x = Period.between(LocalDate.from(timeCreated), LocalDate.now());
+            long difference = ChronoUnit.SECONDS.between(timeCreated, LocalDateTime.now());
+            link.setTimeDiffInSeconds(difference);
+            //double numerator = totalVotes - link.getNumberOfYadas();
+            long denominator = (difference + SECONDS_IN_TWO_HOURS);
+            double finalDenominator = Math.pow(denominator, 1.8);
+            link.setLinkScore(totalVotes/finalDenominator);
+            links.save(link);
+        }
+        return linkList;
+
+    }
 }
 
 
