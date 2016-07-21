@@ -14,10 +14,11 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
 
   //Router
   .config(['$routeProvider', function($routeProvider) {
+
     $routeProvider
       .when('/', {
-        templateUrl: '',
-        // controller: '',
+        templateUrl: 'home.html',
+        // controller: 'LoginController',
       })
 
       .when('/login',{
