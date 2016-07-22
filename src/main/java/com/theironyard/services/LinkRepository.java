@@ -8,5 +8,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface LinkRepository extends CrudRepository<Link, Integer> {
     Link findFirstByUrl(String url);
-    Link OrderByLinkscoreDesc(Link link);
+    Link OrderByLinkScoreDesc(Link link);
 }
