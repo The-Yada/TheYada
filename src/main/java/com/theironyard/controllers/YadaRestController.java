@@ -64,7 +64,7 @@ public class YadaRestController {
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
         generateLinkScore(linkList);
-        return links.findAllByOrderByLinkScoreDesc();
+        return links.findTop5ByOrderByLinkScoreDesc();
     }
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
