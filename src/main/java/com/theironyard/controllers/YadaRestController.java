@@ -1,5 +1,6 @@
 package com.theironyard.controllers;
 
+
 import com.theironyard.entities.Link;
 import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
@@ -7,6 +8,8 @@ import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.h2.tools.Server;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -125,7 +129,6 @@ public class YadaRestController {
         yadas.save(yada);
         links.save(link);
     }
-
 }
 
 
