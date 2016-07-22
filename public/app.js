@@ -181,20 +181,27 @@ module.exports = function(app) {
 
 module.exports = function(app) {
 
+
   app.factory('YadaService', ['$http', '$location', function($http, $location) {
 
     /*******************************
       yadaList should look list:
-
       [
-          {
+          id: 0,
+          linkScore: 0,
+          numberOfYadas: 0,
+          timeDiffInSeconds: 0,
+          timeOfCreation:{},
+          totalVotes: 0,
+          url: "",
+          yadaList:[{
               content: "",
-              karma: "",
+              karma: 0,
               time: {},
-              score: "",
+              score: 0,
               user: "",
               link: ""
-          }
+          }]
       ]
     ********************************/
       let topYadas = [];
@@ -208,7 +215,7 @@ module.exports = function(app) {
         ********************************/
         getTopYadas() {
           $http({
-              url: '/yadaList',
+              url: '/theYadaList',
               method: 'GET'
             }).then(function(response){
               yadas = response.data;
