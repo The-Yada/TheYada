@@ -62,12 +62,9 @@ public class YadaRestController {
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
     public ArrayList<Link> getYadaList() {
 
-//        ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
-//        generateLinkScore(linkList);
-////        ArrayList<Link> finalList = links.findTop10ByOrderByLinkScoreDesc(linkList);
-//        return finalList;
-        ArrayList<Link> allLinks = (ArrayList<Link>) links.findAll();
-          return allLinks;
+        ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
+        generateLinkScore(linkList);
+        return links.findAllByOrderByLinkScoreDesc();
     }
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String

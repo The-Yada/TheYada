@@ -30,7 +30,7 @@ public class Yada {
     @ManyToOne
     User user;
 
-    //@JsonIgnore
+    @JsonIgnore
     @ManyToOne
     Link link;
 
