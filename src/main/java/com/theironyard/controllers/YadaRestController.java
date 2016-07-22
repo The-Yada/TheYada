@@ -13,14 +13,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -83,14 +79,13 @@ public class YadaRestController {
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
     public ArrayList<Link> getYadaList() {
 
-        ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
-        generateLinkScore(linkList);
-
-        ArrayList<Link> finalList = links.findTop10ByOrderByLinkScoreDesc(linkList);
-
-        return finalList;
+//        ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
+//        generateLinkScore(linkList);
+////        ArrayList<Link> finalList = links.findTop10ByOrderByLinkScoreDesc(linkList);
+//        return finalList;
+        ArrayList<Link> allLinks = (ArrayList<Link>) links.findAll();
+          return allLinks;
     }
-
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
     public ArrayList<String> soupThatSite(String url) throws IOException {

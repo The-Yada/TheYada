@@ -1,5 +1,24 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*******************************
+* Home Controller
+*
+********************************/
+
+module.exports = function(app) {
+
+  app.controller('HomeController', ['$scope', 'YadaService', function($scope, YadaService){
+
+    /*******************************
+    * grab the yadas for the ng-repeat in home.html
+    *********************************/
+    $scope.topYadas = YadaService.getTopYadas();
+
+
+  }])
+}
+
+},{}],2:[function(require,module,exports){
+/*******************************
 * Login Controller
 * display user information from service
 ********************************/
@@ -36,7 +55,7 @@ module.exports = function(app) {
   }])
 }
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 /*******************************
 * Nav Controller
 *
@@ -62,7 +81,7 @@ module.exports = function(app) {
   }])
 }
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 /*******************************
@@ -95,7 +114,8 @@ module.exports = function(app) {
     });
 
     $routeProvider.when('/', {
-      templateUrl: 'home.html'
+      templateUrl: 'home.html',
+      controller: 'HomeController'
     }).when('/login', {
       templateUrl: 'login.html',
       controller: 'LoginController'
@@ -113,17 +133,19 @@ module.exports = function(app) {
 
   // Services
   require('./services/user-service')(app);
+  require('./services/yada-service')(app);
 
   // Controllers
   require('./controllers/nav-controller')(app);
   require('./controllers/login-controller')(app);
+  require('./controllers/home-controller')(app);
 
   // Filters
 
   // Directives
 
 })();
-},{"./controllers/login-controller":1,"./controllers/nav-controller":2,"./services/user-service":4}],4:[function(require,module,exports){
+},{"./controllers/home-controller":1,"./controllers/login-controller":2,"./controllers/nav-controller":3,"./services/user-service":5,"./services/yada-service":6}],5:[function(require,module,exports){
 /*******************************
 * User Service
 * stores user
@@ -150,4 +172,62 @@ module.exports = function(app) {
   }])
 }
 
-},{}]},{},[3])
+},{}],6:[function(require,module,exports){
+/*******************************
+* Yada Service
+* grabs yadaList from server
+********************************/
+
+
+module.exports = function(app) {
+
+
+  app.factory('YadaService', ['$http', '$location', function($http, $location) {
+
+    /*******************************
+      yadaList should look list:
+      [
+          id: 0,
+          linkScore: 0,
+          numberOfYadas: 0,
+          timeDiffInSeconds: 0,
+          timeOfCreation:{},
+          totalVotes: 0,
+          url: "",
+          yadaList:[{
+              content: "",
+              karma: 0,
+              time: {},
+              score: 0,
+              user: "",
+              link: ""
+          }]
+      ]
+    ********************************/
+      let topYadas = [];
+
+
+
+
+      return {
+        /*******************************
+        * get yadas from server for home page
+        ********************************/
+        getTopYadas() {
+          $http({
+              url: '/theYadaList',
+              method: 'GET'
+            }).then(function(response){
+              yadas = response.data;
+              angular.copy(yadas, topYadas);
+            })
+            console.log(topYadas);
+            return topYadas;
+        }
+      }
+
+
+  }])
+}
+
+},{}]},{},[4])
