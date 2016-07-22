@@ -1,19 +1,17 @@
 package com.theironyard.controllers;
 
 import com.theironyard.entities.Link;
+import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
 import org.h2.tools.Server;
-import org.hibernate.jpa.event.internal.core.JpaSaveOrUpdateEventListener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,14 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.HashMap;
 
 /**
@@ -119,6 +113,17 @@ public class YadaRestController {
             links.save(link);
         }
         return linkList;
+    }
+
+    @RequestMapping(path = "/addYada", method = RequestMethod.POST)
+    public void addYada(String content, String url, String username) {
+        Link link = links.findFirstByUrl(url);
+        User user = users.findFirstByUsername(username);
+        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
+        ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
+        yadasInLink.add(yada);
+        yadas.save(yada);
+        links.save(link);
     }
 
 }

@@ -2,6 +2,7 @@ package com.theironyard.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class Link {
     long timeDiffInSeconds;
 
     @OneToMany(mappedBy = "link")
-    List<Yada> yadaList;
+    ArrayList<Yada> yadaList;
 
     public Link() {
     }
@@ -84,7 +85,7 @@ public class Link {
         return yadaList;
     }
 
-    public void setYadaList(List<Yada> yadaList) {
+    public void setYadaList(ArrayList<Yada> yadaList) {
         this.yadaList = yadaList;
     }
 
