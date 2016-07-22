@@ -12,8 +12,10 @@ module.exports = function(app) {
 
     $scope.login = function() {
       // OAuth stuff
-      UserService.getUser()
+      // UserService.getUser()
+
     }
+
 
 
     $scope.logout = function() {
