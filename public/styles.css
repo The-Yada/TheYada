@@ -1,3 +1,7 @@
+.logo {
+  width: 100px;
+  height: 100px; }
+
 .login-button {
   background-color: transparent;
   background-image: url("./assets/btn_google_signin_light_normal_web@2x.png");

@@ -13,12 +13,12 @@ module.exports = function(app) {
 
       [
           {
-              title: "",
-              author: "",
-              date: {},
-              url: "",
-              yada: "",
-              karma: ""
+              content: "",
+              karma: "",
+              time: {},
+              score: "",
+              user: "",
+              link: ""
           }
       ]
     ********************************/

@@ -4,9 +4,10 @@
 
 <ul>
     <li ng-repeat="yada in topYadas">
-          <h3>{{yada.title}}</h3>
-          <span class="url-home">{{yada.url}}</span>
-          <span class="author-home">{{yada.author}}</span>
+          <span class="url-home">{{yada.link}}</span>
+          <p>{{yada.content}}</p>
+
+          <span class="author-home">{{yada.user}}</span>
 
           <!-- TODO: these button def need to be arrows-->
           <button class="up-home" type="button" name="up">up</button>
