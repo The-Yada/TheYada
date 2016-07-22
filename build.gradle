@@ -42,6 +42,12 @@ dependencies {
 
 	// spring security
 	compile('org.springframework.boot:spring-boot-starter-security')
+
+	//jjwt
+	compile('io.jsonwebtoken:jjwt:0.6.0')
+
+	//google oauth client library
+	compile ('com.google.apis:google-api-services-oauth2:v1-rev117-1.22.0')
 }
 
 
