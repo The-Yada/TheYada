@@ -34,7 +34,7 @@ let app = angular.module('YadaWebApp', ['ngRoute','satellizer'])
     $routeProvider
       .when('/', {
         templateUrl: 'home.html',
-        // controller: 'LoginController',
+        controller: 'HomeController',
       })
 
       .when('/login',{
@@ -64,10 +64,13 @@ let app = angular.module('YadaWebApp', ['ngRoute','satellizer'])
 
   // Services
   require('./services/user-service')(app);
+  require('./services/yada-service')(app);
+
 
   // Controllers
   require('./controllers/nav-controller')(app);
   require('./controllers/login-controller')(app);
+  require('./controllers/home-controller')(app);
 
 
 
