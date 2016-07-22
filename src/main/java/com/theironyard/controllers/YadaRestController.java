@@ -12,6 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,12 +23,15 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Random;
+
 import java.util.List;
 import java.util.HashMap;
 
 /**
  * Created by will on 7/18/16.
  */
+
 @RestController
 public class YadaRestController {
 
@@ -51,22 +55,17 @@ public class YadaRestController {
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
-        sortLinks();
+
     }
 
     //route which returns a sorted(by highest score) list of all yadaLists(based on url)
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
-    public ArrayList<ArrayList<Yada>> getYadaList() {
+    public ArrayList<Link> getYadaList() {
 
-        //sorted List of
-        ArrayList<ArrayList<Yada>> sortedListOfYadaLists = new ArrayList<>();
-        //get all urls
-        ArrayList<Yada> allYadas = (ArrayList<Yada>) yadas.findAll();
-        HashMap<Link, ArrayList<Yada>> yadaMap = new HashMap<>();
-        for (Yada yada : allYadas) {
-            // ArrayList<Yada> yadaListByUrl = yadaMap.get( );
-        }
-        return sortedListOfYadaLists;
+        ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
+        ArrayList<Link> scoredLinkList = (ArrayList<Link>) generateLinkScore(linkList);
+        ArrayList<Link> finalList = links.OrderByLinkscoreDesc(scoredLinkList);
+        return scoredLinkList;
     }
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
@@ -103,13 +102,13 @@ public class YadaRestController {
     }
 
     // algo attempt 1
-    public List<Link> sortLinks() {
-        List<Link> linkList = (List<Link>) links.findAll();
+    public List<Link> generateLinkScore(ArrayList<Link> linkList) {
+
         for (Link link : linkList) {
             long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
             link.setTimeDiffInSeconds(difference);
             long denominator = (difference + SECONDS_IN_TWO_HOURS);
-            link.setLinkScore(((link.getTotalVotes() - link.getNumberOfYadas())/(Math.pow(denominator, GRAVITY))));
+            link.setLinkScore(((link.getTotalVotes() - link.getNumberOfYadas()) / (Math.pow(denominator, GRAVITY))));
             links.save(link);
         }
         return linkList;
@@ -126,11 +125,34 @@ public class YadaRestController {
         links.save(link);
     }
 
+
+    public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
+        ArrayList<Link> sortedLinkList = new ArrayList<>();
+
+        int yadaCountIterator = 1;
+        int minimum = 0;
+        int maximum = 700;
+
+        for (Link link : list) {
+
+            Random r = new Random();
+            int yadaTotalVotesIterator = minimum + r.nextInt((maximum - minimum) + 1);
+            link.setNumberOfYadas(yadaCountIterator);
+            link.setTotalVotes(yadaTotalVotesIterator);
+            link.setLinkScore(link.getTotalVotes() / link.getNumberOfYadas());
+            yadaCountIterator++;
+            links.save(link);
+            sortedLinkList.add(link);
+        }
+        return sortedLinkList;
+    }
+
+    public ArrayList<Yada> sortYadasFromLink(Integer id) {
+        ArrayList<Yada> sortedYadas = new ArrayList<>();
+
+        Link linkFromWhichTo = links.findOne(id);
+
+
+        return sortedYadas;
+    }
 }
-
-
-
-
-
-
-
