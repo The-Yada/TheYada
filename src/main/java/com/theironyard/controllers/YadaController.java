@@ -39,9 +39,9 @@ public class YadaController {
 
     @PostConstruct
     public void init() throws SQLException, FileNotFoundException {
-        if(users.count() == 0) {
-            parseUsers("users.csv");
-        }
+//        if(users.count() == 0) {
+//            parseUsers("users.csv");
+//        }
 
         if (links.count() == 0) {
             parseLinks("links.csv");

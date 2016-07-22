@@ -16,9 +16,6 @@ public class User {
     @Column(nullable = false)
     String username;
 
-    @Column(nullable = false)
-    String password;
-
     @Column
     int karma;
 
@@ -64,14 +61,6 @@ public class User {
 
     public void setYadaUserJoinList(List<YadaUserJoin> yadaUserJoinList) {
         this.yadaUserJoinList = yadaUserJoinList;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public User(int id, String username, int karma) {
