@@ -12,24 +12,29 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Random;
 
+import java.util.List;
+import java.util.HashMap;
 
 /**
  * Created by will on 7/18/16.
  */
-
 @RestController
 public class YadaRestController {
+
+    static final double GRAVITY = 1.8;
+    static final int SECONDS_IN_TWO_HOURS = 7200;
 
     @Autowired
     UserRepository users;
@@ -58,14 +63,13 @@ public class YadaRestController {
         ArrayList<Link> allLinks = (ArrayList<Link>) links.findAll();
         ArrayList<Link> sortedListOfLinks = new ArrayList<>();
 
-
+        //sorted List of
         ArrayList<ArrayList<Yada>> sortedListOfYadaLists = new ArrayList<>();
         //get all urls
 
 
         return sortedListOfLinks;
     }
-
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
     public ArrayList<String> soupThatSite(String url) throws IOException {
@@ -99,6 +103,34 @@ public class YadaRestController {
 
         return parsedDoc;
     }
+
+    // algo attempt 1
+    public List<Link> sortLinks() {
+        List<Link> linkList = (List<Link>) links.findAll();
+        for (Link link : linkList) {
+            long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
+            link.setTimeDiffInSeconds(difference);
+            long denominator = (difference + SECONDS_IN_TWO_HOURS);
+            link.setLinkScore(((link.getTotalVotes() - link.getNumberOfYadas())/(Math.pow(denominator, GRAVITY))));
+            links.save(link);
+        }
+        return linkList;
+    }
+
+    @RequestMapping(path = "/addYada", method = RequestMethod.POST)
+    public void addYada(String content, String url, String username) {
+        Link link = links.findFirstByUrl(url);
+        User user = users.findFirstByUsername(username);
+        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
+        ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
+        yadasInLink.add(yada);
+        yadas.save(yada);
+        links.save(link);
+    }
+
+}
+
+
 
     public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
         ArrayList<Link> sortedLinkList = new ArrayList<>();
@@ -136,11 +168,3 @@ public class YadaRestController {
         session.setAttribute("username", user.getUsername());
         return user;
     }
-}
-
-
-
-
-
-
-

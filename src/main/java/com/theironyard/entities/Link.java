@@ -2,6 +2,7 @@ package com.theironyard.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,21 +26,27 @@ public class Link {
     double linkScore;
 
     @Column(nullable = false)
-    int yadaCount;
-
-    @Column(nullable = false)
     int totalVotes;
 
+    @Column(nullable = false)
+    int numberOfYadas;
+
+    @Column(nullable = false)
+    long timeDiffInSeconds;
+
     @OneToMany(mappedBy = "link")
-    List<Yada> yadaList;
+    ArrayList<Yada> yadaList;
 
     public Link() {
     }
 
-    public Link(String url, LocalDateTime timeOfCreation, double linkScore) {
+    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int numberOfYadas, long timeDiffInSeconds) {
         this.url = url;
         this.timeOfCreation = timeOfCreation;
         this.linkScore = linkScore;
+        this.totalVotes = totalVotes;
+        this.numberOfYadas = numberOfYadas;
+        this.timeDiffInSeconds = timeDiffInSeconds;
     }
 
     public int getId() {
@@ -74,19 +81,11 @@ public class Link {
         this.linkScore = linkScore;
     }
 
-    public int getYadaCount() {
-        return yadaCount;
-    }
-
-    public void setYadaCount(int yadaCount) {
-        this.yadaCount = yadaCount;
-    }
-
     public List<Yada> getYadaList() {
         return yadaList;
     }
 
-    public void setYadaList(List<Yada> yadaList) {
+    public void setYadaList(ArrayList<Yada> yadaList) {
         this.yadaList = yadaList;
     }
 
@@ -96,5 +95,21 @@ public class Link {
 
     public void setTotalVotes(int totalVotes) {
         this.totalVotes = totalVotes;
+    }
+
+    public int getNumberOfYadas() {
+        return numberOfYadas;
+    }
+
+    public void setNumberOfYadas(int numberOfYadas) {
+        this.numberOfYadas = numberOfYadas;
+    }
+
+    public long getTimeDiffInSeconds() {
+        return timeDiffInSeconds;
+    }
+
+    public void setTimeDiffInSeconds(long timeDiffInSeconds) {
+        this.timeDiffInSeconds = timeDiffInSeconds;
     }
 }
