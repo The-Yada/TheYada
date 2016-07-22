@@ -7,6 +7,7 @@ import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
+import com.theironyard.utils.PasswordStorage;
 import org.h2.tools.Server;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,12 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -60,15 +63,34 @@ public class YadaRestController {
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
 
     }
+    //regular login route
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public User login(@RequestBody User user, HttpSession session) throws Exception {
+        User userFromDatabase = users.findFirstByUsername(user.getUsername());
+        if (userFromDatabase == null) {
+            user.setPassword(PasswordStorage.createHash(user.getPassword()));
+            user.setUsername(user.getUsername());
+            users.save(user);
+        }
+        else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDatabase.getPassword())) {
+            throw new Exception("BAD PASS");
+        }
+        session.setAttribute("username", user.getUsername());
+        return user;
+    }
 
     // route which returns a sorted(by highest score) list of all yadaLists(based on url)
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
     public ArrayList<Link> getYadaList() {
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
-        ArrayList<Link> scoredLinkList = (ArrayList<Link>) generateLinkScore(linkList);
-        return links.findTop10ByOrderByLinkscoreDesc(scoredLinkList);
+        generateLinkScore(linkList);
+
+        ArrayList<Link> finalList = links.findTop10ByOrderByLinkScoreDesc(linkList);
+
+        return finalList;
     }
+
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
     public ArrayList<String> soupThatSite(String url) throws IOException {
