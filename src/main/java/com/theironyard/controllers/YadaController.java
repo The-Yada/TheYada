@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -44,7 +45,7 @@ public class YadaController {
         }
 
         if (links.count() == 0) {
-            parseLinks("links.csv");
+            parseLinks("links2.csv");
         }
 
         if (yadas.count() == 0) {
@@ -72,12 +73,26 @@ public class YadaController {
             File linkFile = new File(fileName);
             Scanner linkScanner = new Scanner(linkFile);
             linkScanner.nextLine();
-            long i = 0;
+//            long i = 0;
+//
+//            Random r = new Random();
+//            int maximum = 500;
+//            int minimum = 0;
+//            int range = maximum - minimum + 1;
+//
+//            int maxYada = 10;
+//            int minYada = 1;
+//            int rangeYada = maxYada - minYada + 1;
+
+
             while (linkScanner.hasNext()) {
+//                int randomNumVotes = r.nextInt(range) + minimum;
+//                int randomNumYadas = r.nextInt(rangeYada + minYada);
                 String[] columns = linkScanner.nextLine().split(",");
-                Link link = new Link(columns[0], LocalDateTime.now().minusDays(i), 1);
+                Link link = new Link(columns[0], LocalDateTime.now().minusSeconds(Long.valueOf(columns[2])), 0, Integer.valueOf(columns[1]), 5, 0);
                 links.save(link);
-                i++;
+//                i++;
+//
             }
         }
     }

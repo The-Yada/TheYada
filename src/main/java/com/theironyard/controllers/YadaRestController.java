@@ -1,19 +1,17 @@
 package com.theironyard.controllers;
 
 import com.theironyard.entities.Link;
+import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
 import org.h2.tools.Server;
-import org.hibernate.jpa.event.internal.core.JpaSaveOrUpdateEventListener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +20,9 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.List;
 import java.util.HashMap;
 
 /**
@@ -31,6 +30,9 @@ import java.util.HashMap;
  */
 @RestController
 public class YadaRestController {
+
+    static final double GRAVITY = 1.8;
+    static final int SECONDS_IN_TWO_HOURS = 7200;
 
     @Autowired
     UserRepository users;
@@ -49,6 +51,7 @@ public class YadaRestController {
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
+        sortLinks();
     }
 
     //route which returns a sorted(by highest score) list of all yadaLists(based on url)
@@ -60,8 +63,8 @@ public class YadaRestController {
         //get all urls
         ArrayList<Yada> allYadas = (ArrayList<Yada>) yadas.findAll();
         HashMap<Link, ArrayList<Yada>> yadaMap = new HashMap<>();
-        for(Yada yada : allYadas) {
-           // ArrayList<Yada> yadaListByUrl = yadaMap.get( );
+        for (Yada yada : allYadas) {
+            // ArrayList<Yada> yadaListByUrl = yadaMap.get( );
         }
         return sortedListOfYadaLists;
     }
@@ -97,6 +100,30 @@ public class YadaRestController {
         //System.out.println(parsedDoc);
 
         return parsedDoc;
+    }
+
+    // algo attempt 1
+    public List<Link> sortLinks() {
+        List<Link> linkList = (List<Link>) links.findAll();
+        for (Link link : linkList) {
+            long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
+            link.setTimeDiffInSeconds(difference);
+            long denominator = (difference + SECONDS_IN_TWO_HOURS);
+            link.setLinkScore(((link.getTotalVotes() - link.getNumberOfYadas())/(Math.pow(denominator, GRAVITY))));
+            links.save(link);
+        }
+        return linkList;
+    }
+
+    @RequestMapping(path = "/addYada", method = RequestMethod.POST)
+    public void addYada(String content, String url, String username) {
+        Link link = links.findFirstByUrl(url);
+        User user = users.findFirstByUsername(username);
+        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
+        ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
+        yadasInLink.add(yada);
+        yadas.save(yada);
+        links.save(link);
     }
 
 }
