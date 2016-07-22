@@ -12,10 +12,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -64,7 +67,8 @@ public class YadaRestController {
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
         ArrayList<Link> scoredLinkList = (ArrayList<Link>) generateLinkScore(linkList);
-        ArrayList<Link> finalList = links.OrderByLinkscoreDesc(scoredLinkList);
+
+
         return scoredLinkList;
     }
 
@@ -126,26 +130,26 @@ public class YadaRestController {
     }
 
 
-    public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
-        ArrayList<Link> sortedLinkList = new ArrayList<>();
-
-        int yadaCountIterator = 1;
-        int minimum = 0;
-        int maximum = 700;
-
-        for (Link link : list) {
-
-            Random r = new Random();
-            int yadaTotalVotesIterator = minimum + r.nextInt((maximum - minimum) + 1);
-            link.setNumberOfYadas(yadaCountIterator);
-            link.setTotalVotes(yadaTotalVotesIterator);
-            link.setLinkScore(link.getTotalVotes() / link.getNumberOfYadas());
-            yadaCountIterator++;
-            links.save(link);
-            sortedLinkList.add(link);
-        }
-        return sortedLinkList;
-    }
+//    public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
+//        ArrayList<Link> sortedLinkList = new ArrayList<>();
+//
+//        int yadaCountIterator = 1;
+//        int minimum = 0;
+//        int maximum = 700;
+//
+//        for (Link link : list) {
+//
+//            Random r = new Random();
+//            int yadaTotalVotesIterator = minimum + r.nextInt((maximum - minimum) + 1);
+//            link.setNumberOfYadas(yadaCountIterator);
+//            link.setTotalVotes(yadaTotalVotesIterator);
+//            link.setLinkScore(link.getTotalVotes() / link.getNumberOfYadas());
+//            yadaCountIterator++;
+//            links.save(link);
+//            sortedLinkList.add(link);
+//        }
+//        return sortedLinkList;
+//    }
 
     public ArrayList<Yada> sortYadasFromLink(Integer id) {
         ArrayList<Yada> sortedYadas = new ArrayList<>();
