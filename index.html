@@ -5,8 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="501527334807-ha9jues5c0u7o3ufev8a66s2jvq8gj0g.apps.googleusercontent.com">
+    <!-- <meta name="google-signin-client_id" content="501527334807-ha9jues5c0u7o3ufev8a66s2jvq8gj0g.apps.googleusercontent.com"> -->
 
     <title>The Yada</title>
     <link  rel="icon" href="./assets/yada-icon.png" media="screen" title="no title" charset="utf-8">
@@ -16,6 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-cookies.min.js" charset="utf-8"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/satellizer/0.15.3/satellizer.min.js"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Aldrich' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" media="screen" title="no title" charset="utf-8">
@@ -31,8 +31,7 @@
           <h1>The Yada</h1>
           <span ng-show="logStatus.status">Thanks for keeping it brief <u>{{vol.firstname}}!</u></span>
 
-          <!-- <a href="#" onclick="signOut();">Sign out</a> -->
-          <div id="my-signin2"></div>
+          <!-- <div id="my-signin2"></div>
               <script>
                 function onSuccess(googleUser) {
                   console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
@@ -53,7 +52,7 @@
                 }
               </script>
 
-        </div>
+        </div> -->
 
         <ul id="nav-list">
             <li><a href="#/">Home</a></li>
@@ -79,7 +78,7 @@
 
 
     <!--MY SCRIPTS-->
-    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    <!-- <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script> -->
     <script src="app.js" charset="utf-8"></script>
 </body>
 
