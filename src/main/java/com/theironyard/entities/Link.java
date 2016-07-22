@@ -35,7 +35,7 @@ public class Link {
     long timeDiffInSeconds;
 
     @OneToMany(mappedBy = "link")
-    ArrayList<Yada> yadaList;
+    List<Yada> yadaList;
 
     public Link() {
     }
