@@ -10,5 +10,5 @@ import java.util.ArrayList;
  */
 public interface LinkRepository extends CrudRepository<Link, Integer> {
     Link findFirstByUrl(String url);
-    ArrayList<Link> findTop10ByOrderByLinkscoreDesc(ArrayList<Link> links);
+    ArrayList<Link> findTop10ByOrderByLinkScoreDesc(ArrayList<Link> links);
 }
