@@ -41,7 +41,7 @@ dependencies {
 	compile('org.hibernate:hibernate-java8:5.0.9.Final')
 
 	// spring security
-	compile('org.springframework.boot:spring-boot-starter-security')
+	//compile('org.springframework.boot:spring-boot-starter-security')
 
 	//jjwt
 	compile('io.jsonwebtoken:jjwt:0.6.0')
