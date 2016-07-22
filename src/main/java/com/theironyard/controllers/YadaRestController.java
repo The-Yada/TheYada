@@ -61,15 +61,13 @@ public class YadaRestController {
 
     }
 
-    //route which returns a sorted(by highest score) list of all yadaLists(based on url)
+    // route which returns a sorted(by highest score) list of all yadaLists(based on url)
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
     public ArrayList<Link> getYadaList() {
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
         ArrayList<Link> scoredLinkList = (ArrayList<Link>) generateLinkScore(linkList);
-
-
-        return scoredLinkList;
+        return links.findTop10ByOrderByLinkscoreDesc(scoredLinkList);
     }
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
