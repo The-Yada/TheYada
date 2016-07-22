@@ -1,57 +1,16 @@
+<!---#################################
+  HOME TEMPLATE
+################################## -->
+
 <ul>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
-  <li>yada yada 
-    <a href="http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn">http://www.cnn.com/videos/world/2016/07/21/intv-amanpour-vincente-fox-republican-convention.cnn
-    </a>
-    <h6>by: billy bob</h6>
-  </li>
+    <li ng-repeat="yada in topYadas">
+          <h3>{{yada.title}}</h3>
+          <span class="url-home">{{yada.url}}</span>
+          <span class="author-home">{{yada.author}}</span>
+
+          <!-- TODO: these button def need to be arrows-->
+          <button class="up-home" type="button" name="up">up</button>
+          <span class="karma-home">{{yada.karma}}</span>
+          <button class="down-home" type="button" name="down">down</button>
+    </li>
 </ul>
