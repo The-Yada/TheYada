@@ -14,6 +14,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,11 +26,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Random;
-
-import java.util.List;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by will on 7/18/16.
@@ -75,6 +72,11 @@ public class YadaRestController {
         session.setAttribute("username", user.getUsername());
         return user;
     }
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "";
+    }
 
     // route which returns a sorted(by highest score) list of all yadaLists(based on url)
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
@@ -82,10 +84,14 @@ public class YadaRestController {
 
 //        ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
 //        generateLinkScore(linkList);
-////        ArrayList<Link> finalList = links.findTop10ByOrderByLinkScoreDesc(linkList);
 //        return finalList;
+
+
+
+
         ArrayList<Link> allLinks = (ArrayList<Link>) links.findAll();
-          return allLinks;
+        generateLinkScore(allLinks);
+        return links.findTop10ByOrderByLinkScoreDesc();
     }
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
