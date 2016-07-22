@@ -9,19 +9,26 @@
     "contextMenus"
   ],
   "background": {
-    "scripts": ["background.js","context-menu.js"],
+    "scripts": [
+      "js/background.js",
+      "js/context-menu.js"
+    ],
     "persistent": false
   },
   "icons": {
-    "16": "yada-icon.png",
-    "48": "yada-icon.png",
-    "128": "yada-icon.png"
+    "16": "assets/yada-icon.png",
+    "48": "assets/yada-icon.png",
+    "128": "assets/yada-icon.png"
   },
   "browser_action": {
     "default_title": "The Yada",
-    "default_icon": "yada-icon.png"
+    "default_icon": "assets/yada-icon.png"
   },
   "manifest_version": 2,
-  "web_accessible_resources": ["yada.html","frame.css","app.js"]
+  "web_accessible_resources": [
+    "yada.html",
+    "css/frame.css",
+    "js/app.js"
+  ]
 
 }
