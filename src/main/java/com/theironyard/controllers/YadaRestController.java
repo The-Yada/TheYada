@@ -7,17 +7,20 @@ import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
+import com.theironyard.utils.PasswordStorage;
 import org.h2.tools.Server;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -56,6 +59,21 @@ public class YadaRestController {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
 
+    }
+    //regular login route
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public User login(@RequestBody User user, HttpSession session) throws Exception {
+        User userFromDatabase = users.findFirstByUsername(user.getUsername());
+        if (userFromDatabase == null) {
+            user.setPassword(PasswordStorage.createHash(user.getPassword()));
+            user.setUsername(user.getUsername());
+            users.save(user);
+        }
+        else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDatabase.getPassword())) {
+            throw new Exception("BAD PASS");
+        }
+        session.setAttribute("username", user.getUsername());
+        return user;
     }
 
     // route which returns a sorted(by highest score) list of all yadaLists(based on url)
@@ -128,26 +146,26 @@ public class YadaRestController {
     }
 
 
-    public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
-        ArrayList<Link> sortedLinkList = new ArrayList<>();
-
-        int yadaCountIterator = 1;
-        int minimum = 0;
-        int maximum = 700;
-
-        for (Link link : list) {
-
-            Random r = new Random();
-            int yadaTotalVotesIterator = minimum + r.nextInt((maximum - minimum) + 1);
-            link.setNumberOfYadas(yadaCountIterator);
-            link.setTotalVotes(yadaTotalVotesIterator);
-            link.setLinkScore(link.getTotalVotes() / link.getNumberOfYadas());
-            yadaCountIterator++;
-            links.save(link);
-            sortedLinkList.add(link);
-        }
-        return sortedLinkList;
-    }
+//    public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
+//        ArrayList<Link> sortedLinkList = new ArrayList<>();
+//
+//        int yadaCountIterator = 1;
+//        int minimum = 0;
+//        int maximum = 700;
+//
+//        for (Link link : list) {
+//
+//            Random r = new Random();
+//            int yadaTotalVotesIterator = minimum + r.nextInt((maximum - minimum) + 1);
+//            link.setNumberOfYadas(yadaCountIterator);
+//            link.setTotalVotes(yadaTotalVotesIterator);
+//            link.setLinkScore(link.getTotalVotes() / link.getNumberOfYadas());
+//            yadaCountIterator++;
+//            links.save(link);
+//            sortedLinkList.add(link);
+//        }
+//        return sortedLinkList;
+//    }
 
     public ArrayList<Yada> sortYadasFromLink(Integer id) {
         ArrayList<Yada> sortedYadas = new ArrayList<>();

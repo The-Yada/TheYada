@@ -16,6 +16,9 @@ public class User {
     @Column(nullable = false)
     String username;
 
+    @Column(nullable = false)
+    String password;
+
     @Column
     int karma;
 
@@ -23,6 +26,14 @@ public class User {
     public List<YadaUserJoin> yadaUserJoinList;
 
     public User() {
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getId() {
