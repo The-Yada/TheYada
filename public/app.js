@@ -7,15 +7,20 @@
 
 module.exports = function(app) {
 
-  app.controller('LoginController', ['$scope', 'UserService', function($scope, UserService){
+  app.controller('LoginController', ['$scope', 'UserService', '$auth', function($scope, UserService, $auth){
     $scope.username = '';
     $scope.user = UserService.getUser();
 
     $scope.login = function() {
       // OAuth stuff
-      // UserService.getUser()
+      UserService.getUser()
 
     }
+
+    $scope.authenticate = function(provider) {
+      $auth.authenticate(provider);
+      console.log(provider);
+    };
 
 
 
@@ -48,13 +53,7 @@ module.exports = function(app) {
     // $scope.user = UserService.getUser();
     $scope.isCollapsed = false;
 
-    function signOut() {
-      GoogleAuth.signOut()
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut().then(function () {
-        console.log('User signed out.');
-      });
-    }
+
 
 
 
@@ -75,10 +74,25 @@ module.exports = function(app) {
 (function () {
   "use strict";
 
-  var app = angular.module('YadaWebApp', ['ngRoute'])
+  var app = angular.module('YadaWebApp', ['ngRoute', 'satellizer'])
 
   //Router
-  .config(['$routeProvider', function ($routeProvider) {
+  .config(['$routeProvider', '$authProvider', function ($routeProvider, $authProvider) {
+
+    $authProvider.google({
+      url: '/auth/google',
+      clientId: '501527334807-ha9jues5c0u7o3ufev8a66s2jvq8gj0g.apps.googleusercontent.com',
+      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
+      redirectUri: window.location.origin,
+      requiredUrlParams: ['scope'],
+      optionalUrlParams: ['display'],
+      scope: ['profile', 'email'],
+      scopePrefix: 'openid',
+      scopeDelimiter: ' ',
+      display: 'popup',
+      type: '2.0',
+      popupOptions: { width: 452, height: 633 }
+    });
 
     $routeProvider.when('/', {
       templateUrl: 'home.html'
