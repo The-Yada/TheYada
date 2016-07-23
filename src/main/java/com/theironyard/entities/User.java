@@ -81,4 +81,9 @@ public class User {
         this.karma = karma;
     }
 
+    public User(String username, String password, int karma) {
+        this.username = username;
+        this.password = password;
+        this.karma = karma;
+    }
 }

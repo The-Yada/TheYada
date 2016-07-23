@@ -61,7 +61,7 @@ public class YadaController {
             fileScanner.nextLine();
             while (fileScanner.hasNext()) {
                 String[] columns = fileScanner.nextLine().split(",");
-                User user = new User(columns[0], Integer.valueOf(columns[1]));
+                User user = new User(columns[0], columns[1], Integer.valueOf(columns[2]));
                 users.save(user);
 
             }
@@ -89,7 +89,7 @@ public class YadaController {
 //                int randomNumVotes = r.nextInt(range) + minimum;
 //                int randomNumYadas = r.nextInt(rangeYada + minYada);
                 String[] columns = linkScanner.nextLine().split(",");
-                Link link = new Link(columns[0], LocalDateTime.now().minusSeconds(Long.valueOf(columns[2])), 0, Integer.valueOf(columns[1]), 5, 0);
+                Link link = new Link(columns[0], LocalDateTime.now().minusSeconds(Long.valueOf(columns[1])), 0, Integer.valueOf(columns[1]), 5, 0);
                 links.save(link);
 //                i++;
 //
