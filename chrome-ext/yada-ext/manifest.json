@@ -3,6 +3,8 @@
   "description": "pop over news article summaries",
   "version": "2.0",
   "permissions": [
+    "http://*/*",
+    "https://*/*",
     "tabs",
     "activeTab",
     "http://tiny-tiny.herokuapp.com/*/*",
@@ -28,7 +30,9 @@
   "web_accessible_resources": [
     "yada.html",
     "css/frame.css",
-    "js/app.js"
+    "js/app.js",
+    "js/content.js"
   ]
+
 
 }
