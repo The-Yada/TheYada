@@ -22,12 +22,12 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
       })
 
       .when('/login',{
-        templateUrl: 'login.html',
+        templateUrl: 'log-in.html',
         controller: 'LoginController',
       })
 
       .when('/logout',{
-        templateUrl: 'logout.html',
+        templateUrl: 'log-out.html',
         controller: 'LoginController',
       })
 

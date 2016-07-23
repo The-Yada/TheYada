@@ -5,16 +5,12 @@
 <h3>login page</h3>
 
 
-<ul ng-if="!isAuthenticated()">
   <div class="login">
 
   <input type="text" ng-model='username' name="username" placeholder="username" value="">
   <input type="password" ng-model='password' name="password" placeholder="password" value="">
   <button class="login-button" type="submit" ng-click="login()" name="button">Login</button>
 
-</div>
-</ul>
+  </div>
 
-<ul ng-if="isAuthenticated()">
   <button class="logout-button" ng-click="logout()">log out</button>
-</ul>

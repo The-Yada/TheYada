@@ -13,32 +13,21 @@ module.exports = function(app) {
 
       return {
         // need server and db to post
-        setUser(userObj) {
+        setUser(user) {
+
           $http({
-            url: '/user',
+            url: '/login',
             method: 'POST',
-            data: {
-              user: userObj,
-            }
-          })
-        },
-
-        //when logging in
-        logUser(callback) {
-          $http({
-            url: '/user',
-            method: 'GET',
-          }).then(function(response){
-
-            let user = callback(response);
+            data: user
+          }).then(function() {
             angular.copy(user, userObj);
-
             let log = {status: true};
             angular.copy(log, logStatus);
 
             $location.path('/');
           })
         },
+
 
         // return log status
         getLogStatus() {
@@ -54,13 +43,23 @@ module.exports = function(app) {
 
         // clear out user information and reset status
         clearSession() {
-          user = {};
-          let log = {status: false};
+          $http({
+            url: '/logout',
+            method: 'POST',
+            data: {
+              user: userObj,
+            }
+          }).then(function() {
 
-          angular.copy(user, vol);
-          angular.copy(log, logStatus);
+            user = {};
+            let log = {status: false};
 
-          $location.path('/');
+            angular.copy(user, userObj);
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          });
+
         },
       }
 

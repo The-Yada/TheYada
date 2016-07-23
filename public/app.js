@@ -31,12 +31,6 @@ module.exports = function(app) {
     $scope.userObj = UserService.getUser();
 
 
-
-
-    $scope.isAuthenticated = function() {
-
-      };
-
       $scope.login = function() {
         //start session
         //block user input *ADD* condition if user has been created
@@ -45,29 +39,9 @@ module.exports = function(app) {
           console.log("enter your shit right", $scope.username);
           return
         } else {
-            // check to see if user exits
-            UserService.logUser(function(response){
-
-                user = response.data.filter(function(e){
-                  return e.username === $scope.username && e.password === $scope.password;
-                })
-                $scope.username = '';
-                $scope.password = '';
-
-                if (user.length === 1) {
-                  // set user session, probs change *login* link to *logout*
-
-                  return user[0].info;
-                } else {
-                  // create new user
-                  console.log("create new user");
-
-                  //** need server and db ** set username and password
-
-                  // VolunteerService.setVol(username, password)
-                  return
-                }
-            });
+            UserService.setUser({username: $scope.username, password: $scope.password});
+            $scope.username = '';
+            $scope.password = '';
 
         }
       }
@@ -75,7 +49,7 @@ module.exports = function(app) {
 
     $scope.logout = function() {
       //clear session
-
+      UserService.clearSession();
     }
 
 
@@ -98,8 +72,8 @@ module.exports = function(app) {
     * menu collapse
     *********************************/
     $scope.logStatus = UserService.getLogStatus();
-    $scope.user = UserService.getUser();
-    $scope.isCollapsed = false;
+    // $scope.user = UserService.getUser();
+    // $scope.isCollapsed = false;
 
 
 
@@ -131,10 +105,10 @@ module.exports = function(app) {
       templateUrl: 'home.html',
       controller: 'HomeController'
     }).when('/login', {
-      templateUrl: 'login.html',
+      templateUrl: 'log-in.html',
       controller: 'LoginController'
     }).when('/logout', {
-      templateUrl: 'logout.html',
+      templateUrl: 'log-out.html',
       controller: 'LoginController'
     }).when('/about', {
       templateUrl: 'about.html'
@@ -175,32 +149,21 @@ module.exports = function(app) {
 
       return {
         // need server and db to post
-        setUser(userObj) {
+        setUser(user) {
+
           $http({
-            url: '/user',
+            url: '/login',
             method: 'POST',
-            data: {
-              user: userObj,
-            }
-          })
-        },
-
-        //when logging in
-        logUser(callback) {
-          $http({
-            url: '/user',
-            method: 'GET',
-          }).then(function(response){
-
-            let user = callback(response);
+            data: user
+          }).then(function() {
             angular.copy(user, userObj);
-
             let log = {status: true};
             angular.copy(log, logStatus);
 
             $location.path('/');
           })
         },
+
 
         // return log status
         getLogStatus() {
@@ -216,13 +179,23 @@ module.exports = function(app) {
 
         // clear out user information and reset status
         clearSession() {
-          user = {};
-          let log = {status: false};
+          $http({
+            url: '/logout',
+            method: 'POST',
+            data: {
+              user: userObj,
+            }
+          }).then(function() {
 
-          angular.copy(user, vol);
-          angular.copy(log, logStatus);
+            user = {};
+            let log = {status: false};
 
-          $location.path('/');
+            angular.copy(user, userObj);
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          });
+
         },
       }
 

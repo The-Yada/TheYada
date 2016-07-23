@@ -11,8 +11,8 @@ module.exports = function(app) {
     * menu collapse
     *********************************/
     $scope.logStatus = UserService.getLogStatus();
-    $scope.user = UserService.getUser();
-    $scope.isCollapsed = false;
+    // $scope.user = UserService.getUser();
+    // $scope.isCollapsed = false;
 
 
 
