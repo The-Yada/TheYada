@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import sun.reflect.annotation.ExceptionProxy;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -125,6 +126,9 @@ public class YadaRestController {
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
     public HttpStatus upVote(int yadaUserJoinId, int userId, int yadaId){
 
+        //*** we need to also account for users karma being altered when up and down votes are cast
+
+
         YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
         User user = users.findOne(userId);
         Yada yada = yadas.findOne(yadaId);
@@ -145,6 +149,8 @@ public class YadaRestController {
     //hit this route so users can downVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public HttpStatus downVote(int yadaUserJoinId, int userId, int yadaId){
+
+        //*** we need to also account for users karma being altered when up and down votes are cast
 
         YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
         User user = users.findOne(userId);
@@ -187,7 +193,11 @@ public class YadaRestController {
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public HttpStatus addYada(String content, String url, String username) {
+    public Iterable<Yada> addYada(HttpSession session, String content, String url) throws Exception {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            throw new Exception ("Not So Fast!!");
+        }
 
         Link link = links.findFirstByUrl(url);
         User user = users.findFirstByUsername(username);
@@ -199,7 +209,9 @@ public class YadaRestController {
         yadas.save(yada);
         links.save(link);
 
-        return HttpStatus.ACCEPTED;
+        Iterable<Yada> updatedYadaList = link.getYadaList();
+
+        return updatedYadaList;
     }
 
     public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
@@ -255,7 +267,6 @@ public class YadaRestController {
                 parsedDoc.add(str);
             });
         }
-        //System.out.println(parsedDoc);
 
         return parsedDoc;
     }
