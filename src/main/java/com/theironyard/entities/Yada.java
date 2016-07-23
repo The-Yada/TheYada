@@ -36,6 +36,7 @@ public class Yada {
 
     public Yada() {
     }
+
     public Yada(String content, int karma, LocalDateTime time, int score, User user, Link link) {
         this.content = content;
         this.karma = karma;

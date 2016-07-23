@@ -6,27 +6,30 @@
 
 module.exports = function(app) {
 
-  app.controller('LoginController', ['$scope', 'UserService', '$auth', function($scope, UserService, $auth){
+  app.controller('LoginController', ['$scope', 'UserService', function($scope, UserService){
     $scope.username = '';
-    $scope.user = UserService.getUser();
+    $scope.userObj = UserService.getUser();
 
-    $scope.login = function() {
-      // OAuth stuff
-      UserService.getUser()
 
-    }
+      $scope.login = function() {
+        //start session
+        //block user input *ADD* condition if user has been created
+        console.log($scope.username);
+        if ($scope.username === '' || $scope.password === '') {
+          console.log("enter your shit right", $scope.username);
+          return
+        } else {
+            UserService.setUser({username: $scope.username, password: $scope.password});
+            $scope.username = '';
+            $scope.password = '';
 
-    $scope.authenticate = function(provider) {
-      $auth.authenticate(provider);
-      console.log(provider);
-    };
-
+        }
+      }
 
 
     $scope.logout = function() {
       //clear session
-      UserService.clearSession()
-
+      UserService.clearSession();
     }
 
 
