@@ -95,7 +95,7 @@ public class YadaRestController {
     }
 
     //route which brings user to the editing screen with scraped website text and submission box
-    @RequestMapping(path = "/lemmieYada{url}", method = RequestMethod.GET)
+    @RequestMapping(path = "/lemmieYada/{url}", method = RequestMethod.GET)
     public ArrayList<String> letMeYada(@PathVariable String url) throws IOException {
 
         ArrayList<String> scrapedSite = soupThatSite(url);
@@ -177,8 +177,8 @@ public class YadaRestController {
     }
 
     //hit this route to display yadas for a given webpage from the chrome extension
-    @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
-    public ArrayList<Yada> showMeTheYada(String url) {
+    @RequestMapping(path = "/lemmieSeeTheYadas/{url}", method = RequestMethod.GET)
+    public ArrayList<Yada> showMeTheYada(@PathVariable String url) {
 
         Link link = links.findFirstByUrl(url);
 
