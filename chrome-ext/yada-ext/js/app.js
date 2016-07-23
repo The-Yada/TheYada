@@ -1,18 +1,27 @@
 
+(function loadYada() {
+    let extUrl = document.referrer;
+    let currentUrl = 'http://localhost:8080/lemmieSeeTheYadas?url=' + extUrl;
 
-var request = new XMLHttpRequest();
-request.addEventListener('load', function() {
-  // let url = 'http://yada.com/yada_url?' + tab.url;
-  var author = JSON.parse(this.responseText);
-  console.log(author);
-  var name = document.createElement('SPAN');
-  var iframe = document.getElementById('yadaText')
-  name.innerText = author[0].name;
-  iframe.appendChild(name);
-})
+    let request = new XMLHttpRequest();
+    request.addEventListener('load', function() {
 
-request.open('GET', 'https://tiny-tiny.herokuapp.com/collections/cbgrid')
-request.send();
+      console.log(currentUrl);
+      let yada = JSON.parse(this.responseText);
+      console.log(yada);
+      let content = document.getElementById('content-yadaText');
+      let author = document.getElementById('author-yadaText');
+      let iframe = document.getElementById('yadaText')
+      content.innerText = yada[0].content;
+      author.innerText = yada[0].user;
+      iframe.appendChild(content);
+    })
+
+    request.open('GET', currentUrl);
+    request.send();
+})();
+
+
 
 
 

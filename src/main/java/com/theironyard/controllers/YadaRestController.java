@@ -25,11 +25,7 @@ import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Random;
-
-import java.util.List;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by will on 7/18/16.
@@ -95,8 +91,8 @@ public class YadaRestController {
     }
 
     //route which brings user to the editing screen with scraped website text and submission box
-    @RequestMapping(path = "/lemmieYada{url}", method = RequestMethod.GET)
-    public ArrayList<String> letMeYada(@PathVariable String url) throws IOException {
+    @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
+    public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
 
         ArrayList<String> scrapedSite = soupThatSite(url);
 
@@ -131,7 +127,6 @@ public class YadaRestController {
         yadas.save(yada);
 
     }
-
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
     public HttpStatus upVote(int yadaUserJoinId, int userId, int yadaId){
@@ -153,7 +148,6 @@ public class YadaRestController {
 
         return HttpStatus.ACCEPTED;
     }
-
     //hit this route so users can downVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public HttpStatus downVote(int yadaUserJoinId, int userId, int yadaId){
@@ -178,11 +172,12 @@ public class YadaRestController {
 
     //hit this route to display yadas for a given webpage from the chrome extension
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
-    public ArrayList<Yada> showMeTheYada(String url) {
+    public Iterable<Yada> showMeTheYada(@RequestParam (value = "url", required = false) String url) {
 
         Link link = links.findFirstByUrl(url);
+        Iterable<Yada> theYadas = link.getYadaList();
 
-        return (ArrayList<Yada>) link.getYadaList();
+        return theYadas;
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
