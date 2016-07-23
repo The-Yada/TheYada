@@ -53,24 +53,31 @@ document.getElementById('login').addEventListener('click', function() {
 
   request.open('POST', 'http://localhost:8080/login');
   request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  request.send(JSON.stringify({username:`${username.value}`, password:`${password.value}`}))
+  request.send(JSON.stringify({username:`${username.value}`, password:`${password.value}`}));
+
+  username.value = '';
+  password.value = '';
+
 });
 
 
 function postIt() {
+  console.log('trying to post');
+
   let extUrl = document.referrer;
 
-  let name = document.getElementById('editorName');
   let text = document.getElementById('editorText');
   let request = new XMLHttpRequest();
 
-  request.open('POST', '/addYada');
-  request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  request.send(JSON.stringify({content: `${text.value}`}, url: `${extUrl}`));
+  request.open('POST', 'http://localhost:8080/addYada');
+  // request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  request.send({content:`${text.value}`, url:`${extUrl}`});
+  text.value = '';
+
 }
 
 // Add a click handler to the new button we just made.
-let postButton = document.querySelector('.postIt');
+let postButton = document.getElementById('postIt');
 postButton.addEventListener('click', function () {
     console.log(`clicked on post button`);
     postIt();

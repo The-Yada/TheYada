@@ -191,21 +191,23 @@ public class YadaRestController {
 
         return theYadas;
     }
-    
+
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
     public Iterable<Yada> addYada(HttpSession session, String content, String url) throws Exception {
         String username = (String) session.getAttribute("username");
-        if (username == null) {
-            throw new Exception ("Not So Fast!!");
-        }
+//        if (username == null) {
+//            throw new Exception ("Not So Fast!!");
+//        }
 
         Link link = links.findFirstByUrl(url);
+        if (link == null) {
+            link = new Link(url, LocalDateTime.now(), 0, 0, 1, 0);
+        }
         User user = users.findFirstByUsername(username);
 
         Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
-        ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
-        yadasInLink.add(yada);
+        link.getYadaList().add(yada);
 
         yadas.save(yada);
         links.save(link);
