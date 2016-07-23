@@ -10,12 +10,17 @@ function disableBrowserAction(tab){
 }
 
 function enableBrowserAction(tab){
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {greeting: `${tab.url}`}, function(response) {
+      console.log(response);
+      });
+    });
+
     chrome.browserAction.setIcon({path:"assets/active.png"});
 
     console.log('Creating ' + tab.url + ' yada!');
     chrome.tabs.executeScript(null, {file: "js/content.js"});
 
-    chrome.tabs.sendMessage(1, "hello from the bG");
 }
 
 function updateState(tab){

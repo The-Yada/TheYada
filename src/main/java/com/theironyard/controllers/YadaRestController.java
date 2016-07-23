@@ -25,11 +25,7 @@ import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Random;
-
-import java.util.List;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by will on 7/18/16.
@@ -175,11 +171,11 @@ public class YadaRestController {
     }
 
     //hit this route to display yadas for a given webpage from the chrome extension
-    @RequestMapping(path = "/lemmieSeeTheYadas{id}", method = RequestMethod.GET)
-    public ArrayList<Yada> showMeTheYada(String url) {
+    @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
+    public Iterable<Yada> showMeTheYada(@RequestParam (value = "url", required = false) String url) {
 
         Link link = links.findFirstByUrl(url);
-        ArrayList<Yada> theYadas = (ArrayList<Yada>) link.getYadaList();
+        Iterable<Yada> theYadas = link.getYadaList();
 
         return theYadas;
     }

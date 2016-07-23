@@ -1,10 +1,4 @@
-function showUrl(message, sender, callback) {
-  console.log("getting message" + message);
-  console.log("getting sender" + sender);
-  return message;
-}
 
-chrome.runtime.onMessage.addListener(showUrl)
 
 var f = document.createElement('iframe'),
     frameStyleElement = document.createElement('link'),
@@ -18,6 +12,7 @@ document.querySelector('head').appendChild(frameStyleElement);
 // Configure the frame:
 f.id = 'frame';
 f.src = chrome.extension.getURL('yada.html');
+
 
 
 
