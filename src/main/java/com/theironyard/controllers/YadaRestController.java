@@ -91,8 +91,8 @@ public class YadaRestController {
     }
 
     //route which brings user to the editing screen with scraped website text and submission box
-    @RequestMapping(path = "/lemmieYada/{url}", method = RequestMethod.GET)
-    public ArrayList<String> letMeYada(@PathVariable String url) throws IOException {
+    @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
+    public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
 
         ArrayList<String> scrapedSite = soupThatSite(url);
 
@@ -127,7 +127,6 @@ public class YadaRestController {
         yadas.save(yada);
 
     }
-
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
     public HttpStatus upVote(int yadaUserJoinId, int userId, int yadaId){
@@ -149,7 +148,6 @@ public class YadaRestController {
 
         return HttpStatus.ACCEPTED;
     }
-
     //hit this route so users can downVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public HttpStatus downVote(int yadaUserJoinId, int userId, int yadaId){
