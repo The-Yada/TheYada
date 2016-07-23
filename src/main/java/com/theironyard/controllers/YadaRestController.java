@@ -3,6 +3,7 @@ package com.theironyard.controllers;
 import com.theironyard.entities.Link;
 import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
+import com.theironyard.entities.YadaUserJoin;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -62,6 +64,7 @@ public class YadaRestController {
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public User login(@RequestBody User user, HttpSession session) throws Exception {
         User userFromDatabase = users.findFirstByUsername(user.getUsername());
+
         if (userFromDatabase == null) {
             user.setPassword(PasswordStorage.createHash(user.getPassword()));
             user.setUsername(user.getUsername());
@@ -70,6 +73,7 @@ public class YadaRestController {
         else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDatabase.getPassword())) {
             throw new Exception("BAD PASS");
         }
+
         session.setAttribute("username", user.getUsername());
         return user;
     }
@@ -78,6 +82,7 @@ public class YadaRestController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "";
+
     }
 
     // route which returns a sorted(by highest score) list of all yadaLists(based on url)
@@ -90,7 +95,7 @@ public class YadaRestController {
     }
 
     //route which brings user to the editing screen with scraped website text and submission box
-    @RequestMapping(path = "/lemmieYada{url}", method = RequestMethod.GET)
+    @RequestMapping(path = "/lemmieYada/{url}", method = RequestMethod.GET)
     public ArrayList<String> letMeYada(@PathVariable String url) throws IOException {
 
         ArrayList<String> scrapedSite = soupThatSite(url);
@@ -109,6 +114,7 @@ public class YadaRestController {
         }
         return linkList;
     }
+
     //hit this route to upvote or downvote yadas
     //not sure how to grab userId from Oauth
     @RequestMapping(path = "/upOrDownVote", method = RequestMethod.POST)
@@ -124,6 +130,59 @@ public class YadaRestController {
         }
         yadas.save(yada);
 
+    }
+
+    //hit this route so users can upVote yadas
+    @RequestMapping(path = "/upVote", method = RequestMethod.POST)
+    public HttpStatus upVote(int yadaUserJoinId, int userId, int yadaId){
+
+        YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
+        User user = users.findOne(userId);
+        Yada yada = yadas.findOne(yadaId);
+
+        if (yadaUJoin == null) {
+            yadaUJoin.setUser(user);
+            yadaUJoin.setYada(yada);
+            yada.setKarma(yada.getKarma() + 1);
+            yadaUserJoinRepo.save(yadaUJoin);
+        }
+
+        else {
+           return HttpStatus.LOCKED;
+        }
+
+        return HttpStatus.ACCEPTED;
+    }
+
+    //hit this route so users can downVote yadas
+    @RequestMapping(path = "/downVote", method = RequestMethod.POST)
+    public HttpStatus downVote(int yadaUserJoinId, int userId, int yadaId){
+
+        YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
+        User user = users.findOne(userId);
+        Yada yada = yadas.findOne(yadaId);
+
+        if (yadaUJoin == null) {
+            yadaUJoin.setUser(user);
+            yadaUJoin.setYada(yada);
+            yada.setKarma(yada.getKarma() - 1);
+            yadaUserJoinRepo.save(yadaUJoin);
+        }
+
+        else {
+            return HttpStatus.LOCKED;
+        }
+
+        return HttpStatus.ACCEPTED;
+    }
+
+    //hit this route to display yadas for a given webpage from the chrome extension
+    @RequestMapping(path = "/lemmieSeeTheYadas/{url}", method = RequestMethod.GET)
+    public ArrayList<Yada> showMeTheYada(@PathVariable String url) {
+
+        Link link = links.findFirstByUrl(url);
+
+        return (ArrayList<Yada>) link.getYadaList();
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
