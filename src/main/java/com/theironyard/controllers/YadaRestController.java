@@ -109,6 +109,22 @@ public class YadaRestController {
         }
         return linkList;
     }
+    //hit this route to upvote or downvote yadas
+    //not sure how to grab userId from Oauth
+    @RequestMapping(path = "/upOrDownVote", method = RequestMethod.POST)
+    public void Vote(int id, int voteInt) {
+        //need user info to check if they've already voted
+
+        Yada yada = yadas.findOne(id);
+        if (voteInt == 1) {
+            yada.setKarma(yada.getKarma() + 1);
+        }
+        if(voteInt == -1) {
+            yada.setKarma(yada.getKarma() - 1);
+        }
+        yadas.save(yada);
+
+    }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
     public HttpStatus addYada(String content, String url, String username) {
