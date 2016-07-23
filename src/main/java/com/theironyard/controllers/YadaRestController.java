@@ -90,6 +90,7 @@ public class YadaRestController {
         return links.findTop5ByOrderByLinkScoreDesc();
     }
 
+
     //route which brings user to the editing screen with scraped website text and submission box
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
@@ -98,7 +99,7 @@ public class YadaRestController {
 
         return scrapedSite;
     }
-    // algo attempt 1
+    // sorting algorithm - HOT (time/votes)
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
 
         for (Link link : linkList) {
