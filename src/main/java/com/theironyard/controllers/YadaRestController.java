@@ -54,7 +54,6 @@ public class YadaRestController {
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
         soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
-
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
@@ -90,6 +89,26 @@ public class YadaRestController {
         return links.findTop5ByOrderByLinkScoreDesc();
     }
 
+    @RequestMapping(path = "/newYadas", method = RequestMethod.GET)
+    public ArrayList<Link> getNewYadas() {
+
+        return links.findTop10ByOrderByTimeOfCreationAsc();
+    }
+
+    @RequestMapping(path = "/controversialYadas", method = RequestMethod.GET)
+    public ArrayList<Yada> getControversialYadas(String url) {
+
+        Link link = links.findFirstByUrl(url);
+        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAllByLinkId(link);
+        generateControveryScore(yadaList);
+
+        return yadas.findAllByLinkIdOrderByControversyScoreAsc(link);
+    }
+
+
+
+
+
 
     //route which brings user to the editing screen with scraped website text and submission box
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
@@ -110,6 +129,19 @@ public class YadaRestController {
             links.save(link);
         }
         return linkList;
+    }
+
+    // sorting algorithm - CONTROVERSIAL
+    public List<Yada> generateControveryScore(ArrayList<Yada> yadaList) {
+        for (Yada yada : yadaList) {
+            int upvotes = yada.getUpvotes();
+            int downvotes = yada.getDownvotes();
+            int totalVotes = yada.getUpvotes() + Math.abs(yada.getDownvotes());
+            yada.setKarma(upvotes - downvotes);
+            yada.setControversyScore((totalVotes) / Math.max(Math.abs(upvotes - downvotes), 1));
+            yadas.save(yada);
+        }
+        return yadaList;
     }
 
     //hit this route to upvote or downvote yadas
@@ -185,7 +217,8 @@ public class YadaRestController {
     public HttpStatus addYada(String content, String url, String username) {
         Link link = links.findFirstByUrl(url);
         User user = users.findFirstByUsername(username);
-        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
+        //Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
+        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
         ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
         yadasInLink.add(yada);
         yadas.save(yada);
