@@ -64,7 +64,7 @@ public class YadaRestController {
 
 //        ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
 //        generateLinkScore(linkList);
-////        ArrayList<Link> finalList = links.findTop10ByOrderByLinkScoreDesc(linkList);
+//        ArrayList<Link> finalList = links.findTop10ByOrderByLinkScoreDesc(linkList);
 //        return finalList;
         ArrayList<Link> allLinks = (ArrayList<Link>) links.findAll();
           return allLinks;

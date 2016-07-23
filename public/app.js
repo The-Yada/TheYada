@@ -26,26 +26,55 @@ module.exports = function(app) {
 
 module.exports = function(app) {
 
-  app.controller('LoginController', ['$scope', 'UserService', '$auth', function($scope, UserService, $auth){
+  app.controller('LoginController', ['$scope', 'UserService', function($scope, UserService){
     $scope.username = '';
-    $scope.user = UserService.getUser();
+    $scope.userObj = UserService.getUser();
 
-    $scope.login = function() {
-      // OAuth stuff
-      UserService.getUser()
 
-    }
 
-    $scope.authenticate = function(provider) {
-      $auth.authenticate(provider);
-      console.log(provider);
-    };
 
+    $scope.isAuthenticated = function() {
+
+      };
+
+      $scope.login = function() {
+        //start session
+        //block user input *ADD* condition if user has been created
+        console.log($scope.username);
+        if ($scope.username === '' || $scope.password === '') {
+          console.log("enter your shit right", $scope.username);
+          return
+        } else {
+            // check to see if user exits
+            UserService.logUser(function(response){
+
+                user = response.data.filter(function(e){
+                  return e.username === $scope.username && e.password === $scope.password;
+                })
+                $scope.username = '';
+                $scope.password = '';
+
+                if (user.length === 1) {
+                  // set user session, probs change *login* link to *logout*
+
+                  return user[0].info;
+                } else {
+                  // create new user
+                  console.log("create new user");
+
+                  //** need server and db ** set username and password
+
+                  // VolunteerService.setVol(username, password)
+                  return
+                }
+            });
+
+        }
+      }
 
 
     $scope.logout = function() {
       //clear session
-      UserService.clearSession()
 
     }
 
@@ -68,8 +97,8 @@ module.exports = function(app) {
     /*******************************
     * menu collapse
     *********************************/
-    // $scope.logStatus = UserService.getLogStatus();
-    // $scope.user = UserService.getUser();
+    $scope.logStatus = UserService.getLogStatus();
+    $scope.user = UserService.getUser();
     $scope.isCollapsed = false;
 
 
@@ -93,25 +122,10 @@ module.exports = function(app) {
 (function () {
   "use strict";
 
-  var app = angular.module('YadaWebApp', ['ngRoute', 'satellizer'])
+  var app = angular.module('YadaWebApp', ['ngRoute'])
 
   //Router
-  .config(['$routeProvider', '$authProvider', function ($routeProvider, $authProvider) {
-
-    $authProvider.google({
-      url: '/auth/google',
-      clientId: '501527334807-ha9jues5c0u7o3ufev8a66s2jvq8gj0g.apps.googleusercontent.com',
-      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
-      redirectUri: window.location.origin,
-      requiredUrlParams: ['scope'],
-      optionalUrlParams: ['display'],
-      scope: ['profile', 'email'],
-      scopePrefix: 'openid',
-      scopeDelimiter: ' ',
-      display: 'popup',
-      type: '2.0',
-      popupOptions: { width: 452, height: 633 }
-    });
+  .config(['$routeProvider', function ($routeProvider) {
 
     $routeProvider.when('/', {
       templateUrl: 'home.html',
@@ -156,15 +170,59 @@ module.exports = function(app) {
 
   app.factory('UserService', ['$http', '$location', function($http, $location) {
 
-      let user = {};
+      let userObj = {};
       let logStatus = {status: false};
 
       return {
+        // need server and db to post
+        setUser(userObj) {
+          $http({
+            url: '/user',
+            method: 'POST',
+            data: {
+              user: userObj,
+            }
+          })
+        },
+
+        //when logging in
+        logUser(callback) {
+          $http({
+            url: '/user',
+            method: 'GET',
+          }).then(function(response){
+
+            let user = callback(response);
+            angular.copy(user, userObj);
+
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+
+        // return log status
+        getLogStatus() {
+
+          return logStatus;
+        },
+
+        // current user
         getUser() {
 
+          return userObj;
         },
-        clearSession() {
 
+        // clear out user information and reset status
+        clearSession() {
+          user = {};
+          let log = {status: false};
+
+          angular.copy(user, vol);
+          angular.copy(log, logStatus);
+
+          $location.path('/');
         },
       }
 
