@@ -30,12 +30,13 @@ public class Yada {
     @ManyToOne
     User user;
 
-    //@JsonIgnore
+    @JsonIgnore
     @ManyToOne
     Link link;
 
     public Yada() {
     }
+
     public Yada(String content, int karma, LocalDateTime time, int score, User user, Link link) {
         this.content = content;
         this.karma = karma;
