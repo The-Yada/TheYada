@@ -1,13 +1,12 @@
 
 (function loadYada() {
     let extUrl = document.referrer;
-    console.log(extUrl);
+    let currentUrl = 'http://localhost:8080/lemmieSeeTheYadas?url=' + extUrl;
 
     let request = new XMLHttpRequest();
     request.addEventListener('load', function() {
 
-
-      let url = 'https://localhost:8080/lemmieSeeTheYada/' extUrl;
+      console.log(currentUrl);
       let yada = JSON.parse(this.responseText);
       console.log(yada);
       let content = document.getElementById('content-yadaText');
@@ -18,7 +17,7 @@
       iframe.appendChild(content);
     })
 
-    request.open('GET', url)
+    request.open('GET', currentUrl);
     request.send();
 })();
 
