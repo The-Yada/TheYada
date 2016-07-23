@@ -26,27 +26,30 @@ module.exports = function(app) {
 
 module.exports = function(app) {
 
-  app.controller('LoginController', ['$scope', 'UserService', '$auth', function($scope, UserService, $auth){
+  app.controller('LoginController', ['$scope', 'UserService', function($scope, UserService){
     $scope.username = '';
-    $scope.user = UserService.getUser();
+    $scope.userObj = UserService.getUser();
 
-    $scope.login = function() {
-      // OAuth stuff
-      UserService.getUser()
 
-    }
+      $scope.login = function() {
+        //start session
+        //block user input *ADD* condition if user has been created
+        console.log($scope.username);
+        if ($scope.username === '' || $scope.password === '') {
+          console.log("enter your shit right", $scope.username);
+          return
+        } else {
+            UserService.setUser({username: $scope.username, password: $scope.password});
+            $scope.username = '';
+            $scope.password = '';
 
-    $scope.authenticate = function(provider) {
-      $auth.authenticate(provider);
-      console.log(provider);
-    };
-
+        }
+      }
 
 
     $scope.logout = function() {
       //clear session
-      UserService.clearSession()
-
+      UserService.clearSession();
     }
 
 
@@ -68,9 +71,9 @@ module.exports = function(app) {
     /*******************************
     * menu collapse
     *********************************/
-    // $scope.logStatus = UserService.getLogStatus();
+    $scope.logStatus = UserService.getLogStatus();
     // $scope.user = UserService.getUser();
-    $scope.isCollapsed = false;
+    // $scope.isCollapsed = false;
 
 
 
@@ -93,34 +96,19 @@ module.exports = function(app) {
 (function () {
   "use strict";
 
-  var app = angular.module('YadaWebApp', ['ngRoute', 'satellizer'])
+  var app = angular.module('YadaWebApp', ['ngRoute'])
 
   //Router
-  .config(['$routeProvider', '$authProvider', function ($routeProvider, $authProvider) {
-
-    $authProvider.google({
-      url: '/auth/google',
-      clientId: '501527334807-ha9jues5c0u7o3ufev8a66s2jvq8gj0g.apps.googleusercontent.com',
-      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
-      redirectUri: window.location.origin,
-      requiredUrlParams: ['scope'],
-      optionalUrlParams: ['display'],
-      scope: ['profile', 'email'],
-      scopePrefix: 'openid',
-      scopeDelimiter: ' ',
-      display: 'popup',
-      type: '2.0',
-      popupOptions: { width: 452, height: 633 }
-    });
+  .config(['$routeProvider', function ($routeProvider) {
 
     $routeProvider.when('/', {
       templateUrl: 'home.html',
       controller: 'HomeController'
     }).when('/login', {
-      templateUrl: 'login.html',
+      templateUrl: 'log-in.html',
       controller: 'LoginController'
     }).when('/logout', {
-      templateUrl: 'logout.html',
+      templateUrl: 'log-out.html',
       controller: 'LoginController'
     }).when('/about', {
       templateUrl: 'about.html'
@@ -156,14 +144,57 @@ module.exports = function(app) {
 
   app.factory('UserService', ['$http', '$location', function($http, $location) {
 
-      let user = {};
+      let userObj = {};
       let logStatus = {status: false};
 
       return {
+        // need server and db to post
+        setUser(user) {
+
+          $http({
+            url: '/login',
+            method: 'POST',
+            data: user
+          }).then(function() {
+            angular.copy(user, userObj);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+
+
+        // return log status
+        getLogStatus() {
+
+          return logStatus;
+        },
+
+        // current user
         getUser() {
 
+          return userObj;
         },
+
+        // clear out user information and reset status
         clearSession() {
+          $http({
+            url: '/logout',
+            method: 'POST',
+            data: {
+              user: userObj,
+            }
+          }).then(function() {
+
+            user = {};
+            let log = {status: false};
+
+            angular.copy(user, userObj);
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          });
 
         },
       }
