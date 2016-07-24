@@ -176,6 +176,7 @@ public class YadaRestController {
             yadaUJoin.setUser(user);
             yadaUJoin.setYada(yada);
             yada.setKarma(yada.getKarma() + 1);
+            yada.setUpvotes(yada.getUpvotes() + 1);
             yadaUserJoinRepo.save(yadaUJoin);
         }
 
@@ -197,6 +198,7 @@ public class YadaRestController {
             yadaUJoin.setUser(user);
             yadaUJoin.setYada(yada);
             yada.setKarma(yada.getKarma() - 1);
+            yada.setDownvotes(yada.getDownvotes() + 1);
             yadaUserJoinRepo.save(yadaUJoin);
         }
 
