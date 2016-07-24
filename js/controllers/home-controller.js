@@ -13,5 +13,13 @@ module.exports = function(app) {
     $scope.topYadas = YadaService.getTopYadas();
 
 
+    $scope.upIt = function (yada) {
+        YadaService.upKarma(yada);
+    }
+    $scope.downIt = function (yada) {
+        YadaService.downKarma(yada);
+    }
+
+
   }])
 }
