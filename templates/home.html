@@ -10,8 +10,8 @@
           <span class="author-home">{{yada.user}}</span>
 
           <!-- TODO: these button def need to be arrows-->
-          <button class="up-home" type="button" name="up">up</button>
+          <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
           <span class="karma-home">karma: {{yada.totalVotes}}</span>
-          <button class="down-home" type="button" name="down">down</button>
+          <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
     </li>
 </ul>
