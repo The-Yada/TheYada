@@ -13,5 +13,10 @@ public interface LinkRepository extends PagingAndSortingRepository<Link, Integer
     Link findFirstByUrl(String url);
     ArrayList<Link> findAllByOrderByLinkScoreDesc();
     ArrayList<Link> findTop5ByOrderByLinkScoreDesc();
+    ArrayList<Link> findTop10ByOrderByLinkScoreDesc();
+    ArrayList<Link> findTop25ByOrderByLinkScoreDesc();
+    ArrayList<Link> findTop5ByOrderByTimeOfCreationAsc();
+    ArrayList<Link> findTop10ByOrderByTimeOfCreationAsc();
+
 
 }

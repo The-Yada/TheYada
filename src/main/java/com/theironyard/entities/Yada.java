@@ -27,6 +27,15 @@ public class Yada {
     @Column(nullable = false)
     int score;
 
+    @Column(nullable = false)
+    int upvotes;
+
+    @Column(nullable = false)
+    int downvotes;
+
+    @Column(nullable = false)
+    double controversyScore;
+
     @ManyToOne
     User user;
 
@@ -37,11 +46,14 @@ public class Yada {
     public Yada() {
     }
 
-    public Yada(String content, int karma, LocalDateTime time, int score, User user, Link link) {
+    public Yada(String content, int karma, LocalDateTime time, int score, int upvotes, int downvotes, double controversyScore, User user, Link link) {
         this.content = content;
         this.karma = karma;
         this.time = time;
         this.score = score;
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
+        this.controversyScore = controversyScore;
         this.user = user;
         this.link = link;
     }
@@ -108,5 +120,29 @@ public class Yada {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getUpvotes() {
+        return upvotes;
+    }
+
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    public int getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(int downvotes) {
+        this.downvotes = downvotes;
+    }
+
+    public double getControversyScore() {
+        return controversyScore;
+    }
+
+    public void setControversyScore(double controversyScore) {
+        this.controversyScore = controversyScore;
     }
 }
