@@ -95,6 +95,7 @@ public class YadaRestController {
         return links.findTop10ByOrderByTimeOfCreationAsc();
     }
 
+    // find controversial yadas inside chrome extension for the article you're on
     @RequestMapping(path = "/controversialYadas", method = RequestMethod.GET)
     public ArrayList<Yada> getControversialYadas(String url) {
 
@@ -133,6 +134,7 @@ public class YadaRestController {
 
     // sorting algorithm - CONTROVERSIAL
     public List<Yada> generateControveryScore(ArrayList<Yada> yadaList) {
+
         for (Yada yada : yadaList) {
             int upvotes = yada.getUpvotes();
             int downvotes = yada.getDownvotes();
@@ -153,9 +155,11 @@ public class YadaRestController {
         Yada yada = yadas.findOne(id);
         if (voteInt == 1) {
             yada.setKarma(yada.getKarma() + 1);
+            yada.setUpvotes(yada.getUpvotes() + 1);
         }
         if(voteInt == -1) {
             yada.setKarma(yada.getKarma() - 1);
+            yada.setDownvotes(yada.getDownvotes() + 1);
         }
         yadas.save(yada);
 
