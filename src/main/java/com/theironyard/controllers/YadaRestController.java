@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import sun.reflect.annotation.ExceptionProxy;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -107,24 +108,6 @@ public class YadaRestController {
         return yadas.findAllByLinkIdOrderByControversyScoreDesc(link);
     }
 
-    //route which brings user to the editing screen with scraped website text and submission box
-    @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
-    public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
-
-        ArrayList<String> scrapedSite = soupThatSite(url);
-
-        return scrapedSite;
-    }
-
-    //hit this route to display yadas for a given webpage from the chrome extension
-    @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
-    public Iterable<Yada> showMeTheYada(@RequestParam (value = "url", required = false) String url) {
-
-        Link link = links.findFirstByUrl(url);
-        Iterable<Yada> theYadas = link.getYadaList();
-
-        return theYadas;
-    }
 
     // sorting algorithm - HOT (time/votes)
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
@@ -170,9 +153,14 @@ public class YadaRestController {
         yadas.save(yada);
 
     }
+
+
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
     public HttpStatus upVote(int yadaUserJoinId, int userId, int yadaId){
+
+        //*** we need to also account for users karma being altered when up and down votes are cast
+
 
         YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
         User user = users.findOne(userId);
@@ -197,6 +185,8 @@ public class YadaRestController {
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public HttpStatus downVote(int yadaUserJoinId, int userId, int yadaId){
 
+        //*** we need to also account for users karma being altered when up and down votes are cast
+
         YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
         User user = users.findOne(userId);
         Yada yada = yadas.findOne(yadaId);
@@ -216,17 +206,56 @@ public class YadaRestController {
         return HttpStatus.ACCEPTED;
     }
 
-    @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public HttpStatus addYada(String content, String url, String username) {
+    //route which brings user to the editing screen with scraped website text and submission box
+    @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
+    public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
+
+        ArrayList<String> scrapedSite = soupThatSite(url);
+
+        return scrapedSite;
+    }
+
+    //hit this route to display yadas for a given webpage from the chrome extension
+    @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
+    public Iterable<Yada> showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
+
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+
+        }
         Link link = links.findFirstByUrl(url);
+        Iterable<Yada> theYadas = link.getYadaList();
+
+        return theYadas;
+    }
+
+
+    @RequestMapping(path = "/addYada", method = RequestMethod.POST)
+    public Iterable<Yada> addYada(HttpSession session, String content, String url) throws Exception {
+        String username = (String) session.getAttribute("username");
+//        if (username == null) {
+//            throw new Exception ("Not So Fast!!");
+//        }
+
+        Link link = links.findFirstByUrl(url);
+        if (link == null) {
+            link = new Link(url, LocalDateTime.now(), 0, 0, 1, 0);
+        }
         User user = users.findFirstByUsername(username);
         //Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
         Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
         ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
         yadasInLink.add(yada);
+
+        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
+        link.getYadaList().add(yada);
+
         yadas.save(yada);
         links.save(link);
-        return HttpStatus.ACCEPTED;
+
+        Iterable<Yada> updatedYadaList = link.getYadaList();
+
+        return updatedYadaList;
     }
 
     public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
@@ -240,11 +269,14 @@ public class YadaRestController {
 
             Random r = new Random();
             int yadaTotalVotesIterator = minimum + r.nextInt((maximum - minimum) + 1);
+
             link.setNumberOfYadas(yadaCountIterator);
             link.setTotalVotes(yadaTotalVotesIterator);
             link.setLinkScore(link.getTotalVotes() / link.getNumberOfYadas());
+
             yadaCountIterator++;
             links.save(link);
+
             sortedLinkList.add(link);
         }
         return sortedLinkList;
@@ -268,6 +300,7 @@ public class YadaRestController {
                 String clean = Jsoup.clean(str, Whitelist.basic());
                 parsedDoc.add(clean);
             });
+
         } else {
 
             doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
