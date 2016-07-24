@@ -51,7 +51,6 @@ public class YadaRestController {
     @PostConstruct
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
-        soupThatSite("http://www.cnn.com/2016/07/22/politics/dnc-wikileaks-emails/index.html");
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
@@ -160,6 +159,7 @@ public class YadaRestController {
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
 
+        //using jsoup method to grab website text
         ArrayList<String> scrapedSite = soupThatSite(url);
 
         return scrapedSite;
@@ -180,7 +180,7 @@ public class YadaRestController {
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public Iterable<Yada> addYada(HttpSession session, String content, String url) throws Exception {
+    public Iterable<Yada> addYada(HttpSession session, @RequestBody Yada yada, @RequestParam (value = "url", required = false) String url) throws Exception {
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
@@ -193,11 +193,11 @@ public class YadaRestController {
         }
 
         User user = users.findFirstByUsername(username);
-        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
+        Yada yada1 = new Yada(yada.getContent(), 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
         ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
-        yadasInLink.add(yada);
+        yadasInLink.add(yada1);
 
-        yadas.save(yada);
+        yadas.save(yada1);
         links.save(link);
 
         Iterable<Yada> updatedYadaList = link.getYadaList();
