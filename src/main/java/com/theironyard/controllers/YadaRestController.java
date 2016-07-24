@@ -15,15 +15,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import sun.reflect.annotation.ExceptionProxy;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -108,53 +104,6 @@ public class YadaRestController {
         return yadas.findAllByLinkIdOrderByControversyScoreDesc(link);
     }
 
-
-    // sorting algorithm - HOT (time/votes)
-    public List<Link> generateLinkScore(ArrayList<Link> linkList) {
-
-        for (Link link : linkList) {
-            long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
-            link.setTimeDiffInSeconds(difference);
-            long denominator = (difference + SECONDS_IN_TWO_HOURS);
-            link.setLinkScore(((link.getTotalVotes() - link.getNumberOfYadas()) / (Math.pow(denominator, GRAVITY))));
-            links.save(link);
-        }
-        return linkList;
-    }
-
-    // sorting algorithm - CONTROVERSIAL
-    public List<Yada> generateControveryScore(ArrayList<Yada> yadaList) {
-
-        for (Yada yada : yadaList) {
-            int upvotes = yada.getUpvotes();
-            int downvotes = yada.getDownvotes();
-            int totalVotes = yada.getUpvotes() + Math.abs(yada.getDownvotes());
-            yada.setKarma(upvotes - downvotes); //*
-            yada.setControversyScore((totalVotes) / Math.max(Math.abs(upvotes - downvotes), 1));
-            yadas.save(yada);
-        }
-        return yadaList;
-    }
-    //hit this route to upvote or downvote yadas
-    //not sure how to grab userId from Oauth
-    @RequestMapping(path = "/upOrDownVote", method = RequestMethod.POST)
-    public void Vote(int id, int voteInt) {
-        //need user info to check if they've already voted
-
-        Yada yada = yadas.findOne(id);
-        if (voteInt == 1) {
-            yada.setKarma(yada.getKarma() + 1);
-            yada.setUpvotes(yada.getUpvotes() + 1);
-        }
-        if(voteInt == -1) {
-            yada.setKarma(yada.getKarma() - 1);
-            yada.setDownvotes(yada.getDownvotes() + 1);
-        }
-        yadas.save(yada);
-
-    }
-
-
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
     public HttpStatus upVote(int yadaUserJoinId, int userId, int yadaId){
@@ -206,6 +155,7 @@ public class YadaRestController {
         return HttpStatus.ACCEPTED;
     }
 
+
     //route which brings user to the editing screen with scraped website text and submission box
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
@@ -229,9 +179,9 @@ public class YadaRestController {
         return theYadas;
     }
 
-
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
     public Iterable<Yada> addYada(HttpSession session, String content, String url) throws Exception {
+
         String username = (String) session.getAttribute("username");
         if (username == null) {
             throw new Exception ("Not So Fast!!");
@@ -241,6 +191,7 @@ public class YadaRestController {
         if (link == null) {
             link = new Link(url, LocalDateTime.now(), 0, 0, 1, 0);
         }
+
         User user = users.findFirstByUsername(username);
         Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
         ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
@@ -254,28 +205,31 @@ public class YadaRestController {
         return updatedYadaList;
     }
 
-    public ArrayList<Link> sortLinkList(ArrayList<Link> list) {
-        ArrayList<Link> sortedLinkList = new ArrayList<>();
+    // sorting algorithm - HOT (time/votes)
+    public List<Link> generateLinkScore(ArrayList<Link> linkList) {
 
-        int yadaCountIterator = 1;
-        int minimum = 0;
-        int maximum = 700;
-
-        for (Link link : list) {
-
-            Random r = new Random();
-            int yadaTotalVotesIterator = minimum + r.nextInt((maximum - minimum) + 1);
-
-            link.setNumberOfYadas(yadaCountIterator);
-            link.setTotalVotes(yadaTotalVotesIterator);
-            link.setLinkScore(link.getTotalVotes() / link.getNumberOfYadas());
-
-            yadaCountIterator++;
+        for (Link link : linkList) {
+            long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
+            link.setTimeDiffInSeconds(difference);
+            long denominator = (difference + SECONDS_IN_TWO_HOURS);
+            link.setLinkScore(((link.getTotalVotes() - link.getNumberOfYadas()) / (Math.pow(denominator, GRAVITY))));
             links.save(link);
-
-            sortedLinkList.add(link);
         }
-        return sortedLinkList;
+        return linkList;
+    }
+
+    // sorting algorithm - CONTROVERSIAL
+    public List<Yada> generateControveryScore(ArrayList<Yada> yadaList) {
+
+        for (Yada yada : yadaList) {
+            int upvotes = yada.getUpvotes();
+            int downvotes = yada.getDownvotes();
+            int totalVotes = yada.getUpvotes() + Math.abs(yada.getDownvotes());
+            yada.setKarma(upvotes - downvotes); //*
+            yada.setControversyScore((totalVotes) / Math.max(Math.abs(upvotes - downvotes), 1));
+            yadas.save(yada);
+        }
+        return yadaList;
     }
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
