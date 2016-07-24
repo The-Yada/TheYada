@@ -43,11 +43,10 @@ module.exports = function(ext) {
         sendYada(extUrl, yadaText) {
 
           $http({
-            url: "http://localhost:8080/addYada",
+            url: "http://localhost:8080/addYada?=" + extUrl,
             method: 'POST',
             data: {
-              content: `${yadaText}`,
-              url: `${extUrl}`
+              content: `${yadaText}`
             }
           })
 
