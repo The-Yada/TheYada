@@ -13,6 +13,7 @@ import org.h2.tools.Server;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -54,8 +55,7 @@ public class YadaRestController {
     @PostConstruct
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
-        soupThatSite("http://www.dw.com/de/frankreich-arbeitsmarktreform-light/a-19407655");
-
+        soupThatSite("http://www.cnn.com/2016/07/22/politics/dnc-wikileaks-emails/index.html");
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
@@ -91,7 +91,25 @@ public class YadaRestController {
         return links.findTop5ByOrderByLinkScoreDesc();
     }
 
-    // algo attempt 1
+    @RequestMapping(path = "/newYadas", method = RequestMethod.GET)
+    public ArrayList<Link> getNewYadas() {
+
+        return links.findTop10ByOrderByTimeOfCreationAsc();
+    }
+
+    // find controversial yadas inside chrome extension for the article you're on
+    @RequestMapping(path = "/controversialYadas", method = RequestMethod.GET)
+    public ArrayList<Yada> getControversialYadas(String url) {
+
+        Link link = links.findFirstByUrl(url);
+        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAllByLinkId(link);
+        generateControveryScore(yadaList);
+
+        return yadas.findAllByLinkIdOrderByControversyScoreDesc(link);
+    }
+
+
+    // sorting algorithm - HOT (time/votes)
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
 
         for (Link link : linkList) {
@@ -104,6 +122,19 @@ public class YadaRestController {
         return linkList;
     }
 
+    // sorting algorithm - CONTROVERSIAL
+    public List<Yada> generateControveryScore(ArrayList<Yada> yadaList) {
+
+        for (Yada yada : yadaList) {
+            int upvotes = yada.getUpvotes();
+            int downvotes = yada.getDownvotes();
+            int totalVotes = yada.getUpvotes() + Math.abs(yada.getDownvotes());
+            yada.setKarma(upvotes - downvotes); //*
+            yada.setControversyScore((totalVotes) / Math.max(Math.abs(upvotes - downvotes), 1));
+            yadas.save(yada);
+        }
+        return yadaList;
+    }
     //hit this route to upvote or downvote yadas
     //not sure how to grab userId from Oauth
     @RequestMapping(path = "/upOrDownVote", method = RequestMethod.POST)
@@ -113,9 +144,11 @@ public class YadaRestController {
         Yada yada = yadas.findOne(id);
         if (voteInt == 1) {
             yada.setKarma(yada.getKarma() + 1);
+            yada.setUpvotes(yada.getUpvotes() + 1);
         }
         if(voteInt == -1) {
             yada.setKarma(yada.getKarma() - 1);
+            yada.setDownvotes(yada.getDownvotes() + 1);
         }
         yadas.save(yada);
 
@@ -137,6 +170,7 @@ public class YadaRestController {
             yadaUJoin.setUser(user);
             yadaUJoin.setYada(yada);
             yada.setKarma(yada.getKarma() + 1);
+            yada.setUpvotes(yada.getUpvotes() + 1);
             yadaUserJoinRepo.save(yadaUJoin);
         }
 
@@ -146,6 +180,7 @@ public class YadaRestController {
 
         return HttpStatus.ACCEPTED;
     }
+
     //hit this route so users can downVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public HttpStatus downVote(int yadaUserJoinId, int userId, int yadaId){
@@ -160,6 +195,7 @@ public class YadaRestController {
             yadaUJoin.setUser(user);
             yadaUJoin.setYada(yada);
             yada.setKarma(yada.getKarma() - 1);
+            yada.setDownvotes(yada.getDownvotes() + 1);
             yadaUserJoinRepo.save(yadaUJoin);
         }
 
@@ -169,6 +205,7 @@ public class YadaRestController {
 
         return HttpStatus.ACCEPTED;
     }
+
     //route which brings user to the editing screen with scraped website text and submission box
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
@@ -192,6 +229,7 @@ public class YadaRestController {
         return theYadas;
     }
 
+
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
     public Iterable<Yada> addYada(HttpSession session, String content, String url) throws Exception {
         String username = (String) session.getAttribute("username");
@@ -200,9 +238,11 @@ public class YadaRestController {
         }
 
         Link link = links.findFirstByUrl(url);
+        if (link == null) {
+            link = new Link(url, LocalDateTime.now(), 0, 0, 1, 0);
+        }
         User user = users.findFirstByUsername(username);
-
-        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, user, link);
+        Yada yada = new Yada(content, 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
         ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
         yadasInLink.add(yada);
 
@@ -247,12 +287,14 @@ public class YadaRestController {
 
             doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
                 String str = element1.text();
-                parsedDoc.add(str);
+                String clean = Jsoup.clean(str, Whitelist.basic());
+                parsedDoc.add(clean);
             });
 
             doc.select(".zn-body__paragraph").stream().filter(Element::hasText).forEach(element1 -> {
                 String str = element1.text();
-                parsedDoc.add(str);
+                String clean = Jsoup.clean(str, Whitelist.basic());
+                parsedDoc.add(clean);
             });
 
         } else {
@@ -267,6 +309,7 @@ public class YadaRestController {
                 parsedDoc.add(str);
             });
         }
+        System.out.println(parsedDoc);
 
         return parsedDoc;
     }

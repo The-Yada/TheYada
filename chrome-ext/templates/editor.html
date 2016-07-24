@@ -1,0 +1,16 @@
+<!---#################################
+  EDITOR TEMPLATE
+################################## -->
+
+<div class="yada-scrape">
+  <p class="scrapeFrag" ng-repeat="p in scrapedText">
+    {{p}}
+  </p>
+</div>
+
+<div class="yada-editor">
+  <textarea id="editorText" ng-model="editorText" name="editor" placeholder="yada yada..."></textarea>
+</div>
+
+<!-- <button class="scrape-button" type="button" name="button">scrape</button> -->
+<button class="post-button" ng-click="postIt()" type="button" name="button">post</button>

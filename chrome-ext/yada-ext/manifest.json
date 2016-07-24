@@ -7,7 +7,6 @@
     "https://*/*",
     "tabs",
     "activeTab",
-    "http://tiny-tiny.herokuapp.com/*/*",
     "contextMenus"
   ],
   "background": {
@@ -30,8 +29,11 @@
   "web_accessible_resources": [
     "yada.html",
     "css/frame.css",
-    "js/app.js",
-    "js/content.js"
+    "ext.js",
+    "js/content.js",
+    "js/angular.min.js",
+    "js/angular-route.min.js"
+
   ]
 
 
