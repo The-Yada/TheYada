@@ -48,6 +48,22 @@ module.exports = function(app) {
             })
             console.log(topYadas);
             return topYadas;
+        },
+
+        upKarma(yada) {
+            $http({
+              url: '/upVote',
+              method: 'POST',
+              data: `${yada}`
+            })
+        },
+        
+        downKarma(yada) {
+          $http({
+            url: '/downVote',
+            method: 'POST',
+            data: `${yada}`
+          })
         }
       }
 
