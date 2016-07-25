@@ -1,9 +1,6 @@
 package com.theironyard.controllers;
 
-import com.theironyard.entities.User;
-import com.theironyard.entities.Yada;
-import com.theironyard.entities.Link;
-import com.theironyard.entities.YadaLink;
+import com.theironyard.entities.*;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
@@ -82,16 +79,11 @@ public class YadaRestController {
 
     // route which returns a sorted(by highest score) list of all yadaLists(based on url)
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<Link>> getYadaList(HttpSession session) {
-
-        String username = (String) session.getAttribute("username");
-        User user = users.findFirstByUsername(username);
-        if (user != null) {
-            return new ResponseEntity<>(HttpStatus.CONTINUE);
-        }
+    public ResponseEntity<ArrayList<Link>> getYadaList() {
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
         generateLinkScore(linkList);
+
         return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
     }
 
@@ -197,88 +189,84 @@ public class YadaRestController {
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public ResponseEntity downVote(HttpSession session, @RequestBody Yada yada) {
-    public ResponseEntity<Yada> downVote(HttpSession session, @RequestBody Yada yada) throws Exception {
 
-        String username = (String) session.getAttribute("username");
-        User user = users.findFirstByUsername(username);
+            String username = (String) session.getAttribute("username");
+            User user = users.findFirstByUsername(username);
 
-        Yada yadaToDownVote = yadas.findOne(yada.getId());
+            Yada yadaToDownVote = yadas.findOne(yada.getId());
 
-        if (username != null) {
+            if (username != null) {
 
-            if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
-                YadaUserJoin yuj = new YadaUserJoin(user, yada);
-                // below is pasted
+                if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
+                    YadaUserJoin yuj = new YadaUserJoin(user, yada);
+                    // below is pasted
 
-                if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+                    if (yuj.isUpvoted() && !yuj.isDownvoted()) {
 
-                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
-                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
-                    User yadaAuthor = yuj.getYada().getUser();
-                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
-                    yuj.setUpvoted(false);
-                    yuj.setDownvoted(true);
-                    yadas.save(yadaToDownVote);
-                    yadaUserJoinRepo.save(yuj);
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                        yuj.setUpvoted(false);
+                        yuj.setDownvoted(true);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
 
-                    return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
 
+                    } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                        yuj.setUpvoted(false);
+                        yuj.setDownvoted(true);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
+
+                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                    }
+
+                } else {
+
+                    YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
+
+                    if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                        yuj.setUpvoted(false);
+                        yuj.setDownvoted(true);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
+
+                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                    } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                        yuj.setUpvoted(false);
+                        yuj.setDownvoted(true);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
+
+                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    }
                 }
-                else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
-
-                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
-                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
-                    User yadaAuthor = yuj.getYada().getUser();
-                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-                    yuj.setUpvoted(false);
-                    yuj.setDownvoted(true);
-                    yadas.save(yadaToDownVote);
-                    yadaUserJoinRepo.save(yuj);
-
-                    return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
-                }
-
-        return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
-                YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
-
-                if (yuj.isUpvoted() && !yuj.isDownvoted()) {
-
-                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
-                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
-                    User yadaAuthor = yuj.getYada().getUser();
-                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
-                    yuj.setUpvoted(false);
-                    yuj.setDownvoted(true);
-                    yadas.save(yadaToDownVote);
-                    yadaUserJoinRepo.save(yuj);
-
-                    return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
-                }
-                else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
-
-                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
-                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
-                    User yadaAuthor = yuj.getYada().getUser();
-                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-                    yuj.setUpvoted(false);
-                    yuj.setDownvoted(true);
-                    yadas.save(yadaToDownVote);
-                    yadaUserJoinRepo.save(yuj);
-
-                    return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
-                }
-                else {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-                }
             }
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+
     }
 
 
