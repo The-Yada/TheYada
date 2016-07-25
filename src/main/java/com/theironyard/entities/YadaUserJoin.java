@@ -22,11 +22,12 @@ public class YadaUserJoin {
     @ManyToOne
     Yada yada;
 
-    boolean hasUpvoted = false;
+    @Column(nullable = false)
+    boolean upvoted = false;
 
-    boolean hasDownvoted = false;
+    @Column(nullable = false)
+    boolean downvoted = false;
 
-    boolean hasVoted = false;
 
     public YadaUserJoin() {
     }
@@ -37,12 +38,12 @@ public class YadaUserJoin {
 //        this.yada = yada;
 //    }
 
-    public YadaUserJoin(User user, Yada yada, boolean hasUpvoted, boolean hasDownvoted, boolean hasVoted) {
+
+    public YadaUserJoin(User user, Yada yada, boolean upvoted, boolean downvoted) {
         this.user = user;
         this.yada = yada;
-        this.hasUpvoted = hasUpvoted;
-        this.hasDownvoted = hasDownvoted;
-        this.hasVoted = hasVoted;
+        this.upvoted = upvoted;
+        this.downvoted = downvoted;
     }
 
     public YadaUserJoin(User user, Yada yada) {
@@ -74,27 +75,20 @@ public class YadaUserJoin {
         this.yada = yada;
     }
 
-    public boolean isHasUpvoted() {
-        return hasUpvoted;
+    public boolean isUpvoted() {
+        return upvoted;
     }
 
-    public void setHasUpvoted(boolean hasUpvoted) {
-        this.hasUpvoted = hasUpvoted;
+    public void setUpvoted(boolean upvoted) {
+        this.upvoted = upvoted;
     }
 
-    public boolean isHasDownvoted() {
-        return hasDownvoted;
+    public boolean isDownvoted() {
+        return downvoted;
     }
 
-    public void setHasDownvoted(boolean hasDownvoted) {
-        this.hasDownvoted = hasDownvoted;
+    public void setDownvoted(boolean downvoted) {
+        this.downvoted = downvoted;
     }
 
-    public boolean isHasVoted() {
-        return hasVoted;
-    }
-
-    public void setHasVoted(boolean hasVoted) {
-        this.hasVoted = hasVoted;
-    }
 }

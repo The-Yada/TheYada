@@ -12,7 +12,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -102,40 +101,54 @@ public class YadaRestController {
 
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public Yada upVote(HttpSession session, @RequestBody Yada yada){
+    public Yada upVote(HttpSession session, @RequestBody YadaUserJoin yuj){
 
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
-        Yada yadaToUpVote = yadas.findOne(yada.getId());
+        Yada yadaToUpVote = yadas.findOne(yuj.getYada().getId());
 
-            yadaToUpVote.setKarma(yada.getKarma() + 1);
-            yadaToUpVote.setUpvotes(yada.getUpvotes() + 1);
-            User yadaAuthor = yada.getUser();
+
+        if ((!yuj.isUpvoted() && yuj.isDownvoted()) || (!yuj.isUpvoted() && !yuj.isDownvoted())) {
+
+            yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
+            yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 1);
+            User yadaAuthor = yuj.getYada().getUser();
             yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+            yuj.setUpvoted(true);
+            yuj.setDownvoted(false);
             yadas.save(yadaToUpVote);
 
-        return yadaToUpVote;
+            return yadaToUpVote;
+        }
+        return null; // return http status here?
     }
 
 
     //hit this route so users can downVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
-    public Yada downVote(HttpSession session, @RequestBody Yada yada) {
+    public Yada downVote(HttpSession session, @RequestBody YadaUserJoin yuj) {
 
         //*** we need to also account for users karma being altered when up and down votes are cast
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
-        Yada yadaToUpVote = yadas.findOne(yada.getId());
+        Yada yadaToUpVote = yadas.findOne(yuj.getYada().getId());
 
-        yadaToUpVote.setKarma(yada.getKarma() - 1);
-        yadaToUpVote.setDownvotes(yada.getDownvotes() + 1);
-        User yadaAuthor = yada.getUser();
-        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-        yadas.save(yadaToUpVote);
+        if ((yuj.isUpvoted() && !yuj.isDownvoted()) || (!yuj.isUpvoted() && !yuj.isDownvoted())) {
 
-        return yadaToUpVote;
+            yadaToUpVote.setKarma(yuj.getYada().getKarma() - 1);
+            yadaToUpVote.setDownvotes(yuj.getYada().getDownvotes() + 1);
+            User yadaAuthor = yuj.getYada().getUser();
+            yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+            yuj.setUpvoted(false);
+            yuj.setDownvoted(true);
+
+            yadas.save(yadaToUpVote);
+
+            return yadaToUpVote;
+        }
+        return null;
     }
 
 
@@ -261,7 +274,6 @@ public class YadaRestController {
                 parsedDoc.add(clean);
             });
         }
-        System.out.println(parsedDoc);
 
         return parsedDoc;
     }
