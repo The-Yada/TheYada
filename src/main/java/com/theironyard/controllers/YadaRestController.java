@@ -252,15 +252,16 @@ public class YadaRestController {
 
             doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
                 String str = element1.text();
-                parsedDoc.add(str);
+                String clean = Jsoup.clean(str, Whitelist.basic());
+                parsedDoc.add(clean);
             });
 
             doc.select("p").stream().filter(Element::hasText).forEach(element -> {
                 String str = element.text();
-                parsedDoc.add(str);
+                String clean = Jsoup.clean(str, Whitelist.basic());
+                parsedDoc.add(clean);
             });
         }
-        System.out.println(parsedDoc);
 
         return parsedDoc;
     }
