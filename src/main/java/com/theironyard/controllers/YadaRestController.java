@@ -163,7 +163,14 @@ public class YadaRestController {
 
         }
         Link link = links.findFirstByUrl(url);
+        if (link == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
+
+        if ((yadasByKarma == null)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
         return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
     }
