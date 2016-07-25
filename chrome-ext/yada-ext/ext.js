@@ -130,7 +130,6 @@ module.exports = function(ext) {
       controller: 'EditorExtController'
     });
   }]).run(function ($rootScope) {
-
     $rootScope.extUrl = document.referrer;
   });
 

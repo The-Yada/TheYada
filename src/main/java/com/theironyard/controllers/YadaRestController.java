@@ -1,9 +1,6 @@
 package com.theironyard.controllers;
 
-import com.theironyard.entities.Link;
-import com.theironyard.entities.User;
-import com.theironyard.entities.Yada;
-import com.theironyard.entities.YadaUserJoin;
+import com.theironyard.entities.*;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
@@ -180,27 +177,39 @@ public class YadaRestController {
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public Iterable<Yada> addYada(HttpSession session, @RequestBody Yada yada, @RequestParam (value = "url", required = false) String url) throws Exception {
+    public Iterable<Yada> addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
+
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
             throw new Exception ("Not So Fast!!");
         }
 
-        Link link = links.findFirstByUrl(url);
+        Link link = links.findFirstByUrl(yl.getLink().getUrl());
         if (link == null) {
-            link = new Link(url, LocalDateTime.now(), 0, 0, 1, 0);
+            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 1, 0);
         }
 
         User user = users.findFirstByUsername(username);
-        Yada yada1 = new Yada(yada.getContent(), 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
-        ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
-        yadasInLink.add(yada1);
+        Yada yada = new Yada(yl.getYada().getContent(), 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
+        if (yl.getLink().getYadaList() != null) {
+            ArrayList<Yada> yadasInLink = (ArrayList<Yada>) yl.getLink().getYadaList();
+            yadasInLink.add(yada);
+            links.save(link);
+            yadas.save(yada);
 
-        yadas.save(yada1);
-        links.save(link);
+        }
+        else {
+            ArrayList<Yada> yadasInLink = new ArrayList<>();
+            yadasInLink.add(yada);
+            yl.getLink().setYadaList(yadasInLink);
+            links.save(link);
+            yadas.save(yada);
 
-        Iterable<Yada> updatedYadaList = link.getYadaList();
+        }
+
+
+        Iterable<Yada> updatedYadaList = yl.getLink().getYadaList();
 
         return updatedYadaList;
     }
@@ -263,7 +272,6 @@ public class YadaRestController {
                 parsedDoc.add(str);
             });
         }
-        System.out.println(parsedDoc);
 
         return parsedDoc;
     }
