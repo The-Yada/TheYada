@@ -104,7 +104,7 @@ public class YadaRestController {
 
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public HttpStatus upVote(HttpSession session, @RequestBody Yada yada){
+    public ResponseEntity upVote(HttpSession session, @RequestBody Yada yada){
 
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
@@ -117,13 +117,13 @@ public class YadaRestController {
             yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
             yadas.save(yadaToUpVote);
 
-        return HttpStatus.ACCEPTED;
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
     //hit this route so users can downVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
-    public HttpStatus downVote(HttpSession session, @RequestBody Yada yada) {
+    public ResponseEntity downVote(HttpSession session, @RequestBody Yada yada) {
 
         //*** we need to also account for users karma being altered when up and down votes are cast
         String username = (String) session.getAttribute("username");
@@ -138,42 +138,42 @@ public class YadaRestController {
         yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
         yadas.save(yadaToUpVote);
 
-        return HttpStatus.ACCEPTED;
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
     //route which brings user to the editing screen with scraped website text and submission box
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
-    public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
+    public ResponseEntity<ArrayList<String>> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
 
         //using jsoup method to grab website text
         ArrayList<String> scrapedSite = soupThatSite(url);
 
-        return scrapedSite;
+        return new ResponseEntity<>(scrapedSite, HttpStatus.OK);
     }
 
     //hit this route to display yadas for a given webpage from the chrome extension
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
-    public ResponseEntity showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
+    public ResponseEntity<Iterable<Yada>> showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            return new ResponseEntity("Not So Fast!", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Link link = links.findFirstByUrl(url);
         Iterable<Yada> theYadas = yadas.findAllByLinkIdOrderByKarmaDesc(link);
 
-        return new ResponseEntity(theYadas, HttpStatus.OK);
+        return new ResponseEntity<>(theYadas, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public Iterable<Yada> addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
+    public ResponseEntity<Iterable<Yada>> addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            throw new Exception ("Not So Fast!!");
+           return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
@@ -190,7 +190,9 @@ public class YadaRestController {
             yadas.save(yada);
 
         }
+
         else {
+
             ArrayList<Yada> yadasInLink = new ArrayList<>();
             yadasInLink.add(yada);
             yl.getLink().setYadaList(yadasInLink);
@@ -202,7 +204,7 @@ public class YadaRestController {
 
         Iterable<Yada> updatedYadaList = yl.getLink().getYadaList();
 
-        return updatedYadaList;
+        return new ResponseEntity<>(updatedYadaList, HttpStatus.OK);
     }
 
     // sorting algorithm - HOT (time/votes)
