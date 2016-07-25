@@ -125,7 +125,7 @@ module.exports = function(app) {
     }).otherwise({
       redirectTo: '/404'
     });
-  }]);
+  }]).run(function () {});
 
   // Services
   require('./services/user-service')(app);
