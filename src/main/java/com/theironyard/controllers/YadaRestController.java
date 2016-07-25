@@ -48,7 +48,6 @@ public class YadaRestController {
     @PostConstruct
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
-        soupThatSite("http://www.cnn.com/2016/07/22/politics/dnc-wikileaks-emails/index.html");
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
@@ -157,6 +156,7 @@ public class YadaRestController {
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
 
+        //using jsoup method to grab website text
         ArrayList<String> scrapedSite = soupThatSite(url);
 
         return scrapedSite;
@@ -272,7 +272,6 @@ public class YadaRestController {
                 parsedDoc.add(str);
             });
         }
-        System.out.println(parsedDoc);
 
         return parsedDoc;
     }

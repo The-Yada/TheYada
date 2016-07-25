@@ -50,7 +50,7 @@ module.exports = function(ext) {
               link: {url: `${extUrl}`}
             }
           })
-          
+
         }
 
       }

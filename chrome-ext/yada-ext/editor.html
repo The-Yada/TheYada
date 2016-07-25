@@ -3,7 +3,7 @@
 ################################## -->
 
 <div class="yada-scrape">
-  <p class="scrapeFrag" ng-repeat="p in scrapedText">
+  <p class="scrapeFrag" ng-repeat="p in scrapedText track by $index">
     {{p}}
   </p>
 </div>
