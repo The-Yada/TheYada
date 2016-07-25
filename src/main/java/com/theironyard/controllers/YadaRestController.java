@@ -106,7 +106,7 @@ public class YadaRestController {
 
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public ResponseEntity<Yada> upVote(HttpSession session, @RequestBody Yada yada) throws Exception {
+    public ResponseEntity upVote(HttpSession session, @RequestBody Yada yada) throws Exception {
 
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
@@ -142,7 +142,7 @@ public class YadaRestController {
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
 
-                    return new ResponseEntity<>(yadaToUpVote, HttpStatus.OK);
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
 
             } else {
@@ -172,8 +172,9 @@ public class YadaRestController {
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
 
-                    return new ResponseEntity<>(yadaToUpVote, HttpStatus.OK);
-                } else {
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+                }
+                else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
             }
