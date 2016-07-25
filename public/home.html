@@ -9,7 +9,7 @@
           <span class="votes-home">votes: {{links.totalVotes}}</span>
 s
           <div class="yadas-home" ng-repeat="yada in links.yadaList">
-            <span class="author-home">author: {{yada.user}}</span>
+            <span class="author-home">author: {{yada.user.username}}</span>
             <span class="content-home">content: {{yada.content}}</span>
             <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
             <span class="karma-home">karma: {{yada.karma}}</span>

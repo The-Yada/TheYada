@@ -1,0 +1,16 @@
+.editor-wrapper {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  margin: 0 auto;
+  .yada-scrape {
+    width: 50vh;
+  }
+  .yada-editor {
+    #editorText {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}

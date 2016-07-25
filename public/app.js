@@ -11,14 +11,23 @@ module.exports = function(app) {
     /*******************************
     * grab the yadas for the ng-repeat in home.html
     *********************************/
+    // YadaService.getTopYadas();
     $scope.topYadas = YadaService.getTopYadas();
 
 
     $scope.upIt = function (yada) {
-      YadaService.upKarma(yada);
+        YadaService.upKarma(yada, function(response) {
+              $scope.topYadas = YadaService.getTopYadas();
+              return $scope.topYadas;
+        });
+
     }
     $scope.downIt = function (yada) {
-        YadaService.downKarma(yada);
+        YadaService.downKarma(yada, function(response) {
+            $scope.topYadas = YadaService.getTopYadas();
+            return $scope.topYadas;
+        });
+
     }
 
 
@@ -125,7 +134,7 @@ module.exports = function(app) {
     }).otherwise({
       redirectTo: '/404'
     });
-  }]);
+  }]).run(function () {});
 
   // Services
   require('./services/user-service')(app);
@@ -264,25 +273,29 @@ module.exports = function(app) {
             return topYadas;
         },
 
-        upKarma(yada) {
-            console.log(yada);
+        upKarma(yada, callback) {
+
             $http({
               url: '/upVote',
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log(response);
+              yadas = callback(response);
+
+              angular.copy(yadas, topYadas);
             })
         },
 
-        downKarma(yada) {
-          console.log(yada);
+        downKarma(yada, callback) {
+
           $http({
             url: '/downVote',
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log(response);
+            yadas = callback(response);
+
+            angular.copy(yadas, topYadas);
           })
         }
 

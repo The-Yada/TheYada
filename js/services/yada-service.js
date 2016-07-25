@@ -50,25 +50,29 @@ module.exports = function(app) {
             return topYadas;
         },
 
-        upKarma(yada) {
-            console.log(yada);
+        upKarma(yada, callback) {
+
             $http({
               url: '/upVote',
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log(response);
+              yadas = callback(response);
+
+              angular.copy(yadas, topYadas);
             })
         },
 
-        downKarma(yada) {
-          console.log(yada);
+        downKarma(yada, callback) {
+
           $http({
             url: '/downVote',
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log(response);
+            yadas = callback(response);
+
+            angular.copy(yadas, topYadas);
           })
         }
 
