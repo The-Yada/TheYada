@@ -19,6 +19,7 @@ public class YadaUserJoin {
     @ManyToOne(cascade = CascadeType.ALL)
     User user;
 
+    @JsonIgnore
     @ManyToOne
     Yada yada;
 
