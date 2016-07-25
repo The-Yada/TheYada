@@ -48,14 +48,6 @@ module.exports = function(ext) {
       }
 
 
-    // $scope.logout = function() {
-    //   //clear session
-    //   UserExtService.clearSession();
-    // }
-
-
-
-
   }])
 }
 
@@ -127,12 +119,7 @@ module.exports = function(ext) {
     }).when('/log-in', {
       templateUrl: '/log-in.html',
       controller: 'LoginExtController'
-    })
-    // .when('/log-out', {
-    //   templateUrl: '/log-out.html',
-    //   controller: 'LoginExtController',
-    // })
-    .when('/editor', {
+    }).when('/editor', {
       templateUrl: '/editor.html',
       controller: 'EditorExtController'
     });

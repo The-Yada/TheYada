@@ -1,4 +1,4 @@
-// console.log(document.getElementById('frame'));
+
 
 if (document.getElementById('frame') === null) {
   var f = document.createElement('iframe'),
