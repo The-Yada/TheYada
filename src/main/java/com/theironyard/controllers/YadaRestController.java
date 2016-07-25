@@ -12,7 +12,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -102,41 +101,165 @@ public class YadaRestController {
 
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public Yada upVote(HttpSession session, @RequestBody Yada yada){
+    public Yada upVote(HttpSession session, @RequestBody Yada yada) throws Exception {
 
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
         Yada yadaToUpVote = yadas.findOne(yada.getId());
 
-            yadaToUpVote.setKarma(yada.getKarma() + 1);
-            yadaToUpVote.setUpvotes(yada.getUpvotes() + 1);
-            User yadaAuthor = yada.getUser();
-            yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
-            yadas.save(yadaToUpVote);
 
-        return yadaToUpVote;
+        if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
+            YadaUserJoin yuj = new YadaUserJoin(user, yada);
+            // below is pasted
+
+            if (!yuj.isUpvoted() && yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() + 2);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 2);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() + 2);
+                yuj.setUpvoted(true);
+                yuj.setDownvoted(false);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 1);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+                yuj.setUpvoted(true);
+                yuj.setDownvoted(false);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+
+        }
+        else {
+
+            YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
+
+            if (!yuj.isUpvoted() && yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() + 2);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 2);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() + 2);
+                yuj.setUpvoted(true);
+                yuj.setDownvoted(false);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 1);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+                yuj.setUpvoted(true);
+                yuj.setDownvoted(false);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else {
+                throw new Exception("You have already upvoted.");
+            }
+        }
+        return null;
     }
 
-
-    //hit this route so users can downVote yadas
+    //hit this route so users can upVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
-    public Yada downVote(HttpSession session, @RequestBody Yada yada) {
+    public Yada downVote(HttpSession session, @RequestBody Yada yada) throws Exception {
 
-        //*** we need to also account for users karma being altered when up and down votes are cast
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
         Yada yadaToUpVote = yadas.findOne(yada.getId());
 
-        yadaToUpVote.setKarma(yada.getKarma() - 1);
-        yadaToUpVote.setDownvotes(yada.getDownvotes() + 1);
-        User yadaAuthor = yada.getUser();
-        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-        yadas.save(yadaToUpVote);
 
-        return yadaToUpVote;
+        if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
+            YadaUserJoin yuj = new YadaUserJoin(user, yada);
+            // below is pasted
+
+            if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() - 2);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() -2);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                yuj.setUpvoted(false);
+                yuj.setDownvoted(true);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() - 1);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                yuj.setUpvoted(false);
+                yuj.setDownvoted(true);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+
+        }
+        else {
+
+            YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
+
+            if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() - 2);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                yuj.setUpvoted(false);
+                yuj.setDownvoted(true);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() - 1);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                yuj.setUpvoted(false);
+                yuj.setDownvoted(true);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else {
+                throw new Exception("You have already downvoted.");
+            }
+        }
+        return null;
     }
+
+
+
+//    //hit this route so u
 
 
     //route which brings user to the editing screen with scraped website text and submission box
@@ -251,15 +374,16 @@ public class YadaRestController {
 
             doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
                 String str = element1.text();
-                parsedDoc.add(str);
+                String clean = Jsoup.clean(str, Whitelist.basic());
+                parsedDoc.add(clean);
             });
 
             doc.select("p").stream().filter(Element::hasText).forEach(element -> {
                 String str = element.text();
-                parsedDoc.add(str);
+                String clean = Jsoup.clean(str, Whitelist.basic());
+                parsedDoc.add(clean);
             });
         }
-        System.out.println(parsedDoc);
 
         return parsedDoc;
     }

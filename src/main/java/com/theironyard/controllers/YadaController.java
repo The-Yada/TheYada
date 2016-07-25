@@ -43,7 +43,8 @@ public class YadaController {
 //        if(users.count() == 0) {
 //            parseUsers("users.csv");
 //        }
-//
+
+
 //        if (links.count() == 0) {
 //            parseLinks("links2.csv");
 //        }
