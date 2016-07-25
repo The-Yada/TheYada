@@ -130,7 +130,6 @@ module.exports = function(ext) {
       controller: 'EditorExtController'
     });
   }]).run(function ($rootScope) {
-
     $rootScope.extUrl = document.referrer;
   });
 
@@ -268,8 +267,8 @@ module.exports = function(ext) {
             url: "http://localhost:8080/addYada",
             method: 'POST',
             data: {
-              content: `${yadaText}`,
-              url: `${extUrl}`
+              yada: {content: `${yadaText}`},
+              link: {url: `${extUrl}`}
             }
           })
 

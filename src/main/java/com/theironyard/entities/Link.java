@@ -34,7 +34,7 @@ public class Link {
     @Column(nullable = false)
     long timeDiffInSeconds;
 
-    @OneToMany(mappedBy = "link")
+    @OneToMany(mappedBy = "link", cascade = CascadeType.ALL)
     List<Yada> yadaList;
 
     public Link() {
@@ -95,7 +95,7 @@ public class Link {
         return yadaList;
     }
 
-    public void setYadaList(ArrayList<Yada> yadaList) {
+    public void setYadaList(List<Yada> yadaList) {
         this.yadaList = yadaList;
     }
 
