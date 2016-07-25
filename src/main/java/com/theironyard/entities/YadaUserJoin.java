@@ -22,13 +22,27 @@ public class YadaUserJoin {
     @ManyToOne
     Yada yada;
 
+    boolean hasUpvoted = false;
+
+    boolean hasDownvoted = false;
+
+    boolean hasVoted = false;
+
     public YadaUserJoin() {
     }
 
-    public YadaUserJoin(int id, User user, Yada yada) {
-        this.id = id;
+//    public YadaUserJoin(int id, User user, Yada yada) {
+//        this.id = id;
+//        this.user = user;
+//        this.yada = yada;
+//    }
+
+    public YadaUserJoin(User user, Yada yada, boolean hasUpvoted, boolean hasDownvoted, boolean hasVoted) {
         this.user = user;
         this.yada = yada;
+        this.hasUpvoted = hasUpvoted;
+        this.hasDownvoted = hasDownvoted;
+        this.hasVoted = hasVoted;
     }
 
     public YadaUserJoin(User user, Yada yada) {
@@ -58,5 +72,29 @@ public class YadaUserJoin {
 
     public void setYada(Yada yada) {
         this.yada = yada;
+    }
+
+    public boolean isHasUpvoted() {
+        return hasUpvoted;
+    }
+
+    public void setHasUpvoted(boolean hasUpvoted) {
+        this.hasUpvoted = hasUpvoted;
+    }
+
+    public boolean isHasDownvoted() {
+        return hasDownvoted;
+    }
+
+    public void setHasDownvoted(boolean hasDownvoted) {
+        this.hasDownvoted = hasDownvoted;
+    }
+
+    public boolean isHasVoted() {
+        return hasVoted;
+    }
+
+    public void setHasVoted(boolean hasVoted) {
+        this.hasVoted = hasVoted;
     }
 }

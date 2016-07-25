@@ -100,28 +100,19 @@ public class YadaRestController {
         return yadas.findAllByLinkIdOrderByControversyScoreDesc(link);
     }
 
-    //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public HttpStatus upVote(int yadaUserJoinId, int userId, int yadaId){
+    public HttpStatus upVote(HttpSession session, @RequestBody Yada yada){
 
-        //*** we need to also account for users karma being altered when up and down votes are cast
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
 
+        Yada yadaToUpVote = yadas.findOne(yada.getId());
 
-        YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
-        User user = users.findOne(userId);
-        Yada yada = yadas.findOne(yadaId);
-
-        if (yadaUJoin == null) {
-            yadaUJoin.setUser(user);
-            yadaUJoin.setYada(yada);
-            yada.setKarma(yada.getKarma() + 1);
-            yada.setUpvotes(yada.getUpvotes() + 1);
-            yadaUserJoinRepo.save(yadaUJoin);
-        }
-
-        else {
-           return HttpStatus.LOCKED;
-        }
+        yadaToUpVote.setKarma(yada.getKarma() + 1);
+        yadaToUpVote.setUpvotes(yada.getUpvotes() + 1);
+        User yadaAuthor = yada.getUser();
+        yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+        yadas.save(yadaToUpVote);
 
         return HttpStatus.ACCEPTED;
     }
@@ -192,6 +183,7 @@ public class YadaRestController {
 
         User user = users.findFirstByUsername(username);
         Yada yada = new Yada(yl.getYada().getContent(), 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
+
         if (yl.getLink().getYadaList() != null) {
             ArrayList<Yada> yadasInLink = (ArrayList<Yada>) yl.getLink().getYadaList();
             yadasInLink.add(yada);
@@ -264,12 +256,14 @@ public class YadaRestController {
 
             doc.select("h1").stream().filter(Element::hasText).forEach(element1 -> {
                 String str = element1.text();
-                parsedDoc.add(str);
+                String clean = Jsoup.clean(str, Whitelist.basic());
+                parsedDoc.add(clean);
             });
 
             doc.select("p").stream().filter(Element::hasText).forEach(element -> {
                 String str = element.text();
-                parsedDoc.add(str);
+                String clean = Jsoup.clean(str, Whitelist.basic());
+                parsedDoc.add(clean);
             });
         }
 
