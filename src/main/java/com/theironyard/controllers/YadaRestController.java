@@ -52,7 +52,7 @@ public class YadaRestController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public User login(@RequestBody User user, HttpSession session) throws Exception {
+    public ResponseEntity<User> login(@RequestBody User user, HttpSession session) throws Exception {
         User userFromDatabase = users.findFirstByUsername(user.getUsername());
 
         if (userFromDatabase == null) {
@@ -65,23 +65,26 @@ public class YadaRestController {
         }
 
         session.setAttribute("username", user.getUsername());
-        return user;
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public String logout(HttpSession session) {
+    public ResponseEntity<String> logout(HttpSession session) {
+
         session.invalidate();
-        return "";
+
+        return new ResponseEntity<>("Please Come Again Soon", HttpStatus.OK);
 
     }
 
     // route which returns a sorted(by highest score) list of all yadaLists(based on url)
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
-    public ArrayList<Link> getYadaList() {
+    public ResponseEntity<ArrayList<Link>> getYadaList() {
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
         generateLinkScore(linkList);
-        return links.findAllByOrderByLinkScoreDesc();
+
+        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/newYadas", method = RequestMethod.GET)
@@ -185,87 +188,85 @@ public class YadaRestController {
 
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
-    public ResponseEntity<Yada> downVote(HttpSession session, @RequestBody Yada yada) throws Exception {
+    public ResponseEntity downVote(HttpSession session, @RequestBody Yada yada) {
 
-        String username = (String) session.getAttribute("username");
-        User user = users.findFirstByUsername(username);
+            String username = (String) session.getAttribute("username");
+            User user = users.findFirstByUsername(username);
 
-        Yada yadaToDownVote = yadas.findOne(yada.getId());
+            Yada yadaToDownVote = yadas.findOne(yada.getId());
 
-        if (username != null) {
+            if (username != null) {
 
-            if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
-                YadaUserJoin yuj = new YadaUserJoin(user, yada);
-                // below is pasted
+                if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
+                    YadaUserJoin yuj = new YadaUserJoin(user, yada);
+                    // below is pasted
 
-                if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+                    if (yuj.isUpvoted() && !yuj.isDownvoted()) {
 
-                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
-                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
-                    User yadaAuthor = yuj.getYada().getUser();
-                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
-                    yuj.setUpvoted(false);
-                    yuj.setDownvoted(true);
-                    yadas.save(yadaToDownVote);
-                    yadaUserJoinRepo.save(yuj);
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                        yuj.setUpvoted(false);
+                        yuj.setDownvoted(true);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
 
-                    return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
 
+                    } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                        yuj.setUpvoted(false);
+                        yuj.setDownvoted(true);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
+
+                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                    }
+
+                } else {
+
+                    YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
+
+                    if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                        yuj.setUpvoted(false);
+                        yuj.setDownvoted(true);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
+
+                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                    } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                        yuj.setUpvoted(false);
+                        yuj.setDownvoted(true);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
+
+                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    }
                 }
-                else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
-
-                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
-                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
-                    User yadaAuthor = yuj.getYada().getUser();
-                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-                    yuj.setUpvoted(false);
-                    yuj.setDownvoted(true);
-                    yadas.save(yadaToDownVote);
-                    yadaUserJoinRepo.save(yuj);
-
-                    return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
-                }
-
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
-                YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
-
-                if (yuj.isUpvoted() && !yuj.isDownvoted()) {
-
-                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
-                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
-                    User yadaAuthor = yuj.getYada().getUser();
-                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
-                    yuj.setUpvoted(false);
-                    yuj.setDownvoted(true);
-                    yadas.save(yadaToDownVote);
-                    yadaUserJoinRepo.save(yuj);
-
-                    return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
-                }
-                else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
-
-                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
-                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
-                    User yadaAuthor = yuj.getYada().getUser();
-                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-                    yuj.setUpvoted(false);
-                    yuj.setDownvoted(true);
-                    yadas.save(yadaToDownVote);
-                    yadaUserJoinRepo.save(yuj);
-
-                    return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
-                }
-                else {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-                }
             }
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+
     }
 
 
@@ -275,35 +276,42 @@ public class YadaRestController {
 
     //route which brings user to the editing screen with scraped website text and submission box
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
-    public ArrayList<String> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
+    public ResponseEntity<ArrayList<String>> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
 
         //using jsoup method to grab website text
         ArrayList<String> scrapedSite = soupThatSite(url);
 
-        return scrapedSite;
+        return new ResponseEntity<>(scrapedSite, HttpStatus.OK);
     }
 
     //hit this route to display yadas for a given webpage from the chrome extension
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
-    public Iterable<Yada> showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
+    public ResponseEntity<Iterable<Yada>> showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
 
         }
         Link link = links.findFirstByUrl(url);
-        Iterable<Yada> theYadas = link.getYadaList();
+        if (link == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
 
-        return theYadas;
+        if ((yadasByKarma == null)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public Iterable<Yada> addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
+    public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            throw new Exception ("Not So Fast!!");
+            return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
         }
 
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
@@ -333,11 +341,9 @@ public class YadaRestController {
             yadaUserJoinRepo.save(yuj);
 
         }
-
-
         Iterable<Yada> updatedYadaList = yl.getLink().getYadaList();
 
-        return updatedYadaList;
+        return new ResponseEntity<>(updatedYadaList, HttpStatus.OK);
     }
 
     // sorting algorithm - HOT (time/votes)

@@ -21,5 +21,8 @@ public interface YadaRepository extends CrudRepository<Yada, Integer> {
     List<Yada> findAllByLinkId(Link link);
     ArrayList<Yada> findAllByLinkIdOrderByControversyScoreDesc(Link link);
     //ArrayList<Yada> findTop10ByOrderByTimeOfCreationAsc();
+    Iterable<Yada> findTop10ByLinkIdOrderByKarmaDesc(int id);
+
+
 
 }
