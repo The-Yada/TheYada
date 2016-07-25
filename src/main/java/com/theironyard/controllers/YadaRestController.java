@@ -130,7 +130,8 @@ public class YadaRestController {
         Yada yadaToUpVote = yadas.findOne(yada.getId());
 
         yadaToUpVote.setKarma(yada.getKarma() - 1);
-        yadaToUpVote.setUpvotes(yada.getDownvotes() + 1);
+        yadaToUpVote.setDownvotes(
+                yada.getDownvotes() + 1);
         User yadaAuthor = yada.getUser();
         yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
         yadas.save(yadaToUpVote);
