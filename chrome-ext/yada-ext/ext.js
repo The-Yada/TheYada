@@ -165,7 +165,7 @@ module.exports = function(ext) {
       return {
         // need server and db to post
         setUser(user) {
-          console.log(user);
+
           $http({
             url: 'http://localhost:8080/login',
             method: 'POST',

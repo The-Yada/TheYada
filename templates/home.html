@@ -3,15 +3,17 @@
 ################################## -->
 
 <ul>
-    <li ng-repeat="yada in topYadas">
-          <span class="url-home">{{yada.url}}</span>
-          <p># of yada: {{yada.numberOfYadas}}</p>
-
-          <span class="author-home">{{yada.user}}</span>
-
-          <!-- TODO: these button def need to be arrows-->
-          <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
-          <span class="karma-home">karma: {{yada.totalVotes}}</span>
-          <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
+    <li ng-repeat="links in topYadas">
+          <span class="url-home">url: {{links.url}}</span>
+          <p># of yada: {{links.numberOfYadas}}</p>
+          <span class="votes-home">votes: {{links.totalVotes}}</span>
+s
+          <div class="yadas-home" ng-repeat="yada in links.yadaList">
+            <span class="author-home">author: {{yada.user}}</span>
+            <span class="content-home">content: {{yada.content}}</span>
+            <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
+            <span class="karma-home">karma: {{yada.karma}}</span>
+            <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
+          </div>
     </li>
 </ul>

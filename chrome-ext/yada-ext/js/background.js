@@ -1,10 +1,9 @@
 var x = false;
-// disableBrowserAction();
+disableBrowserAction();
 
-function disableBrowserAction(tab){
+function disableBrowserAction(){
     chrome.browserAction.setIcon({path:"assets/inactive.png"});
 
-    console.log('toggling ' + tab.url);
 
     chrome.tabs.executeScript(null, {file: "js/togglecontent.js"});
 }
@@ -29,8 +28,9 @@ function updateState(tab){
         enableBrowserAction(tab);
     }else{
         x=false;
-        disableBrowserAction(tab);
+        disableBrowserAction();
     }
 }
 
 chrome.browserAction.onClicked.addListener(updateState);
+chrome.tabs.onActivated.addListener(disableBrowserAction);
