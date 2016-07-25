@@ -22,10 +22,10 @@
             templateUrl: '/log-in.html',
             controller: 'LoginExtController',
           })
-          .when('/log-out', {
-            templateUrl: '/log-out.html',
-            controller: 'LoginExtController',
-          })
+          // .when('/log-out', {
+          //   templateUrl: '/log-out.html',
+          //   controller: 'LoginExtController',
+          // })
           .when('/editor', {
             templateUrl: '/editor.html',
             controller: 'EditorExtController',

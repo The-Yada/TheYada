@@ -1,5 +1,7 @@
 // find iframe by id and destroy it
-
-f = document.getElementById('frame')
-
-f.remove();
+console.log(document.getElementById('frame'));
+if (document.getElementById('frame') !== null) {
+  document.getElementById('frame').classList.add('hidden');
+} else {
+  console.log('hellow');
+}

@@ -48,10 +48,10 @@ module.exports = function(ext) {
       }
 
 
-    $scope.logout = function() {
-      //clear session
-      UserExtService.clearSession();
-    }
+    // $scope.logout = function() {
+    //   //clear session
+    //   UserExtService.clearSession();
+    // }
 
 
 
@@ -79,6 +79,11 @@ module.exports = function(ext) {
     $scope.toWebsite = function() {
       let win = window.open("http://localhost:8080", '_blank');
       win.focus();
+    }
+
+    $scope.logout = function() {
+      //clear session
+      UserExtService.clearSession();
     }
 
   }]);
@@ -122,14 +127,17 @@ module.exports = function(ext) {
     }).when('/log-in', {
       templateUrl: '/log-in.html',
       controller: 'LoginExtController'
-    }).when('/log-out', {
-      templateUrl: '/log-out.html',
-      controller: 'LoginExtController'
-    }).when('/editor', {
+    })
+    // .when('/log-out', {
+    //   templateUrl: '/log-out.html',
+    //   controller: 'LoginExtController',
+    // })
+    .when('/editor', {
       templateUrl: '/editor.html',
       controller: 'EditorExtController'
     });
   }]).run(function ($rootScope) {
+
     $rootScope.extUrl = document.referrer;
   });
 

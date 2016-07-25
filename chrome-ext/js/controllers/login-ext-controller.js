@@ -26,10 +26,10 @@ module.exports = function(ext) {
       }
 
 
-    $scope.logout = function() {
-      //clear session
-      UserExtService.clearSession();
-    }
+    // $scope.logout = function() {
+    //   //clear session
+    //   UserExtService.clearSession();
+    // }
 
 
 

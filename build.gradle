@@ -48,6 +48,7 @@ dependencies {
 
 	//google oauth client library
 	compile ('com.google.apis:google-api-services-oauth2:v1-rev117-1.22.0')
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0")
 }
 
 
