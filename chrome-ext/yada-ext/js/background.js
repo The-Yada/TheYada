@@ -10,6 +10,11 @@ function disableBrowserAction(tab){
 
 function enableBrowserAction(tab){
 
+    chrome.contentSettings.cookies.set({
+      primaryPattern: "http://localhost:8080/*",
+      setting: "session_only"
+    });
+
     chrome.browserAction.setIcon({path:"assets/active.png"});
 
     console.log('Enabling ' + tab.url + ' yada!');
