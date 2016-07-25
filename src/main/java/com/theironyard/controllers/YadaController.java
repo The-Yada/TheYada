@@ -43,14 +43,14 @@ public class YadaController {
 //        if(users.count() == 0) {
 //            parseUsers("users.csv");
 //        }
-
-        if (links.count() == 0) {
-            parseLinks("links2.csv");
-        }
-
-        if (yadas.count() == 0) {
-            parseYadas("yadas.csv");
-        }
+//
+//        if (links.count() == 0) {
+//            parseLinks("links2.csv");
+//        }
+//
+//        if (yadas.count() == 0) {
+//            parseYadas("yadas.csv");
+//        }
 
 
     }
