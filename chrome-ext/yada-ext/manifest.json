@@ -19,13 +19,13 @@
     "persistent": false
   },
   "icons": {
-    "16": "assets/yada-icon.png",
-    "48": "assets/yada-icon.png",
-    "128": "assets/yada-icon.png"
+    "16": "assets/yada-bulb-on.png",
+    "48": "assets/yada-bulb-on.png",
+    "128": "assets/yada-bulb-on.png"
   },
   "browser_action": {
     "default_title": "The Yada",
-    "default_icon": "assets/yada-icon.png"
+    "default_icon": "assets/yada-bulb-on-browser-icon.png"
   },
   "manifest_version": 2,
   "web_accessible_resources": [

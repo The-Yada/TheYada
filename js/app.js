@@ -46,6 +46,9 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
       })
 
   }])
+  .run(function() {
+
+  })
 
   // Services
   require('./services/user-service')(app);
