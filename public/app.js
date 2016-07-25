@@ -265,18 +265,20 @@ module.exports = function(app) {
         },
 
         upKarma(yada) {
+            console.log(yada);
             $http({
               url: '/upVote',
               method: 'POST',
-              data: `${yada}`
+              data: yada
             })
         },
-        
+
         downKarma(yada) {
+          console.log(yada);
           $http({
             url: '/downVote',
             method: 'POST',
-            data: `${yada}`
+            data: yada
           })
         }
       }

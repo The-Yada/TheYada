@@ -146,5 +146,4 @@ public class Yada {
         this.controversyScore = controversyScore;
     }
 
-
 }

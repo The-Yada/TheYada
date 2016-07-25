@@ -26,13 +26,5 @@ module.exports = function(ext) {
       }
 
 
-    $scope.logout = function() {
-      //clear session
-      UserExtService.clearSession();
-    }
-
-
-
-
   }])
 }

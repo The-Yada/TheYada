@@ -80,7 +80,7 @@ public class YadaRestController {
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
         generateLinkScore(linkList);
-        return links.findTop5ByOrderByLinkScoreDesc();
+        return links.findAllByOrderByLinkScoreDesc();
     }
 
     @RequestMapping(path = "/newYadas", method = RequestMethod.GET)
@@ -100,46 +100,42 @@ public class YadaRestController {
         return yadas.findAllByLinkIdOrderByControversyScoreDesc(link);
     }
 
+    //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public HttpStatus upVote(HttpSession session, @RequestBody Yada yada){
+    public Yada upVote(HttpSession session, @RequestBody Yada yada){
 
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
         Yada yadaToUpVote = yadas.findOne(yada.getId());
 
-        yadaToUpVote.setKarma(yada.getKarma() + 1);
-        yadaToUpVote.setUpvotes(yada.getUpvotes() + 1);
-        User yadaAuthor = yada.getUser();
-        yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
-        yadas.save(yadaToUpVote);
+            yadaToUpVote.setKarma(yada.getKarma() + 1);
+            yadaToUpVote.setUpvotes(yada.getUpvotes() + 1);
+            User yadaAuthor = yada.getUser();
+            yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+            yadas.save(yadaToUpVote);
 
-        return HttpStatus.ACCEPTED;
+        return yadaToUpVote;
     }
+
 
     //hit this route so users can downVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
-    public HttpStatus downVote(int yadaUserJoinId, int userId, int yadaId){
+    public Yada downVote(HttpSession session, @RequestBody Yada yada) {
 
         //*** we need to also account for users karma being altered when up and down votes are cast
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
 
-        YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
-        User user = users.findOne(userId);
-        Yada yada = yadas.findOne(yadaId);
+        Yada yadaToUpVote = yadas.findOne(yada.getId());
 
-        if (yadaUJoin == null) {
-            yadaUJoin.setUser(user);
-            yadaUJoin.setYada(yada);
-            yada.setKarma(yada.getKarma() - 1);
-            yada.setDownvotes(yada.getDownvotes() + 1);
-            yadaUserJoinRepo.save(yadaUJoin);
-        }
+        yadaToUpVote.setKarma(yada.getKarma() - 1);
+        yadaToUpVote.setDownvotes(yada.getDownvotes() + 1);
+        User yadaAuthor = yada.getUser();
+        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+        yadas.save(yadaToUpVote);
 
-        else {
-            return HttpStatus.LOCKED;
-        }
-
-        return HttpStatus.ACCEPTED;
+        return yadaToUpVote;
     }
 
 
@@ -183,7 +179,6 @@ public class YadaRestController {
 
         User user = users.findFirstByUsername(username);
         Yada yada = new Yada(yl.getYada().getContent(), 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
-
         if (yl.getLink().getYadaList() != null) {
             ArrayList<Yada> yadasInLink = (ArrayList<Yada>) yl.getLink().getYadaList();
             yadasInLink.add(yada);
@@ -266,6 +261,7 @@ public class YadaRestController {
                 parsedDoc.add(clean);
             });
         }
+        System.out.println(parsedDoc);
 
         return parsedDoc;
     }
