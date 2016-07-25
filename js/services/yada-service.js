@@ -56,6 +56,8 @@ module.exports = function(app) {
               url: '/upVote',
               method: 'POST',
               data: yada
+            }).then(function(response){
+              console.log(response);
             })
         },
 
@@ -65,8 +67,11 @@ module.exports = function(app) {
             url: '/downVote',
             method: 'POST',
             data: yada
+          }).then(function(response){
+            console.log(response);
           })
         }
+
       }
 
 
