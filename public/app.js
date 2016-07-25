@@ -265,6 +265,7 @@ module.exports = function(app) {
         },
 
         upKarma(yada) {
+            console.log(yada);
             $http({
               url: '/upVote',
               method: 'POST',
@@ -273,6 +274,7 @@ module.exports = function(app) {
         },
         
         downKarma(yada) {
+          console.log(yada);
           $http({
             url: '/downVote',
             method: 'POST',
