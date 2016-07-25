@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -43,6 +44,7 @@ public class YadaRestController {
 
     @Autowired
     LinkRepository links;
+
 
     // start h2 database
     @PostConstruct
@@ -152,16 +154,17 @@ public class YadaRestController {
 
     //hit this route to display yadas for a given webpage from the chrome extension
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
-    public Iterable<Yada> showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
+    public ResponseEntity showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
-
+            return new ResponseEntity("Not So Fast!", HttpStatus.FORBIDDEN);
         }
-        Link link = links.findFirstByUrl(url);
-        Iterable<Yada> theYadas = link.getYadaList();
 
-        return theYadas;
+        Link link = links.findFirstByUrl(url);
+        Iterable<Yada> theYadas = yadas.findAllByLinkIdOrderByKarmaDesc(link);
+
+        return new ResponseEntity(theYadas, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
@@ -260,7 +263,6 @@ public class YadaRestController {
                 parsedDoc.add(str);
             });
         }
-        System.out.println(parsedDoc);
 
         return parsedDoc;
     }
