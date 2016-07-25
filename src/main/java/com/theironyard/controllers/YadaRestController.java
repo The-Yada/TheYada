@@ -101,57 +101,165 @@ public class YadaRestController {
 
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public Yada upVote(HttpSession session, @RequestBody YadaUserJoin yuj){
+    public Yada upVote(HttpSession session, @RequestBody Yada yada) throws Exception {
 
-        String username = (String) session.getAttribute("username");
-
-        User user = users.findFirstByUsername(yuj.getUser().getUsername());
-
-        yuj.getYada();
-        Yada yadaToUpVote = yadas.findOne(yuj.getYada().getId());
-
-
-        if ((!yuj.isUpvoted() && yuj.isDownvoted()) || (!yuj.isUpvoted() && !yuj.isDownvoted())) {
-
-            yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
-            yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 1);
-            User yadaAuthor = yuj.getYada().getUser();
-            yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
-            yuj.setUpvoted(true);
-            yuj.setDownvoted(false);
-            yadas.save(yadaToUpVote);
-
-            return yadaToUpVote;
-        }
-        return null; // return http status here?
-    }
-
-
-    //hit this route so users can downVote yadas
-    @RequestMapping(path = "/downVote", method = RequestMethod.POST)
-    public Yada downVote(HttpSession session, @RequestBody YadaUserJoin yuj) {
-
-        //*** we need to also account for users karma being altered when up and down votes are cast
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
-        Yada yadaToUpVote = yadas.findOne(yuj.getYada().getId());
+        Yada yadaToUpVote = yadas.findOne(yada.getId());
 
-        if ((yuj.isUpvoted() && !yuj.isDownvoted()) || (!yuj.isUpvoted() && !yuj.isDownvoted())) {
 
-            yadaToUpVote.setKarma(yuj.getYada().getKarma() - 1);
-            yadaToUpVote.setDownvotes(yuj.getYada().getDownvotes() + 1);
-            User yadaAuthor = yuj.getYada().getUser();
-            yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-            yuj.setUpvoted(false);
-            yuj.setDownvoted(true);
+        if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
+            YadaUserJoin yuj = new YadaUserJoin(user, yada);
+            // below is pasted
 
-            yadas.save(yadaToUpVote);
+            if (!yuj.isUpvoted() && yuj.isDownvoted()) {
 
-            return yadaToUpVote;
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() + 2);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 2);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() + 2);
+                yuj.setUpvoted(true);
+                yuj.setDownvoted(false);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 1);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+                yuj.setUpvoted(true);
+                yuj.setDownvoted(false);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+
+        }
+        else {
+
+            YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
+
+            if (!yuj.isUpvoted() && yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() + 2);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 2);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() + 2);
+                yuj.setUpvoted(true);
+                yuj.setDownvoted(false);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() + 1);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+                yuj.setUpvoted(true);
+                yuj.setDownvoted(false);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else {
+                throw new Exception("You have already upvoted.");
+            }
         }
         return null;
     }
+
+    //hit this route so users can upVote yadas
+    @RequestMapping(path = "/downVote", method = RequestMethod.POST)
+    public Yada downVote(HttpSession session, @RequestBody Yada yada) throws Exception {
+
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
+
+        Yada yadaToUpVote = yadas.findOne(yada.getId());
+
+
+        if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
+            YadaUserJoin yuj = new YadaUserJoin(user, yada);
+            // below is pasted
+
+            if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() - 2);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() -2);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                yuj.setUpvoted(false);
+                yuj.setDownvoted(true);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() - 1);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                yuj.setUpvoted(false);
+                yuj.setDownvoted(true);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+
+        }
+        else {
+
+            YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
+
+            if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() - 2);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() - 2);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                yuj.setUpvoted(false);
+                yuj.setDownvoted(true);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                yadaToUpVote.setKarma(yuj.getYada().getKarma() - 1);
+                yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                User yadaAuthor = yuj.getYada().getUser();
+                yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                yuj.setUpvoted(false);
+                yuj.setDownvoted(true);
+                yadas.save(yadaToUpVote);
+                yadaUserJoinRepo.save(yuj);
+
+                return yadaToUpVote;
+            }
+            else {
+                throw new Exception("You have already downvoted.");
+            }
+        }
+        return null;
+    }
+
+
+
+//    //hit this route so u
 
 
     //route which brings user to the editing screen with scraped website text and submission box
