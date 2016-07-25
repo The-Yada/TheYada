@@ -1,6 +1,9 @@
 package com.theironyard.controllers;
 
-import com.theironyard.entities.*;
+import com.theironyard.entities.User;
+import com.theironyard.entities.Yada;
+import com.theironyard.entities.Link;
+import com.theironyard.entities.YadaLink;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -159,9 +163,9 @@ public class YadaRestController {
 
         }
         Link link = links.findFirstByUrl(url);
-        Iterable<Yada> theYadas = link.getYadaList();
+        Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
 
-        return new ResponseEntity<>(theYadas, HttpStatus.OK);
+        return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
