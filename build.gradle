@@ -34,6 +34,9 @@ dependencies {
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0")
+
+
 	// web scrape library
 	compile('org.jsoup:jsoup:1.9.2')
 

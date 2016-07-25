@@ -1,15 +1,14 @@
 string content,int karma,int score,userId,linkId
-FIRST,0,5,1,11, http://nation.foxnews.com/2016/07/19/members-kkk-black-lives-matter-and-westboro-baptist-church-reportedly-throwing-urine-each
-SECOND,3,0,2,12, http://www.bbc.com/news/business-36791928
-THIRD,2,2,3,13, http://okcfox.com/news/fox-25-investigates/police-kill-family-dog-at-childs-birthday-party
-FOURTH,4,3,4,14, http://www.corriere.it/salute/malattie_infettive/16_luglio_20/vaccini-medici-che-li-sconsigliano-rischiano-sanzioni-radiazione-9d386b22-4e5c-11e6-8e8b-1212ced41b8e.shtml
-FIFTH,10,4,5,15, http://bigstory.ap.org/b358df640c684b99a5aacdacef44c07c
-SIXTH,0,5,6,16, http://www.popularmechanics.com/space/moon-mars/a21884/us-russia-moon-plan/
-SEVENTH,0,7,7,17, https://www.theguardian.com/world/2016/jul/18/mexico-cuts-poverty-national-statistics-changes-earnings-measurements
-EIGHTH,45,7,8,2, http://www.news.com.au/world/middle-east/turkey-escalates-postcoup-purge-despite-global-alarm/news-story/954df95eb91bb3adb12f046d8a289fe5
-NINTH,100,8,9,2, http://www.click2houston.com/news/rape-victim-put-in-jail-after-breakdown-on-witness-stand
-TENTH,55,9,10,2, http://pix11.com/2016/07/19/drinking-buddies-of-cop-who-killed-man-in-drunk-driving-incident-stripped-of-guns-and-shields/#
-ELEVENTH,111,16,2,2, http://www.bbc.com/news/business-36791928
-Twelfth,38,9,1,2, http://www.bbc.com/news/business-36791928
-
+FIRST,0,5,1,11
+SECOND,3,0,2,12
+THIRD,2,2,3,13
+FOURTH,4,3,4,14
+FIFTH,10,4,5,15
+SIXTH,0,5,6,16
+SEVENTH,0,7,7,17
+EIGHTH,45,7,8,2
+NINTH,100,8,9,2
+TENTH,55,9,10,2
+ELEVENTH,111,16,2,2
+Twelfth,38,9,1,2
 
