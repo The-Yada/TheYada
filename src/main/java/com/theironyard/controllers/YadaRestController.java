@@ -83,7 +83,7 @@ public class YadaRestController {
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
         generateLinkScore(linkList);
-        return links.findTop5ByOrderByLinkScoreDesc();
+        return links.findAllByOrderByLinkScoreDesc();
     }
 
     @RequestMapping(path = "/newYadas", method = RequestMethod.GET)
@@ -105,13 +105,14 @@ public class YadaRestController {
 
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public HttpStatus upVote(int yadaUserJoinId, int userId, int yadaId){
+    public HttpStatus upVote(HttpSession session, int yadaUserJoinId, int userId, int yadaId){
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
 
         //*** we need to also account for users karma being altered when up and down votes are cast
 
 
         YadaUserJoin yadaUJoin = yadaUserJoinRepo.findOne(yadaUserJoinId);
-        User user = users.findOne(userId);
         Yada yada = yadas.findOne(yadaId);
 
         if (yadaUJoin == null) {
@@ -173,32 +174,47 @@ public class YadaRestController {
         if (username == null) {
 
         }
+
         Link link = links.findFirstByUrl(url);
+        if (link == null) {
+
+        }
+
+        if(link.getYadaList() == null) {
+            ArrayList<Yada> yadasInLink = new ArrayList<>();
+            link.setYadaList(yadasInLink);
+        }
         Iterable<Yada> theYadas = link.getYadaList();
 
         return theYadas;
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public Iterable<Yada> addYada(HttpSession session, @RequestBody Yada yada, @RequestParam (value = "url", required = false) String url) throws Exception {
-
+    public Iterable<Yada> addYada(HttpSession session, @RequestBody Yada yada) throws Exception {
         String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
+        Yada firstYada = new Yada("Your Yada Here", 0, LocalDateTime.now(), 0, 0, 0, "", 0, yada.getUser(), links.findFirstByUrl(yada.getUrl()));
+
         if (username == null) {
             throw new Exception ("Not So Fast!!");
         }
+        ArrayList<Yada> theYadasInside = new ArrayList<>();
+        theYadasInside.add(yada);
+        Link link = links.findFirstByUrl(yada.getUrl());
 
-        Link link = links.findFirstByUrl(url);
-        if (link == null) {
-            link = new Link(url, LocalDateTime.now(), 0, 0, 1, 0);
+        Yada yada1 = new Yada(yada.getContent(), 0,  LocalDateTime.now(), 0, 0, 0, yada.getUrl(),  0, user, link);
+
+        if(link.getYadaList() == null) {
+            ArrayList<Yada> yadasInLink = new ArrayList<>();
+            yadasInLink.add(firstYada);
+            link.setYadaList(yadasInLink);
         }
 
-        User user = users.findFirstByUsername(username);
-        Yada yada1 = new Yada(yada.getContent(), 0, LocalDateTime.now(), 0, 0, 0, 0, user, link);
-        ArrayList<Yada> yadasInLink = (ArrayList<Yada>) link.getYadaList();
+        List<Yada> yadasInLink = link.getYadaList();
         yadasInLink.add(yada1);
 
-        yadas.save(yada1);
         links.save(link);
+        yadas.save(yada1);
 
         Iterable<Yada> updatedYadaList = link.getYadaList();
 
@@ -263,7 +279,6 @@ public class YadaRestController {
                 parsedDoc.add(str);
             });
         }
-        System.out.println(parsedDoc);
 
         return parsedDoc;
     }

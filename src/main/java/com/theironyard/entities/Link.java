@@ -49,6 +49,16 @@ public class Link {
         this.timeDiffInSeconds = timeDiffInSeconds;
     }
 
+    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int numberOfYadas, long timeDiffInSeconds, List<Yada> yadaList) {
+        this.url = url;
+        this.timeOfCreation = timeOfCreation;
+        this.linkScore = linkScore;
+        this.totalVotes = totalVotes;
+        this.numberOfYadas = numberOfYadas;
+        this.timeDiffInSeconds = timeDiffInSeconds;
+        this.yadaList = yadaList;
+    }
+
     public int getId() {
         return id;
     }

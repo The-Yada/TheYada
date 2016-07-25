@@ -34,6 +34,9 @@ public class Yada {
     int downvotes;
 
     @Column(nullable = false)
+    String url;
+
+    @Column(nullable = false)
     double controversyScore;
 
     @ManyToOne
@@ -44,6 +47,19 @@ public class Yada {
     Link link;
 
     public Yada() {
+    }
+
+    public Yada(String content, int karma, LocalDateTime time, int score, int upvotes, int downvotes, String url, double controversyScore, User user, Link link) {
+        this.content = content;
+        this.karma = karma;
+        this.time = time;
+        this.score = score;
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
+        this.url = url;
+        this.controversyScore = controversyScore;
+        this.user = user;
+        this.link = link;
     }
 
     public Yada(String content, int karma, LocalDateTime time, int score, int upvotes, int downvotes, double controversyScore, User user, Link link) {
@@ -144,5 +160,13 @@ public class Yada {
 
     public void setControversyScore(double controversyScore) {
         this.controversyScore = controversyScore;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
