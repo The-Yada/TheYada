@@ -104,8 +104,10 @@ public class YadaRestController {
     public Yada upVote(HttpSession session, @RequestBody YadaUserJoin yuj){
 
         String username = (String) session.getAttribute("username");
-        User user = users.findFirstByUsername(username);
 
+        User user = users.findFirstByUsername(yuj.getUser().getUsername());
+
+        yuj.getYada();
         Yada yadaToUpVote = yadas.findOne(yuj.getYada().getId());
 
 
