@@ -15,7 +15,7 @@ module.exports = function(app) {
 
 
     $scope.upIt = function (yada) {
-        YadaService.upKarma(yada);
+      YadaService.upKarma(yada);
     }
     $scope.downIt = function (yada) {
         YadaService.downKarma(yada);
@@ -270,6 +270,8 @@ module.exports = function(app) {
               url: '/upVote',
               method: 'POST',
               data: yada
+            }).then(function(response){
+              console.log(response);
             })
         },
 
@@ -279,8 +281,11 @@ module.exports = function(app) {
             url: '/downVote',
             method: 'POST',
             data: yada
+          }).then(function(response){
+            console.log(response);
           })
         }
+
       }
 
 
