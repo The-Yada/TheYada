@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -81,11 +80,17 @@ public class YadaRestController {
 
     // route which returns a sorted(by highest score) list of all yadaLists(based on url)
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
-    public ArrayList<Link> getYadaList() {
+    public ResponseEntity<ArrayList<Link>> getYadaList(HttpSession session) {
+
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
+        if (user != null) {
+            return new ResponseEntity<>(HttpStatus.CONTINUE);
+        }
 
         ArrayList<Link> linkList = (ArrayList<Link>) links.findAll();
         generateLinkScore(linkList);
-        return links.findAllByOrderByLinkScoreDesc();
+        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/newYadas", method = RequestMethod.GET)
