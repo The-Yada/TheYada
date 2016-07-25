@@ -45,7 +45,6 @@ public class YadaRestController {
     @Autowired
     LinkRepository links;
 
-
     // start h2 database
     @PostConstruct
     public void init() throws SQLException, IOException {
@@ -132,8 +131,7 @@ public class YadaRestController {
         Yada yadaToUpVote = yadas.findOne(yada.getId());
 
         yadaToUpVote.setKarma(yada.getKarma() - 1);
-        yadaToUpVote.setDownvotes(
-                yada.getDownvotes() + 1);
+        yadaToUpVote.setDownvotes(yada.getDownvotes() + 1);
         User yadaAuthor = yada.getUser();
         yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
         yadas.save(yadaToUpVote);

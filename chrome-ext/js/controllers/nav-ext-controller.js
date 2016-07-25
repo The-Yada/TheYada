@@ -19,5 +19,10 @@ module.exports = function(ext) {
       win.focus();
     }
 
+    $scope.logout = function() {
+      //clear session
+      UserExtService.clearSession();
+    }
+
   }]);
 }
