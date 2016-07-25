@@ -145,5 +145,5 @@ public class Yada {
     public void setControversyScore(double controversyScore) {
         this.controversyScore = controversyScore;
     }
-    
+
 }
