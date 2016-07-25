@@ -348,7 +348,9 @@ public class YadaRestController {
 
     // sorting algorithm - HOT (time/votes)
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
-
+        /** edit this to calculate totalVotes from upvotes/downvotes
+         *
+         */
         for (Link link : linkList) {
             long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
             link.setTimeDiffInSeconds(difference);
