@@ -16,16 +16,15 @@ module.exports = function(app) {
 
 
     $scope.upIt = function (yada) {
-        YadaService.upKarma(yada, function(response) {
-              $scope.topYadas = YadaService.getTopYadas();
-              return $scope.topYadas;
+        YadaService.upKarma(yada, function() {
+              $scope.topYadas = YadaService.updateYadas();
+
         });
 
     }
     $scope.downIt = function (yada) {
-        YadaService.downKarma(yada, function(response) {
-            $scope.topYadas = YadaService.getTopYadas();
-            return $scope.topYadas;
+        YadaService.downKarma(yada, function() {
+            $scope.topYadas = YadaService.updateYadas();
         });
 
     }
@@ -280,10 +279,11 @@ module.exports = function(app) {
               method: 'POST',
               data: yada
             }).then(function(response){
-              yadas = callback(response);
+              yadas = response;
 
               angular.copy(yadas, topYadas);
-            })
+              callback();
+            });
         },
 
         downKarma(yada, callback) {
@@ -293,10 +293,15 @@ module.exports = function(app) {
             method: 'POST',
             data: yada
           }).then(function(response){
-            yadas = callback(response);
+            yadas = response;
 
             angular.copy(yadas, topYadas);
-          })
+            callback();
+          });
+        },
+
+        updateYadas() {
+          return topYadas;
         }
 
       }

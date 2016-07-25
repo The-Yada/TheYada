@@ -57,10 +57,11 @@ module.exports = function(app) {
               method: 'POST',
               data: yada
             }).then(function(response){
-              yadas = callback(response);
+              yadas = response;
 
               angular.copy(yadas, topYadas);
-            })
+              callback();
+            });
         },
 
         downKarma(yada, callback) {
@@ -70,10 +71,15 @@ module.exports = function(app) {
             method: 'POST',
             data: yada
           }).then(function(response){
-            yadas = callback(response);
+            yadas = response;
 
             angular.copy(yadas, topYadas);
-          })
+            callback();
+          });
+        },
+
+        updateYadas() {
+          return topYadas;
         }
 
       }
