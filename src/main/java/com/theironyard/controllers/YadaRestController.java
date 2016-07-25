@@ -156,22 +156,21 @@ public class YadaRestController {
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
 
+        }
         Link link = links.findFirstByUrl(url);
-        Iterable<Yada> theYadas = yadas.findAllByLinkIdOrderByKarmaDesc(link);
+        Iterable<Yada> theYadas = link.getYadaList();
 
         return new ResponseEntity<>(theYadas, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public ResponseEntity<Iterable<Yada>> addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
+    public Iterable<Yada> addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
-           return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            throw new Exception ("Not So Fast!!");
         }
 
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
@@ -188,9 +187,7 @@ public class YadaRestController {
             yadas.save(yada);
 
         }
-
         else {
-
             ArrayList<Yada> yadasInLink = new ArrayList<>();
             yadasInLink.add(yada);
             yl.getLink().setYadaList(yadasInLink);
@@ -202,7 +199,7 @@ public class YadaRestController {
 
         Iterable<Yada> updatedYadaList = yl.getLink().getYadaList();
 
-        return new ResponseEntity<>(updatedYadaList, HttpStatus.OK);
+        return updatedYadaList;
     }
 
     // sorting algorithm - HOT (time/votes)
@@ -263,6 +260,7 @@ public class YadaRestController {
                 parsedDoc.add(str);
             });
         }
+        System.out.println(parsedDoc);
 
         return parsedDoc;
     }
