@@ -55,7 +55,7 @@ public class YadaRestController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public User login(@RequestBody User user, HttpSession session) throws Exception {
+    public ResponseEntity<User> login(@RequestBody User user, HttpSession session) throws Exception {
         User userFromDatabase = users.findFirstByUsername(user.getUsername());
 
         if (userFromDatabase == null) {
@@ -68,13 +68,15 @@ public class YadaRestController {
         }
 
         session.setAttribute("username", user.getUsername());
-        return user;
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public String logout(HttpSession session) {
+    public ResponseEntity<String> logout(HttpSession session) {
+
         session.invalidate();
-        return "";
+
+        return new ResponseEntity<>("Please Come Again Soon", HttpStatus.OK);
 
     }
 
@@ -181,12 +183,12 @@ public class YadaRestController {
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
-    public Iterable<Yada> addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
+    public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
 
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            throw new Exception ("Not So Fast!!");
+            return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
         }
 
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
@@ -211,11 +213,9 @@ public class YadaRestController {
             yadas.save(yada);
 
         }
-
-
         Iterable<Yada> updatedYadaList = yl.getLink().getYadaList();
 
-        return updatedYadaList;
+        return new ResponseEntity<>(updatedYadaList, HttpStatus.OK);
     }
 
     // sorting algorithm - HOT (time/votes)
