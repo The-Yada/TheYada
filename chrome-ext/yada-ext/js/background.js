@@ -1,23 +1,23 @@
 var x = false;
-disableBrowserAction();
 
-function disableBrowserAction(){
+
+function disableBrowserAction(tab){
     chrome.browserAction.setIcon({path:"assets/inactive.png"});
 
-
+    console.log('Disabling ' + tab.url + ' yada!');
     chrome.tabs.executeScript(null, {file: "js/togglecontent.js"});
 }
 
 function enableBrowserAction(tab){
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {greeting: `${tab.url}`}, function(response) {
-      console.log(response);
-      });
+
+    chrome.contentSettings.cookies.set({
+      primaryPattern: "http://localhost:8080/*",
+      setting: "session_only"
     });
 
     chrome.browserAction.setIcon({path:"assets/active.png"});
 
-    console.log('Creating ' + tab.url + ' yada!');
+    console.log('Enabling ' + tab.url + ' yada!');
     chrome.tabs.executeScript(null, {file: "js/content.js"});
 
 }
@@ -28,9 +28,10 @@ function updateState(tab){
         enableBrowserAction(tab);
     }else{
         x=false;
-        disableBrowserAction();
+        disableBrowserAction(tab);
     }
 }
+
 
 chrome.browserAction.onClicked.addListener(updateState);
 chrome.tabs.onActivated.addListener(disableBrowserAction);

@@ -55,16 +55,16 @@ module.exports = function(app) {
             $http({
               url: '/upVote',
               method: 'POST',
-              data: `${yada}`
+              data: yada
             })
         },
-        
+
         downKarma(yada) {
           console.log(yada);
           $http({
             url: '/downVote',
             method: 'POST',
-            data: `${yada}`
+            data: yada
           })
         }
       }

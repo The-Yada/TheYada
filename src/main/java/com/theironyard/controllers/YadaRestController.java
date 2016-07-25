@@ -102,7 +102,7 @@ public class YadaRestController {
 
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
-    public HttpStatus upVote(HttpSession session, @RequestBody Yada yada){
+    public Yada upVote(HttpSession session, @RequestBody Yada yada){
 
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
@@ -115,13 +115,13 @@ public class YadaRestController {
             yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
             yadas.save(yadaToUpVote);
 
-        return HttpStatus.ACCEPTED;
+        return yadaToUpVote;
     }
 
 
     //hit this route so users can downVote yadas
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
-    public HttpStatus downVote(HttpSession session, @RequestBody Yada yada) {
+    public Yada downVote(HttpSession session, @RequestBody Yada yada) {
 
         //*** we need to also account for users karma being altered when up and down votes are cast
         String username = (String) session.getAttribute("username");
@@ -130,13 +130,12 @@ public class YadaRestController {
         Yada yadaToUpVote = yadas.findOne(yada.getId());
 
         yadaToUpVote.setKarma(yada.getKarma() - 1);
-        yadaToUpVote.setDownvotes(
-                yada.getDownvotes() + 1);
+        yadaToUpVote.setDownvotes(yada.getDownvotes() + 1);
         User yadaAuthor = yada.getUser();
         yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
         yadas.save(yadaToUpVote);
 
-        return HttpStatus.ACCEPTED;
+        return yadaToUpVote;
     }
 
 

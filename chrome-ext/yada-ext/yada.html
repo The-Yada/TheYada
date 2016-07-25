@@ -27,7 +27,7 @@
            </li>
           <li id='log'>
               <a ng-show="!logStatus.status" href="#/log-in">Login</a>
-              <a ng-show="logStatus.status" href="#/log-out">Logout</a>
+              <a ng-click="logout()" ng-show="logStatus.status" href="#/">Logout</a>
             </li>
           <li ng-click="toWebsite()">The Yada Website</li>
         </ul>
