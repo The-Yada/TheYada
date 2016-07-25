@@ -1,22 +1,40 @@
 
+var x = false;
 
 
-// https://developer.chrome.com/extensions/contextMenus
-// see onClicked events for information on info and tab
-// (tabs is set in Manifest.json permissions)
-// this will give us access to tabs.Tab.url
+function disableBrowserAction(tab){
+    chrome.browserAction.setIcon({path:"assets/inactive.png"});
 
-let showMeTheYada = function(info, tab) {
-  //TODO: determine which menu item was clicked
-  //TODO: tab.url
-  //TODO: redirect to website or show yada
+    console.log('Disabling ' + tab.url + ' yada!');
+    chrome.tabs.executeScript(null, {file: "js/togglecontent.js"});
+}
 
-  // find yadas array matching the url
-  // displays yada overlaying DOM
+function enableBrowserAction(tab){
+
+    chrome.contentSettings.cookies.set({
+      primaryPattern: "http://localhost:8080/*",
+      setting: "session_only"
+    });
+
+    chrome.browserAction.setIcon({path:"assets/active.png"});
+
+    console.log('Enabling ' + tab.url + ' yada!');
+    chrome.tabs.executeScript(null, {file: "js/content.js"});
+
+}
+
+function updateState(tab){
+    if(x==false){
+        x=true;
+        enableBrowserAction(tab);
+    }else{
+        x=false;
+        disableBrowserAction(tab);
+    }
 }
 
 
-chrome.contextMenus.onClicked.addListener(showMeTheYada);
+chrome.contextMenus.onClicked.addListener(updateState);
 
 // Set up context menu tree at install time.
 chrome.runtime.onInstalled.addListener(function() {
@@ -27,25 +45,26 @@ chrome.runtime.onInstalled.addListener(function() {
    id: "showYada"
   });
 
-  // Yada Website redirecting
-  chrome.contextMenus.create({
-   title: "Yada Website",
-   id: "parent",
-  });
-  // children of Yada Website
-  chrome.contextMenus.create({
-   title: "New Tab",
-   parentId: "parent",
-   id: "newTabChild"
-  });
-  chrome.contextMenus.create({
-   title: "New Window",
-   parentId: "parent",
-   id: "newWindowChild"
-  });
-  chrome.contextMenus.create({
-   title: "Current Window",
-   parentId: "parent",
-   id: "currentWindowChild"
-  });
+  //
+  // // Yada Website redirecting
+  // chrome.contextMenus.create({
+  //  title: "Yada Website",
+  //  id: "parent",
+  // });
+  // // children of Yada Website
+  // chrome.contextMenus.create({
+  //  title: "New Tab",
+  //  parentId: "parent",
+  //  id: "newTabChild"
+  // });
+  // chrome.contextMenus.create({
+  //  title: "New Window",
+  //  parentId: "parent",
+  //  id: "newWindowChild"
+  // });
+  // chrome.contextMenus.create({
+  //  title: "Current Window",
+  //  parentId: "parent",
+  //  id: "currentWindowChild"
+  // });
 });
