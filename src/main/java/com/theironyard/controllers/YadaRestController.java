@@ -118,7 +118,7 @@ public class YadaRestController {
         ArrayList<Link> linksThatMatchSearchResults = new ArrayList<>();
 
         if (searchInput != null) {
-            yadasThatMatchSearchInput = yadas.findBySearchInput(searchInput);
+            yadasThatMatchSearchInput = yadas.searchByContent(searchInput);
         }
         else {
             return new ResponseEntity<>("Please Type in Valid Search Term", HttpStatus.EXPECTATION_FAILED);

@@ -27,7 +27,4 @@ public interface YadaRepository extends CrudRepository<Yada, Integer> {
     @Query("SELECT y FROM Yada y WHERE LOWER(content) LIKE '%' || LOWER(?) || '%'")
     Iterable<Yada> searchByContent(String searchInput);
 
-
-    @Query("select y from Yada y where y.content like %?1")
-    Iterable<Yada> findBySearchInput(String searchInput);
 }
