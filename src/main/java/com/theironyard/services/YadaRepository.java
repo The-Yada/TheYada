@@ -4,6 +4,7 @@ import com.theironyard.entities.Link;
 import com.theironyard.entities.Yada;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -23,6 +24,10 @@ public interface YadaRepository extends CrudRepository<Yada, Integer> {
     //ArrayList<Yada> findTop10ByOrderByTimeOfCreationAsc();
     Iterable<Yada> findTop10ByLinkIdOrderByKarmaDesc(int id);
 
+    @Query("SELECT y FROM Yada y WHERE LOWER(content) LIKE '%' || LOWER(?) || '%'")
+    Iterable<Yada> searchByContent(String searchInput);
 
 
+    @Query("select y from Yada y where y.content like %?1")
+    Iterable<Yada> findBySearchInput(String searchInput);
 }
