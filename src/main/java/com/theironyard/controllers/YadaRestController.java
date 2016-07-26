@@ -131,6 +131,7 @@ public class YadaRestController {
                     yadaUserJoinRepo.save(yuj);
 
                     return new ResponseEntity<>(yadaToUpVote, HttpStatus.OK);
+
                 } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
                     yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
@@ -304,6 +305,7 @@ public class YadaRestController {
     public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
 
+
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
@@ -311,7 +313,7 @@ public class YadaRestController {
 
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
         if (link == null) {
-            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 1, 0);
+            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 1, 0, soupThatSite(yl.getLink().getUrl()).get(0));
         }
 
         User user = users.findFirstByUsername(username);
@@ -343,11 +345,7 @@ public class YadaRestController {
 
     // sorting algorithm - HOT (time/votes)
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
-        /** edit this to calculate totalVotes from upvotes/downvotes
-         *
-         * need to calculate a link's total number of UPVOTES from all of its yadas upvotes.
-         * so.. total votes = karma of each yada summed together.
-         */
+
         for (Link link : linkList) {
             /**
              * calculate collective karma for a link. this causes links with the most upvotes

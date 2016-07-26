@@ -34,19 +34,23 @@ public class Link {
     @Column(nullable = false)
     long timeDiffInSeconds;
 
+    @Column(nullable = false)
+    String title;
+
     @OneToMany(mappedBy = "link", cascade = CascadeType.ALL)
     List<Yada> yadaList;
 
     public Link() {
     }
 
-    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int numberOfYadas, long timeDiffInSeconds) {
+    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int numberOfYadas, long timeDiffInSeconds, String title) {
         this.url = url;
         this.timeOfCreation = timeOfCreation;
         this.linkScore = linkScore;
         this.totalVotes = totalVotes;
         this.numberOfYadas = numberOfYadas;
         this.timeDiffInSeconds = timeDiffInSeconds;
+        this.title = title;
     }
 
     public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int numberOfYadas, long timeDiffInSeconds, List<Yada> yadaList) {
@@ -121,5 +125,13 @@ public class Link {
 
     public void setTimeDiffInSeconds(long timeDiffInSeconds) {
         this.timeDiffInSeconds = timeDiffInSeconds;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
