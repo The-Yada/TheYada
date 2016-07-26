@@ -63,7 +63,8 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
 
 
   // Filters
-
+  require('./filters/search-filter.js')(app);
+  
   // Directives
 
 

@@ -320,11 +320,6 @@ public class YadaRestController {
 
     }
 
-
-
-//    //hit this route so u
-
-
     //route which brings user to the editing screen with scraped website text and submission box
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<String>> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
@@ -358,6 +353,7 @@ public class YadaRestController {
     public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
 
+
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
@@ -365,7 +361,7 @@ public class YadaRestController {
 
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
         if (link == null) {
-            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 1, 0);
+            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 1, 0, soupThatSite(yl.getLink().getUrl()).get(0));
         }
 
         User user = users.findFirstByUsername(username);
@@ -399,6 +395,14 @@ public class YadaRestController {
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
 
         for (Link link : linkList) {
+            /**
+             * calculate collective karma for a link. this causes links with the most upvotes
+             * among all of its yadas to rise to the top.
+             */
+            for (Yada yada : link.getYadaList()) {
+                link.setTotalVotes(link.getTotalVotes() + yada.getKarma());
+            }
+
             long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
             link.setTimeDiffInSeconds(difference);
             long denominator = (difference + SECONDS_IN_TWO_HOURS);
@@ -407,6 +411,7 @@ public class YadaRestController {
         }
         return linkList;
     }
+
 
     // sorting algorithm - CONTROVERSIAL
     public List<Yada> generateControveryScore(ArrayList<Yada> yadaList) {
