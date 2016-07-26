@@ -1,6 +1,8 @@
 package com.theironyard.services;
 
 import com.theironyard.entities.Link;
+import com.theironyard.entities.Yada;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -17,6 +19,9 @@ public interface LinkRepository extends PagingAndSortingRepository<Link, Integer
     ArrayList<Link> findTop25ByOrderByLinkScoreDesc();
     ArrayList<Link> findTop5ByOrderByTimeOfCreationAsc();
     ArrayList<Link> findTop10ByOrderByTimeOfCreationAsc();
+
+    @Query("SELECT l FROM Link l WHERE LOWER(title) LIKE '%' || LOWER(?) || '%'")
+    Iterable<Link> searchByTitle(String searchInput);
 
 
 }

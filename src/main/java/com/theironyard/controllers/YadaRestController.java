@@ -7,6 +7,11 @@ import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
 import com.theironyard.utils.PasswordStorage;
 import org.h2.tools.Server;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -104,6 +110,43 @@ public class YadaRestController {
         return yadas.findAllByLinkIdOrderByControversyScoreDesc(link);
     }
 
+    //hit this route when searching through content of yadas
+    @RequestMapping(path = "/searchYadas", method = RequestMethod.GET)
+    public ResponseEntity getSearchResults(@RequestParam (value = "searchInput", required = false) String searchInput) {
+
+        Iterable<Yada> yadasThatMatchSearchInput;
+        ArrayList<Link> linksThatMatchSearchResults = new ArrayList<>();
+
+        if (searchInput != null) {
+            yadasThatMatchSearchInput = yadas.findBySearchInput(searchInput);
+        }
+        else {
+            return new ResponseEntity<>("Please Type in Valid Search Term", HttpStatus.EXPECTATION_FAILED);
+        }
+
+        for (Yada yada : yadasThatMatchSearchInput) {
+            Link linkToAddToSearchResults = yada.getLink();
+
+            if (!linksThatMatchSearchResults.contains(linkToAddToSearchResults)) {
+                linksThatMatchSearchResults.add(linkToAddToSearchResults);
+            }
+        }
+        return new ResponseEntity<Iterable<Link>>(linksThatMatchSearchResults, HttpStatus.OK);
+    }
+    //hit this route to search by title
+    @RequestMapping(path = "/searchTitles", method = RequestMethod.GET)
+    public ResponseEntity getSearchResultsOfTitles(@RequestParam (value = "searchInput", required = false) String searchInput) {
+        Iterable<Link> linksThatMatchSearchInput = new ArrayList<>();
+
+        if (searchInput != null) {
+            linksThatMatchSearchInput = links.searchByTitle(searchInput);
+
+        }
+
+        return new ResponseEntity<Iterable<Link>>(linksThatMatchSearchInput, HttpStatus.OK);
+    }
+
+
     //hit this route so users can upVote yadas
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
     public ResponseEntity upVote(HttpSession session, @RequestBody Yada yada) throws Exception {
@@ -148,10 +191,8 @@ public class YadaRestController {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
                 }
-
-
-            } else {
-
+            }
+            else {
                 YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
 
                 if (!yuj.isUpvoted() && yuj.isDownvoted()) {
@@ -383,6 +424,7 @@ public class YadaRestController {
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
     public ArrayList<String> soupThatSite(String url) throws IOException {
+
         ArrayList<String> parsedDoc = new ArrayList<>();
         Document doc = Jsoup.connect(url).get();
 
