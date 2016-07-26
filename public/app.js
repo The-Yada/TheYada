@@ -6,7 +6,7 @@
 
 module.exports = function(app) {
 
-  app.controller('HomeController', ['$scope', 'YadaService', function($scope, YadaService){
+  app.controller('HomeController', ['$scope', '$location', 'YadaService', function($scope, $location, YadaService){
 
     /*******************************
     * grab the yadas for the ng-repeat in home.html
@@ -16,16 +16,18 @@ module.exports = function(app) {
 
 
     $scope.upIt = function (yada) {
-        YadaService.upKarma(yada, function(response) {
-              $scope.topYadas = YadaService.getTopYadas();
-              return $scope.topYadas;
+        YadaService.upKarma(yada, function() {
+              console.log("callback");
+              $scope.topYadas = YadaService.updateYadas();
+              $location.path("/");
         });
 
     }
     $scope.downIt = function (yada) {
-        YadaService.downKarma(yada, function(response) {
-            $scope.topYadas = YadaService.getTopYadas();
-            return $scope.topYadas;
+        YadaService.downKarma(yada, function() {
+            console.log("callback");
+            $scope.topYadas = YadaService.updateYadas();
+            $location.path("/");
         });
 
     }
@@ -269,7 +271,7 @@ module.exports = function(app) {
               yadas = response.data;
               angular.copy(yadas, topYadas);
             })
-            console.log(topYadas);
+            console.log("initial get", topYadas);
             return topYadas;
         },
 
@@ -280,10 +282,12 @@ module.exports = function(app) {
               method: 'POST',
               data: yada
             }).then(function(response){
-              yadas = callback(response);
+              console.log("up vote update", response.data);
+              yadas = response.data;
 
               angular.copy(yadas, topYadas);
-            })
+              // callback();
+            }).then(callback)
         },
 
         downKarma(yada, callback) {
@@ -293,10 +297,17 @@ module.exports = function(app) {
             method: 'POST',
             data: yada
           }).then(function(response){
-            yadas = callback(response);
+            console.log("down vote update", response.data);
+            yadas = response.data;
 
             angular.copy(yadas, topYadas);
-          })
+            // callback();
+          }).then(callback)
+        },
+
+        updateYadas() {
+          console.log("updating");
+          return topYadas;
         }
 
       }

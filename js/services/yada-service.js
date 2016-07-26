@@ -46,7 +46,7 @@ module.exports = function(app) {
               yadas = response.data;
               angular.copy(yadas, topYadas);
             })
-            console.log(topYadas);
+            console.log("initial get", topYadas);
             return topYadas;
         },
 
@@ -57,10 +57,12 @@ module.exports = function(app) {
               method: 'POST',
               data: yada
             }).then(function(response){
-              yadas = callback(response);
+              console.log("up vote update", response.data);
+              yadas = response.data;
 
               angular.copy(yadas, topYadas);
-            })
+              // callback();
+            }).then(callback)
         },
 
         downKarma(yada, callback) {
@@ -70,10 +72,17 @@ module.exports = function(app) {
             method: 'POST',
             data: yada
           }).then(function(response){
-            yadas = callback(response);
+            console.log("down vote update", response.data);
+            yadas = response.data;
 
             angular.copy(yadas, topYadas);
-          })
+            // callback();
+          }).then(callback)
+        },
+
+        updateYadas() {
+          console.log("updating");
+          return topYadas;
         }
 
       }
