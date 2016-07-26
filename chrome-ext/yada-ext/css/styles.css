@@ -1,9 +1,6 @@
 html {
   background: transparent; }
 
-body {
-  background-color: #85ECFF; }
-
 #pops {
   font-weight: bold;
   background-color: transparent;
@@ -23,8 +20,13 @@ span {
   height: 50px; }
 
 .main-container {
-  margin: 0 auto;
-  width: 90%; }
+  padding: 10px;
+  background-color: #85ECFF;
+  margin: 100px auto;
+  width: 77%;
+  border-radius: 6px;
+  max-height: 60vh;
+  overflow: scroll; }
 
 .editor-wrapper {
   display: inline-flex;

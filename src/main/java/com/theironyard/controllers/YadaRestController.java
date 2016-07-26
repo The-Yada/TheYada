@@ -130,7 +130,7 @@ public class YadaRestController {
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
 
-                    return new ResponseEntity<>(yadaToUpVote, HttpStatus.OK);
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
                     yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
@@ -144,6 +144,11 @@ public class YadaRestController {
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
+                else {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+                }
+
 
             } else {
 
@@ -160,7 +165,7 @@ public class YadaRestController {
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
 
-                    return new ResponseEntity<>(yadaToUpVote, HttpStatus.OK);
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
                     yadaToUpVote.setKarma(yuj.getYada().getKarma() + 1);
@@ -178,7 +183,7 @@ public class YadaRestController {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
             }
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            //return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -213,7 +218,7 @@ public class YadaRestController {
                         yadas.save(yadaToDownVote);
                         yadaUserJoinRepo.save(yuj);
 
-                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
 
                     } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
@@ -226,7 +231,11 @@ public class YadaRestController {
                         yadas.save(yadaToDownVote);
                         yadaUserJoinRepo.save(yuj);
 
-                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+                    }
+                    else {
+                        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
                     }
 
                 } else {
@@ -244,7 +253,7 @@ public class YadaRestController {
                         yadas.save(yadaToDownVote);
                         yadaUserJoinRepo.save(yuj);
 
-                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                     } else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
                         yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
@@ -256,12 +265,12 @@ public class YadaRestController {
                         yadas.save(yadaToDownVote);
                         yadaUserJoinRepo.save(yuj);
 
-                        return new ResponseEntity<>(yadaToDownVote, HttpStatus.OK);
+                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                     } else {
                         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                     }
                 }
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                //return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
