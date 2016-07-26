@@ -289,17 +289,15 @@ public class YadaRestController {
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Yada>> showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
 
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-
-        }
         Link link = links.findFirstByUrl(url);
         if (link == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
 
         if ((yadasByKarma == null)) {
+
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
