@@ -86,15 +86,15 @@ public class YadaController {
 //            int rangeYada = maxYada - minYada + 1;
 
 
-            while (linkScanner.hasNext()) {
-//                int randomNumVotes = r.nextInt(range) + minimum;
-//                int randomNumYadas = r.nextInt(rangeYada + minYada);
-                String[] columns = linkScanner.nextLine().split(",");
-                Link link = new Link(columns[0], LocalDateTime.now().minusSeconds(Long.valueOf(columns[1])), 0, Integer.valueOf(columns[1]), 5, 0);
-                links.save(link);
-//                i++;
-//
-            }
+//            while (linkScanner.hasNext()) {
+////                int randomNumVotes = r.nextInt(range) + minimum;
+////                int randomNumYadas = r.nextInt(rangeYada + minYada);
+//                String[] columns = linkScanner.nextLine().split(",");
+//                Link link = new Link(columns[0], LocalDateTime.now().minusSeconds(Long.valueOf(columns[1])), 0, Integer.valueOf(columns[1]), 5, 0);
+//                links.save(link);
+////                i++;
+////
+//            }
         }
     }
     //parsing yada file for dummy data
