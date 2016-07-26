@@ -38,4 +38,6 @@ span {
     width: 50vh; }
   .editor-wrapper .yada-editor #editorText {
     height: 100%;
+    max-height: 55vh;
+    position: fixed;
     width: 100%; }

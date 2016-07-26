@@ -12,6 +12,7 @@ module.exports = function(app) {
     *********************************/
     // YadaService.getTopYadas();
     $scope.topYadas = YadaService.getTopYadas();
+    $scope.searchString = "";
 
 
     $scope.upIt = function (yada) {
@@ -29,6 +30,14 @@ module.exports = function(app) {
             $location.path("/");
         });
 
+    }
+
+    $scope.search = function(query) {
+        console.log(query);
+        YadaService.searchYadas(query, function() {
+          $scope.topYadas = YadaService.updateYadas();
+          $location.path("/");
+        });
     }
 
 

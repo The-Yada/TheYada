@@ -10,8 +10,8 @@
     box-shadow: 0 3px 5px 3px rgba(0,0,0,0.2) !important;
     background-color: rgba(0,0,0,0.2) !important;
     z-index: 2147483647 !important;
-    -webkit-transition: opacity 0.5s ease-out !important;
-    transition: opacity 0.5s ease-out !important;
+    -webkit-transition: opacity 1s ease-out !important;
+    transition: opacity 1s ease-out !important;
 
     /* leave opacity without !important or it will be difficult to override */
     opacity: 1;
