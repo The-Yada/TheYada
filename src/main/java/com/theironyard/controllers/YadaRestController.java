@@ -269,11 +269,6 @@ public class YadaRestController {
 
     }
 
-
-
-//    //hit this route so u
-
-
     //route which brings user to the editing screen with scraped website text and submission box
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<String>> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
@@ -350,8 +345,18 @@ public class YadaRestController {
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
         /** edit this to calculate totalVotes from upvotes/downvotes
          *
+         * need to calculate a link's total number of UPVOTES from all of its yadas upvotes.
+         * so.. total votes = karma of each yada summed together.
          */
         for (Link link : linkList) {
+            /**
+             * calculate collective karma for a link. this causes links with the most upvotes
+             * among all of its yadas to rise to the top.
+             */
+            for (Yada yada : link.getYadaList()) {
+                link.setTotalVotes(link.getTotalVotes() + yada.getKarma());
+            }
+
             long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
             link.setTimeDiffInSeconds(difference);
             long denominator = (difference + SECONDS_IN_TWO_HOURS);
@@ -360,6 +365,7 @@ public class YadaRestController {
         }
         return linkList;
     }
+
 
     // sorting algorithm - CONTROVERSIAL
     public List<Yada> generateControveryScore(ArrayList<Yada> yadaList) {
