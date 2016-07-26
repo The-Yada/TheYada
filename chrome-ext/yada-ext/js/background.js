@@ -2,7 +2,7 @@ var x = false;
 
 
 function disableBrowserAction(tab){
-    chrome.browserAction.setIcon({path:"assets/inactive.png"});
+    chrome.browserAction.setIcon({path:"assets/yada-bulb-off-browser-icon.png"});
 
     console.log('Disabling ' + tab.url + ' yada!');
     chrome.tabs.executeScript(null, {file: "js/togglecontent.js"});
@@ -15,7 +15,7 @@ function enableBrowserAction(tab){
       setting: "session_only"
     });
 
-    chrome.browserAction.setIcon({path:"assets/active.png"});
+    chrome.browserAction.setIcon({path:"assets/yada-bulb-on-browser-icon.png"});
 
     console.log('Enabling ' + tab.url + ' yada!');
     chrome.tabs.executeScript(null, {file: "js/content.js"});

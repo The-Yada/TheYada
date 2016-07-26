@@ -1,15 +1,19 @@
 <!---#################################
   HOME TEMPLATE
 ################################## -->
-
-<ul>
+<div class="searchBox">
+  <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
+  <button ng-click="search(searchString)" type="button" name="search">Search</button>
+</div>
+<ul class="data-ctrl">
+    <!-- add this >> to ng-repeat: '| searchFor:searchString' -->
     <li ng-repeat="links in topYadas">
           <span class="url-home">url: {{links.url}}</span>
           <p># of yada: {{links.numberOfYadas}}</p>
           <span class="votes-home">votes: {{links.totalVotes}}</span>
-s
+
           <div class="yadas-home" ng-repeat="yada in links.yadaList">
-            <span class="author-home">author: {{yada.user}}</span>
+            <span class="author-home">author: {{yada.user.username}}</span>
             <span class="content-home">content: {{yada.content}}</span>
             <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
             <span class="karma-home">karma: {{yada.karma}}</span>

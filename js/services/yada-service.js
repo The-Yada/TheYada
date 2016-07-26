@@ -46,30 +46,58 @@ module.exports = function(app) {
               yadas = response.data;
               angular.copy(yadas, topYadas);
             })
-            console.log(topYadas);
+            console.log("initial get", topYadas);
             return topYadas;
         },
 
-        upKarma(yada) {
-            console.log(yada);
+        upKarma(yada, callback) {
+
             $http({
               url: '/upVote',
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log(response);
-            })
+              console.log("up vote update", response.data);
+              yadas = response.data;
+
+              angular.copy(yadas, topYadas);
+              // callback();
+            }).then(callback)
         },
 
-        downKarma(yada) {
-          console.log(yada);
+        downKarma(yada, callback) {
+
           $http({
             url: '/downVote',
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log(response);
-          })
+            console.log("down vote update", response.data);
+            yadas = response.data;
+
+            angular.copy(yadas, topYadas);
+            // callback();
+          }).then(callback)
+        },
+
+        updateYadas() {
+          console.log("updating");
+          return topYadas;
+        },
+
+        searchYadas(searchString, callback) {
+
+            let searchUrl = '/searchYadas?searchInput=' + searchString;
+
+            $http({
+                url: searchUrl,
+                method: 'GET'
+              }).then(function(response){
+                yadas = response.data;
+                angular.copy(yadas, topYadas);
+              }).then(callback)
+
+          return topYadas;
         }
 
       }

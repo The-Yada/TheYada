@@ -46,6 +46,9 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
       })
 
   }])
+  .run(function() {
+
+  })
 
   // Services
   require('./services/user-service')(app);
@@ -60,7 +63,8 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
 
 
   // Filters
-
+  require('./filters/search-filter.js')(app);
+  
   // Directives
 
 

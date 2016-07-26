@@ -6,19 +6,39 @@
 
 module.exports = function(app) {
 
-  app.controller('HomeController', ['$scope', 'YadaService', function($scope, YadaService){
+  app.controller('HomeController', ['$scope', '$location', 'YadaService', function($scope, $location, YadaService){
 
     /*******************************
     * grab the yadas for the ng-repeat in home.html
     *********************************/
+    // YadaService.getTopYadas();
     $scope.topYadas = YadaService.getTopYadas();
+    $scope.searchString = "";
 
 
     $scope.upIt = function (yada) {
-      YadaService.upKarma(yada);
+        YadaService.upKarma(yada, function() {
+              console.log("callback");
+              $scope.topYadas = YadaService.updateYadas();
+              $location.path("/");
+        });
+
     }
     $scope.downIt = function (yada) {
-        YadaService.downKarma(yada);
+        YadaService.downKarma(yada, function() {
+            console.log("callback");
+            $scope.topYadas = YadaService.updateYadas();
+            $location.path("/");
+        });
+
+    }
+
+    $scope.search = function(query) {
+        console.log(query);
+        YadaService.searchYadas(query, function() {
+          $scope.topYadas = YadaService.updateYadas();
+          $location.path("/");
+        });
     }
 
 
@@ -125,7 +145,7 @@ module.exports = function(app) {
     }).otherwise({
       redirectTo: '/404'
     });
-  }]);
+  }]).run(function () {});
 
   // Services
   require('./services/user-service')(app);
@@ -137,11 +157,39 @@ module.exports = function(app) {
   require('./controllers/home-controller')(app);
 
   // Filters
+  require('./filters/search-filter.js')(app);
 
   // Directives
 
 })();
-},{"./controllers/home-controller":1,"./controllers/login-controller":2,"./controllers/nav-controller":3,"./services/user-service":5,"./services/yada-service":6}],5:[function(require,module,exports){
+},{"./controllers/home-controller":1,"./controllers/login-controller":2,"./controllers/nav-controller":3,"./filters/search-filter.js":5,"./services/user-service":6,"./services/yada-service":7}],5:[function(require,module,exports){
+
+module.exports = function (app) {
+
+    app.filter('searchFor', function(){
+        return function(arr, searchString){
+            if(!searchString){
+                return arr;
+            }
+            var result = [];
+            searchString = searchString.toLowerCase();
+            angular.forEach(arr, function(item){
+
+                item.yadaList.forEach(function(e){
+
+                      if(e.content.toLowerCase().indexOf(searchString) !== -1){
+                        console.log(e);
+                      // result.push(e);
+                  }
+                })
+      
+            });
+            return result;
+        };
+    });
+}
+
+},{}],6:[function(require,module,exports){
 /*******************************
 * User Service
 * stores user
@@ -211,7 +259,7 @@ module.exports = function(app) {
   }])
 }
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /*******************************
 * Yada Service
 * grabs yadaList from server
@@ -260,30 +308,58 @@ module.exports = function(app) {
               yadas = response.data;
               angular.copy(yadas, topYadas);
             })
-            console.log(topYadas);
+            console.log("initial get", topYadas);
             return topYadas;
         },
 
-        upKarma(yada) {
-            console.log(yada);
+        upKarma(yada, callback) {
+
             $http({
               url: '/upVote',
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log(response);
-            })
+              console.log("up vote update", response.data);
+              yadas = response.data;
+
+              angular.copy(yadas, topYadas);
+              // callback();
+            }).then(callback)
         },
 
-        downKarma(yada) {
-          console.log(yada);
+        downKarma(yada, callback) {
+
           $http({
             url: '/downVote',
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log(response);
-          })
+            console.log("down vote update", response.data);
+            yadas = response.data;
+
+            angular.copy(yadas, topYadas);
+            // callback();
+          }).then(callback)
+        },
+
+        updateYadas() {
+          console.log("updating");
+          return topYadas;
+        },
+
+        searchYadas(searchString, callback) {
+
+            let searchUrl = '/searchYadas?searchInput=' + searchString;
+
+            $http({
+                url: searchUrl,
+                method: 'GET'
+              }).then(function(response){
+                yadas = response.data;
+                angular.copy(yadas, topYadas);
+              }).then(callback)
+
+          return topYadas;
         }
 
       }
