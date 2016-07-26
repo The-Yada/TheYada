@@ -83,6 +83,21 @@ module.exports = function(app) {
         updateYadas() {
           console.log("updating");
           return topYadas;
+        },
+
+        searchYadas(searchString, callback) {
+
+            let searchUrl = '/searchYadas?searchInput=' + searchString;
+
+            $http({
+                url: searchUrl,
+                method: 'GET'
+              }).then(function(response){
+                yadas = response.data;
+                angular.copy(yadas, topYadas);
+              }).then(callback)
+
+          return topYadas;
         }
 
       }
