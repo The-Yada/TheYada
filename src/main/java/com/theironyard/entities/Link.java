@@ -28,8 +28,10 @@ public class Link {
     @Column(nullable = false)
     int totalVotes;
 
+    @Column(nullable = false)
     int upVotes;
 
+    @Column(nullable = false)
     int downVotes;
 
     @Column(nullable = false)

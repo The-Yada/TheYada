@@ -409,21 +409,11 @@ public class YadaRestController {
     public List<Link> generateControveryScore(ArrayList<Link> linkList) {
 
         for (Link link : linkList) {
-            int linkUpVotesTotaled = 0;
-            int linkDownVotesTotaled = 0;
-            for (Yada yada : link.getYadaList()) {
 
-                int upVotes = yada.getUpvotes();
-                int downVotes = yada.getDownvotes();
-                yada.setKarma(upVotes - downVotes);
-                yadas.save(yada);
-                link.setTotalVotes(link.getTotalVotes() + (upVotes + downVotes));
-            }
-            int totalVotes = linkUpVotesTotaled + Math.abs(linkDownVotesTotaled);
             link.setControversyScore((link.getTotalVotes()) / Math.max((Math.abs(link.getUpVotes() - link.getDownVotes())), 1));
             links.save(link);
-        }
 
+        }
         return linkList;
     }
 
