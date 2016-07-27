@@ -29,6 +29,12 @@ public class Link {
     int totalVotes;
 
     @Column(nullable = false)
+    int upVotes;
+
+    @Column(nullable = false)
+    int downVotes;
+
+    @Column(nullable = false)
     int numberOfYadas;
 
     @Column(nullable = false)
@@ -46,11 +52,13 @@ public class Link {
     public Link() {
     }
 
-    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int numberOfYadas, long timeDiffInSeconds, String title, int karma) {
+    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int upVotes, int downVotes, int numberOfYadas, long timeDiffInSeconds, String title, int karma) {
         this.url = url;
         this.timeOfCreation = timeOfCreation;
         this.linkScore = linkScore;
         this.totalVotes = totalVotes;
+        this.upVotes = upVotes;
+        this.downVotes = downVotes;
         this.numberOfYadas = numberOfYadas;
         this.timeDiffInSeconds = timeDiffInSeconds;
         this.title = title;
@@ -145,5 +153,21 @@ public class Link {
 
     public void setKarma(int karma) {
         this.karma = karma;
+    }
+
+    public int getUpVotes() {
+        return upVotes;
+    }
+
+    public void setUpVotes(int upVotes) {
+        this.upVotes = upVotes;
+    }
+
+    public int getDownVotes() {
+        return downVotes;
+    }
+
+    public void setDownVotes(int downVotes) {
+        this.downVotes = downVotes;
     }
 }
