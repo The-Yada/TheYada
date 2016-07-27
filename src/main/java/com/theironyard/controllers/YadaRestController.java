@@ -96,7 +96,7 @@ public class YadaRestController {
     @RequestMapping(path = "/newLinks", method = RequestMethod.GET)
     public ArrayList<Link> getNewYadas() {
 
-        return links.findTop10ByOrderByTimeOfCreationAsc();
+        return links.findTop10ByOrderByTimeOfCreationDesc();
     }
 
     // find controversial yadas inside chrome extension for the article you're on
