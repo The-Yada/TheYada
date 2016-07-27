@@ -415,7 +415,7 @@ public class YadaRestController {
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
 
         if (link == null) {
-            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 0, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0));
+            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0));
             link = links.save(link);
         }
 
