@@ -28,6 +28,13 @@ public class Link {
     @Column(nullable = false)
     int totalVotes;
 
+    int upVotes;
+
+    int downVotes;
+
+    @Column(nullable = false)
+    double controversyScore;
+
     @Column(nullable = false)
     int numberOfYadas;
 
@@ -48,6 +55,19 @@ public class Link {
         this.timeOfCreation = timeOfCreation;
         this.linkScore = linkScore;
         this.totalVotes = totalVotes;
+        this.numberOfYadas = numberOfYadas;
+        this.timeDiffInSeconds = timeDiffInSeconds;
+        this.title = title;
+    }
+
+    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int upVotes, int downVotes, double controversyScore, int numberOfYadas, long timeDiffInSeconds, String title) {
+        this.url = url;
+        this.timeOfCreation = timeOfCreation;
+        this.linkScore = linkScore;
+        this.totalVotes = totalVotes;
+        this.upVotes = upVotes;
+        this.downVotes = downVotes;
+        this.controversyScore = controversyScore;
         this.numberOfYadas = numberOfYadas;
         this.timeDiffInSeconds = timeDiffInSeconds;
         this.title = title;
@@ -133,5 +153,29 @@ public class Link {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getUpVotes() {
+        return upVotes;
+    }
+
+    public void setUpVotes(int upVotes) {
+        this.upVotes = upVotes;
+    }
+
+    public int getDownVotes() {
+        return downVotes;
+    }
+
+    public void setDownVotes(int downVotes) {
+        this.downVotes = downVotes;
+    }
+
+    public double getControversyScore() {
+        return controversyScore;
+    }
+
+    public void setControversyScore(double controversyScore) {
+        this.controversyScore = controversyScore;
     }
 }
