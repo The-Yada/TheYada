@@ -6,5 +6,10 @@
   <button ng-click="scrollLeft()" type="button" name="scrollLeft"> < </button>
   <button ng-click="scrollRight()" type="button" name="scrollRight"> > </button>
   </br>
-  <h5>author: <span id="author-yadaText">{{yadas[0].user.username}}</span> </h5>
+  <h5>author: <span id="author-yadaText">{{yadas[yadaScrollIndex].user.username}}</span> </h5>
+  <div class="karmaBox">
+    <button ng-click="upIt(yadas[yadaScrollIndex])" class="up-home" type="button" name="up">up</button>
+    <span class="karma-home">karma: {{yadas[yadaScrollIndex].karma}}</span>
+    <button ng-click="downIt(yadas[yadaScrollIndex])" class="down-home" type="button" name="down">down</button>
+  </div>
 </div>
