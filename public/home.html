@@ -1,6 +1,11 @@
 <!---#################################
   HOME TEMPLATE
 ################################## -->
+<div class="filterBox">
+  <button ng-click="hot()" type="button" name="hot">Hot</button>
+  <button ng-click="controversial()" type="button" name="controversial">Controversial</button>
+  <button ng-click="new()" type="button" name="new">New</button>
+</div>
 <div class="searchBox">
   <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
   <button ng-click="search(searchString)" type="button" name="search">Search</button>
@@ -8,11 +13,11 @@
 <ul class="data-ctrl">
     <!-- save for filtering vvvvv -->
     <!-- add this >> to ng-repeat: '| searchFor:searchString' -->
-    <li ng-repeat="links in topYadas">
+    <li ng-repeat="links in yadas">
           <div class="link-home">
               <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
 
-              <p># of yadas: {{links.numberOfYadas}}</p>
+              <p># of yadas: {{links.yadaList.length}}</p>
           </div>
 
           <div class="yadas-home" ng-repeat="yada in links.yadaList">

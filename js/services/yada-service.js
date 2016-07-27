@@ -49,7 +49,9 @@ module.exports = function(app) {
             console.log("initial get", topYadas);
             return topYadas;
         },
-
+        /*******************************
+        * up voting yada
+        ********************************/
         upKarma(yada, callback) {
 
             $http({
@@ -64,7 +66,9 @@ module.exports = function(app) {
               // callback();
             }).then(callback)
         },
-
+        /*******************************
+        * down voting yada
+        ********************************/
         downKarma(yada, callback) {
 
           $http({
@@ -79,15 +83,20 @@ module.exports = function(app) {
             // callback();
           }).then(callback)
         },
-
+        /*******************************
+        * update w/out new server request
+        ********************************/
         updateYadas() {
           console.log("updating");
           return topYadas;
         },
 
+        /*******************************
+        * search request
+        ********************************/
         searchYadas(searchString, callback) {
 
-            let searchUrl = '/searchYadas?searchInput=' + searchString;
+            let searchUrl = `/searchYadas?searchInput=${searchString}`;
 
             $http({
                 url: searchUrl,
@@ -100,6 +109,25 @@ module.exports = function(app) {
               }).then(callback)
 
           return topYadas;
+        },
+
+        /*******************************
+        * filter requests
+        ********************************/
+        filter(sortStyle) {
+          let filterUrl = `/${sortStyle}Links`;
+
+          $http({
+              url: filterUrl,
+              method: 'GET'
+            }).then(function(response){
+
+              yadas = response.data;
+              console.log("filtering", yadas);
+              angular.copy(yadas, topYadas);
+            })
+
+            return topYadas;
         }
 
       }
