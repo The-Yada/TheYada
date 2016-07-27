@@ -187,6 +187,18 @@ public class YadaRestController {
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
+                else if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                    yadaToUpVote.setKarma(yuj.getYada().getKarma() - 1);
+                    yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                    User yadaAuthor = yuj.getYada().getUser();
+                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                    yuj.setUpvoted(false);
+                    yadas.save(yadaToUpVote);
+                    yadaUserJoinRepo.save(yuj);
+
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+                }
                 else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
@@ -220,6 +232,19 @@ public class YadaRestController {
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
+                else if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                    yadaToUpVote.setKarma(yuj.getYada().getKarma() - 1);
+                    yadaToUpVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                    User yadaAuthor = yuj.getYada().getUser();
+                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                    yuj.setUpvoted(false);
+                    yadas.save(yadaToUpVote);
+                    yadaUserJoinRepo.save(yuj);
+
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+                }
+
                 else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
@@ -274,6 +299,18 @@ public class YadaRestController {
 
                         return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                     }
+                    else if (!yuj.isUpvoted() && yuj.isDownvoted()){
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() + 1);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() + 1);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+                        yuj.setDownvoted(false);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
+
+                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+
+                    }
                     else {
                         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
@@ -307,7 +344,20 @@ public class YadaRestController {
                         yadaUserJoinRepo.save(yuj);
 
                         return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
-                    } else {
+                    }
+                    else if (!yuj.isUpvoted() && yuj.isDownvoted()){
+                        yadaToDownVote.setKarma(yuj.getYada().getKarma() + 1);
+                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() + 1);
+                        User yadaAuthor = yuj.getYada().getUser();
+                        yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+                        yuj.setDownvoted(false);
+                        yadas.save(yadaToDownVote);
+                        yadaUserJoinRepo.save(yuj);
+
+                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+
+                    }
+                    else {
                         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                     }
                 }
