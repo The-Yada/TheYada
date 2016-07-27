@@ -19,8 +19,7 @@ public interface YadaRepository extends CrudRepository<Yada, Integer> {
   // Iterable<Yada> findByScoreDesc(int score);
   //  List<Yada> findByUrl(String url);
 //   Iterable<Yada> findByScoreAsc(int score);
-    List<Yada> findAllByLinkId(Link link);
-    ArrayList<Yada> findAllByLinkIdOrderByControversyScoreDesc(Link link);
+    List<Yada> findAllByLinkId(int id);
     //ArrayList<Yada> findTop10ByOrderByTimeOfCreationAsc();
     Iterable<Yada> findTop10ByLinkIdOrderByKarmaDesc(int id);
 

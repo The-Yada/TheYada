@@ -38,9 +38,9 @@ public class YadaController {
     LinkRepository links;
 
 
-    @PostConstruct
-    public void init() throws SQLException, FileNotFoundException {
-//        if(users.count() == 0) {
+//    @PostConstruct
+//    public void init() throws SQLException, FileNotFoundException {
+////        if(users.count() == 0) {
 //            parseUsers("users.csv");
 //        }
 
@@ -54,7 +54,7 @@ public class YadaController {
 //        }
 
 
-    }
+//    }
     public void parseUsers(String fileName) throws FileNotFoundException {
         if (users.count() == 0) {
             File usersFile = new File(fileName);
@@ -98,17 +98,17 @@ public class YadaController {
         }
     }
     //parsing yada file for dummy data
-    public void parseYadas(String fileName) throws FileNotFoundException {
-        if (yadas.count() == 0) {
-            File yadaFile = new File(fileName);
-            Scanner fileScanner = new Scanner(yadaFile);
-            fileScanner.nextLine();
-            while (fileScanner.hasNext()) {
-                String[] columns = fileScanner.nextLine().split(",");
-                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), LocalDateTime.now(), Integer.valueOf(columns[2]), 0, 0, 0,  users.findOne(Integer.valueOf(columns[3])), links.findOne(Integer.valueOf(columns[4])));
-                yadas.save(yada);
-
-            }
-        }
-    }
+//    public void parseYadas(String fileName) throws FileNotFoundException {
+//        if (yadas.count() == 0) {
+//            File yadaFile = new File(fileName);
+//            Scanner fileScanner = new Scanner(yadaFile);
+//            fileScanner.nextLine();
+//            while (fileScanner.hasNext()) {
+//                String[] columns = fileScanner.nextLine().split(",");
+//                Yada yada = new Yada(columns[0], Integer.valueOf(columns[1]), LocalDateTime.now(), Integer.valueOf(columns[2]), 0, 0, 0,  users.findOne(Integer.valueOf(columns[3])), links.findOne(Integer.valueOf(columns[4])));
+//                yadas.save(yada);
+//
+//            }
+//        }
+//    }
 }
