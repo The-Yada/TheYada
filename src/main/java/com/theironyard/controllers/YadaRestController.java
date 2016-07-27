@@ -417,7 +417,7 @@ public class YadaRestController {
 
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
         if (link == null) {
-            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1);
+            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1);
         }
 
         User user = users.findFirstByUsername(username);
@@ -451,31 +451,11 @@ public class YadaRestController {
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
 
         for (Link link : linkList) {
-            /**
-             * calculate collective karma for a link. this causes links with the most upvotes
-             * among all of its yadas to rise to the top.
-             */
-
-//            for (Yada yada : link.getYadaList()) {
-//
-//                //calculate karma for each yada.. is that ok?
-//                yada.setKarma(yada.getUpvotes() - yada.getDownvotes());
-//
-//                //calculate total votes in the link based on each yada's total votes
-//                i = i +  yada.getUpvotes() + yada.getDownvotes();
-//
-//
-//                // calculate link karma: get existing karma, add upvotes from that yada, subtracts downvotes from that yada
-//
-//                //not working because it's addingto the karma every time the page is hit and the algo runs
-//                // should i modify the karma inside the upvote/downvote method?
-//                link.setKarma(link.getKarma() + yada.getUpvotes() - yada.getDownvotes());
-//            }
-
             long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
             link.setTimeDiffInSeconds(difference);
             long denominator = (difference + SECONDS_IN_TWO_HOURS);
-            link.setLinkScore(((link.getKarma()) / (Math.pow(denominator, GRAVITY))));
+            // numerator needs to account for personal vote?
+            link.setLinkScore(((link.getKarma() - link.getYadaList().size()) / (Math.pow(denominator, GRAVITY))));
             links.save(link);
         }
         return linkList;

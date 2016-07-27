@@ -148,7 +148,7 @@ public class Link {
     }
 
     public int getKarma() {
-        return karma;
+        return upVotes - downVotes;
     }
 
     public void setKarma(int karma) {
