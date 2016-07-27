@@ -40,7 +40,7 @@ module.exports = function(ext) {
             return scrapes;
         },
 
-        sendYada(extUrl, yadaText) {
+        sendYada(extUrl, yadaText, callback) {
 
           $http({
             url: "http://localhost:8080/addYada",
@@ -49,7 +49,7 @@ module.exports = function(ext) {
               yada: {content: `${yadaText}`},
               link: {url: `${extUrl}`}
             }
-          })
+          }).then(callback)
 
         }
 
