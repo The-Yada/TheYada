@@ -93,7 +93,9 @@ module.exports = function(app) {
                 url: searchUrl,
                 method: 'GET'
               }).then(function(response){
+
                 yadas = response.data;
+                console.log("searching", yadas);
                 angular.copy(yadas, topYadas);
               }).then(callback)
 

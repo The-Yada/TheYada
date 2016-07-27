@@ -9,13 +9,17 @@
     <!-- save for filtering vvvvv -->
     <!-- add this >> to ng-repeat: '| searchFor:searchString' -->
     <li ng-repeat="links in topYadas">
-          <span class="url-home">url: {{links.url}}</span>
-          <p># of yada: {{links.numberOfYadas}}</p>
-          <span class="votes-home">votes: {{links.totalVotes}}</span>
+          <div class="link-home">
+              <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
+
+              <p># of yadas: {{links.numberOfYadas}}</p>
+          </div>
 
           <div class="yadas-home" ng-repeat="yada in links.yadaList">
-            <span class="author-home">author: {{yada.user.username}}</span>
-            <span class="content-home">content: {{yada.content}}</span>
+
+            <span class="content-home">{{yada.content}}</span></br>
+            <span class="author-home">author: <b>{{yada.user.username}}</b></span>
+
             <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
             <span class="karma-home">karma: {{yada.karma}}</span>
             <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
