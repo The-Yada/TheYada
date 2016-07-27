@@ -18,7 +18,8 @@ public interface LinkRepository extends PagingAndSortingRepository<Link, Integer
     ArrayList<Link> findTop10ByOrderByLinkScoreDesc();
     ArrayList<Link> findTop25ByOrderByLinkScoreDesc();
     ArrayList<Link> findTop5ByOrderByTimeOfCreationAsc();
-    ArrayList<Link> findTop10ByOrderByTimeOfCreationAsc();
+    ArrayList<Link> findTop10ByOrderByTimeOfCreationDesc();
+    ArrayList<Link> findAllByOrderByControversyScoreDesc();
 
     @Query("SELECT l FROM Link l WHERE LOWER(title) LIKE '%' || LOWER(?) || '%'")
     Iterable<Link> searchByTitle(String searchInput);

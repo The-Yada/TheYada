@@ -93,21 +93,20 @@ public class YadaRestController {
         return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/newYadas", method = RequestMethod.GET)
+    @RequestMapping(path = "/newLinks", method = RequestMethod.GET)
     public ArrayList<Link> getNewYadas() {
 
-        return links.findTop10ByOrderByTimeOfCreationAsc();
+        return links.findTop10ByOrderByTimeOfCreationDesc();
     }
 
     // find controversial yadas inside chrome extension for the article you're on
-    @RequestMapping(path = "/controversialYadas", method = RequestMethod.GET)
-    public ArrayList<Yada> getControversialYadas(String url) {
+    @RequestMapping(path = "/controversialLinks", method = RequestMethod.GET)
+    public ArrayList<Link> getControversialYadas() {
 
-        Link link = links.findFirstByUrl(url);
-        ArrayList<Yada> yadaList = (ArrayList<Yada>) yadas.findAllByLinkId(link);
-        generateControveryScore(yadaList);
+        ArrayList<Link> allLinks = (ArrayList<Link>) links.findAll();
+        generateControveryScore(allLinks);
 
-        return yadas.findAllByLinkIdOrderByControversyScoreDesc(link);
+        return links.findAllByOrderByControversyScoreDesc();
     }
 
     //hit this route when searching through content of yadas
@@ -332,18 +331,18 @@ public class YadaRestController {
 
     //hit this route to display yadas for a given webpage from the chrome extension
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Yada>> showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
+    public ResponseEntity showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
 
         Link link = links.findFirstByUrl(url);
         if (link == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
 
         if ((yadasByKarma == null)) {
 
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
 
         return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
@@ -352,41 +351,34 @@ public class YadaRestController {
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
     public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
-
-
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
         }
 
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
+
         if (link == null) {
-            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 1, 0, soupThatSite(yl.getLink().getUrl()).get(0));
+            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 0, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0));
+            link = links.save(link);
         }
 
         User user = users.findFirstByUsername(username);
-        Yada yada = new Yada(yl.getYada().getContent(), 1, LocalDateTime.now(), 0, 1, 0, 0, user, link);
-
+        Yada yada = new Yada(yl.getYada().getContent(), 1, LocalDateTime.now(), 0, 1, 0, user, link);
+        yadas.save(yada);
         YadaUserJoin yuj = new YadaUserJoin(user, yada, true, false);
 
-        if (yl.getLink().getYadaList() != null) {
-            ArrayList<Yada> yadasInLink = (ArrayList<Yada>) yl.getLink().getYadaList();
-            yadasInLink.add(yada);
+        if (link.getYadaList() == null) {
+            ArrayList<Yada> newYadaListInLink = new ArrayList<>();
+            link.setYadaList(newYadaListInLink);
+        }
+
+        link.getYadaList().add(yada);
+        link.setNumberOfYadas(link.getNumberOfYadas() + 1);
             links.save(link);
-            yadas.save(yada);
             yadaUserJoinRepo.save(yuj);
 
-        }
-        else {
-            ArrayList<Yada> yadasInLink = new ArrayList<>();
-            yadasInLink.add(yada);
-            yl.getLink().setYadaList(yadasInLink);
-            links.save(link);
-            yadas.save(yada);
-            yadaUserJoinRepo.save(yuj);
-
-        }
-        Iterable<Yada> updatedYadaList = yl.getLink().getYadaList();
+        Iterable<Yada> updatedYadaList = link.getYadaList();
 
         return new ResponseEntity<>(updatedYadaList, HttpStatus.OK);
     }
@@ -414,17 +406,15 @@ public class YadaRestController {
 
 
     // sorting algorithm - CONTROVERSIAL
-    public List<Yada> generateControveryScore(ArrayList<Yada> yadaList) {
+    public List<Link> generateControveryScore(ArrayList<Link> linkList) {
 
-        for (Yada yada : yadaList) {
-            int upvotes = yada.getUpvotes();
-            int downvotes = yada.getDownvotes();
-            int totalVotes = yada.getUpvotes() + Math.abs(yada.getDownvotes());
-            yada.setKarma(upvotes - downvotes); //*
-            yada.setControversyScore((totalVotes) / Math.max(Math.abs(upvotes - downvotes), 1));
-            yadas.save(yada);
+        for (Link link : linkList) {
+
+            link.setControversyScore((link.getTotalVotes()) / Math.max((Math.abs(link.getUpVotes() - link.getDownVotes())), 1));
+            links.save(link);
+
         }
-        return yadaList;
+        return linkList;
     }
 
     //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
