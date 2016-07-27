@@ -455,6 +455,8 @@ public class YadaRestController {
             link.setTimeDiffInSeconds(difference);
             long denominator = (difference + SECONDS_IN_TWO_HOURS);
             // numerator needs to account for personal vote?
+            //
+            link.setKarma(link.getUpVotes() - link.getDownVotes());
             link.setLinkScore(((link.getKarma() - link.getYadaList().size()) / (Math.pow(denominator, GRAVITY))));
             links.save(link);
         }
