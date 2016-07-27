@@ -36,6 +36,7 @@ module.exports = function(app) {
         console.log(query);
         YadaService.searchYadas(query, function() {
           $scope.topYadas = YadaService.updateYadas();
+          $scope.searchString = "";
           $location.path("/");
         });
     }

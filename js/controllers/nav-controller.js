@@ -5,7 +5,7 @@
 
 module.exports = function(app) {
 
-  app.controller('NavController', ['$scope', 'UserService', function($scope, UserService){
+  app.controller('NavController', ['$scope', '$location', 'YadaService', 'UserService', function($scope, $location, YadaService, UserService){
 
     /*******************************
     * menu collapse
@@ -14,10 +14,9 @@ module.exports = function(app) {
     // $scope.user = UserService.getUser();
     // $scope.isCollapsed = false;
 
-
-
-
-
+    $scope.home = function() {
+      YadaService.getTopYadas();
+    }
 
 
   }])

@@ -37,6 +37,7 @@ module.exports = function(app) {
         console.log(query);
         YadaService.searchYadas(query, function() {
           $scope.topYadas = YadaService.updateYadas();
+          $scope.searchString = "";
           $location.path("/");
         });
     }
@@ -94,7 +95,7 @@ module.exports = function(app) {
 
 module.exports = function(app) {
 
-  app.controller('NavController', ['$scope', 'UserService', function($scope, UserService){
+  app.controller('NavController', ['$scope', '$location', 'YadaService', 'UserService', function($scope, $location, YadaService, UserService){
 
     /*******************************
     * menu collapse
@@ -103,10 +104,9 @@ module.exports = function(app) {
     // $scope.user = UserService.getUser();
     // $scope.isCollapsed = false;
 
-
-
-
-
+    $scope.home = function() {
+      YadaService.getTopYadas();
+    }
 
 
   }])
@@ -355,7 +355,9 @@ module.exports = function(app) {
                 url: searchUrl,
                 method: 'GET'
               }).then(function(response){
+
                 yadas = response.data;
+                console.log("searching", yadas);
                 angular.copy(yadas, topYadas);
               }).then(callback)
 
