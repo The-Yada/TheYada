@@ -9,23 +9,45 @@ module.exports = function(ext) {
 
       let yadas = [];
       let scrapes = [];
+      let blankYada = [{
+        content: "You should write a Yada for this article.",
+        user: {
+          username: "Noone, but it could be you!"
+        }
+     }];
 
       return {
 
+        /*******************************
+        * Grab yadas from DB
+        ********************************/
         getYadas(extUrl) {
 
           let currentUrl = 'http://localhost:8080/lemmieSeeTheYadas?url=' + extUrl;
           $http({
               url: currentUrl,
               method: 'GET'
-            }).then(function(response){
+            }).then(function success(response){
+
               currentYadas = response.data;
-              angular.copy(currentYadas, yadas);
-            })
+              if(currentYadas === '') {
+                console.log("blank array on getYadas");
+                angular.copy(blankYada, yadas);
+              } else {
+                  angular.copy(currentYadas, yadas);
+              }
+
+            }, function error(response){
+              console.log("error on getYadas");
+              angular.copy(blankYada, yadas);
+            });
             console.log(yadas);
             return yadas;
         },
 
+        /*******************************
+        * Grab scraped text by sending current tabs url
+        ********************************/
         scrapeIt(extUrl) {
 
           let scrapeUrl = 'http://localhost:8080/lemmieYada?url=' + extUrl;
@@ -40,6 +62,9 @@ module.exports = function(ext) {
             return scrapes;
         },
 
+        /*******************************
+        * posts new yadas from editor
+        ********************************/
         sendYada(extUrl, yadaText, callback) {
 
           $http({

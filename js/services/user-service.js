@@ -12,7 +12,10 @@ module.exports = function(app) {
       let logStatus = {status: false};
 
       return {
-        // need server and db to post
+
+        /*******************************
+        * add user
+        ********************************/
         setUser(user) {
 
           $http({
@@ -29,19 +32,26 @@ module.exports = function(app) {
         },
 
 
-        // return log status
+        /*******************************
+        * return log status
+        ********************************/
         getLogStatus() {
 
           return logStatus;
         },
 
-        // current user
+        /*******************************
+        * current user
+        ********************************/
         getUser() {
 
           return userObj;
         },
 
-        // clear out user information and reset status
+        /*******************************
+        * clear out user information and reset status
+        * redirect to homepage
+        ********************************/
         clearSession() {
           $http({
             url: '/logout',

@@ -14,13 +14,20 @@ module.exports = function(ext) {
     $scope.logStatus = UserExtService.getLogStatus();
     $scope.isCollapsed = false;
 
+
+    /*******************************
+    * Redirect to Main Website in new tab
+    ********************************/
     $scope.toWebsite = function() {
       let win = window.open("http://localhost:8080", '_blank');
       win.focus();
     }
 
+    /*******************************
+    * log out and clear session
+    ********************************/
     $scope.logout = function() {
-      //clear session
+
       UserExtService.clearSession();
     }
 
