@@ -10,7 +10,10 @@ module.exports = function(app) {
     $scope.username = '';
     $scope.userObj = UserService.getUser();
 
-
+    /*******************************
+    * login
+    * TODO: keep track of login state
+    ********************************/
       $scope.login = function() {
         //start session
         //block user input *ADD* condition if user has been created
@@ -26,7 +29,9 @@ module.exports = function(app) {
         }
       }
 
-
+    /*******************************
+    * logout
+    ********************************/
     $scope.logout = function() {
       //clear session
       UserService.clearSession();

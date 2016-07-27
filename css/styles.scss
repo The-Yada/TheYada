@@ -4,4 +4,51 @@
   height: 100px;
 }
 
+.jumbo {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.link-home {
+  background-color: #72E9FF;
+  a {
+    font-size: 1.6em;
+  }
+}
+.yadas-home {
+  width: 80%;
+  background-color: #E9E3CB;
+}
+
+.yadas-home, .link-home {
+  margin-right: 50px;
+  border: 2px solid black;
+  border-radius: 5px;
+  color: #42222F;
+  display: flex;
+  flex-direction: column;
+  button {
+    width: 50px;
+  }
+}
+
+.searchBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 400px;
+  margin: 0 auto;
+  input {
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding-left: 10px;
+    font-size: 1.5em;
+  }
+  button {
+    width: 100px;
+    margin: 0 auto;
+  }
+}
+
 @import "login";

@@ -1,7 +1,11 @@
-
+/*******************************
+* CONTENT
+* (chrome extension content file)
+********************************/
 
 (function() {
 
+  // Conditional to help determine whether to toggle the frame or initialize it.
   if (document.getElementById('frame') === null) {
     let f = document.createElement('iframe'),
         frameStyleElement = document.createElement('link'),
@@ -17,9 +21,9 @@
     f.src = chrome.extension.getURL('yada.html');
 
 
+    // append frame to body
+    document.body.appendChild(f);
 
-    document.body.appendChild(f); // Append to body, for example.
-    // let frame = document.getElementById('frame');
 
     console.log('Creating yada!');
   } else {

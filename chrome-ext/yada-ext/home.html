@@ -1,8 +1,12 @@
-
+<!---#################################
+  HOME YADA EXTENSION TEMPLATE
+################################## -->
 
 
 <div id="yadaText">
-  <h2 id="content-yadaText">{{yadas[0].content}}</h2>
-  <span>Yada yada.</span>
+  <h2 id="content-yadaText">{{yadas[yadaScrollIndex].content}}</h2>
+  <button ng-click="scrollLeft()" type="button" name="scrollLeft"> < </button>
+  <button ng-click="scrollRight()" type="button" name="scrollRight"> > </button>
+  </br>
   <h5>author: <span id="author-yadaText">{{yadas[0].user.username}}</span> </h5>
 </div>
