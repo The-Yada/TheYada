@@ -477,23 +477,22 @@ public class YadaRestController {
              * calculate collective karma for a link. this causes links with the most upvotes
              * among all of its yadas to rise to the top.
              */
-            int i = link.getTotalVotes();
 
-            for (Yada yada : link.getYadaList()) {
-
-                //calculate karma for each yada.. is that ok?
-                yada.setKarma(yada.getUpvotes() - yada.getDownvotes());
-
-                //calculate total votes in the link based on each yada's total votes
-                i = i +  yada.getUpvotes() + yada.getDownvotes();
-
-
-                // calculate link karma: get existing karma, add upvotes from that yada, subtracts downvotes from that yada
-
-                //not working because it's addingto the karma every time the page is hit and the algo runs
-                // should i modify the karma inside the upvote/downvote method?
-                link.setKarma(link.getKarma() + yada.getUpvotes() - yada.getDownvotes());
-            }
+//            for (Yada yada : link.getYadaList()) {
+//
+//                //calculate karma for each yada.. is that ok?
+//                yada.setKarma(yada.getUpvotes() - yada.getDownvotes());
+//
+//                //calculate total votes in the link based on each yada's total votes
+//                i = i +  yada.getUpvotes() + yada.getDownvotes();
+//
+//
+//                // calculate link karma: get existing karma, add upvotes from that yada, subtracts downvotes from that yada
+//
+//                //not working because it's addingto the karma every time the page is hit and the algo runs
+//                // should i modify the karma inside the upvote/downvote method?
+//                link.setKarma(link.getKarma() + yada.getUpvotes() - yada.getDownvotes());
+//            }
 
             long difference = ChronoUnit.SECONDS.between(link.getTimeOfCreation(), LocalDateTime.now());
             link.setTimeDiffInSeconds(difference);
