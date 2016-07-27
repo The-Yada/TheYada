@@ -7,8 +7,26 @@ module.exports = function(ext) {
 
   ext.controller('YadaExtController', ['$scope', '$rootScope','YadaExtService', function($scope, $rootScope, YadaExtService){
 
-      
-      $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
+       $scope.yadaScrollIndex = 0;
+       $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
+
+       /*******************************
+       * scroll yada left and right
+       ********************************/
+       $scope.scrollLeft = function() {
+         if ($scope.yadaScrollIndex <= 0) {
+           $scope.yadaScrollIndex = $scope.yadas.length -1;
+         } else {
+           $scope.yadaScrollIndex --;
+         }
+       }
+       $scope.scrollRight = function() {
+         if ($scope.yadaScrollIndex >= $scope.yadas.length -1) {
+           $scope.yadaScrollIndex = 0;
+         } else {
+           $scope.yadaScrollIndex ++;
+         }
+       }
 
   }]);
 }

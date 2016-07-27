@@ -12,7 +12,9 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
 
 
 
-  //Router
+  /*******************************
+  * ROUTER
+  *********************************/
   .config(['$routeProvider', function($routeProvider) {
 
     $routeProvider
@@ -46,10 +48,17 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
       })
 
   }])
+  /*******************************
+  * run function when app is initiated
+  * could be used to check for cookies or user log status
+  *********************************/
   .run(function() {
 
   })
 
+  /*******************************
+  * file tree of requirements
+  *********************************/
   // Services
   require('./services/user-service')(app);
   require('./services/yada-service')(app);
@@ -64,7 +73,7 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
 
   // Filters
   require('./filters/search-filter.js')(app);
-  
+
   // Directives
 
 

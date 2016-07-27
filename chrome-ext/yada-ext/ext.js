@@ -6,14 +6,20 @@
 
 module.exports = function(ext) {
 
-  ext.controller('EditorExtController', ['$scope', '$rootScope','YadaExtService', function($scope, $rootScope, YadaExtService){
+  ext.controller('EditorExtController', ['$scope', '$rootScope', '$location', 'YadaExtService', function($scope, $rootScope, $location, YadaExtService){
 
-    console.log("hello url", $rootScope.extUrl);
+
     $scope.scrapedText = YadaExtService.scrapeIt($rootScope.extUrl);
     $scope.editorText = '';
 
+    /*******************************
+    * post a yada
+    ********************************/
     $scope.postIt = function () {
-      YadaExtService.sendYada($rootScope.extUrl, $scope.editorText);
+      YadaExtService.sendYada($rootScope.extUrl, $scope.editorText, function() {
+        $scope.editorText = '';
+        $location.path('/');
+      });
     };
 
   }]);
@@ -29,10 +35,13 @@ module.exports = function(ext) {
 module.exports = function(ext) {
 
   ext.controller('LoginExtController', ['$scope', 'UserExtService', function($scope, UserExtService){
+
     $scope.username = '';
     $scope.userObj = UserExtService.getUser();
 
-
+    /*******************************
+    * Login
+    ********************************/
       $scope.login = function() {
         //start session
         //block user input *ADD* condition if user has been created
@@ -68,13 +77,20 @@ module.exports = function(ext) {
     $scope.logStatus = UserExtService.getLogStatus();
     $scope.isCollapsed = false;
 
+
+    /*******************************
+    * Redirect to Main Website in new tab
+    ********************************/
     $scope.toWebsite = function() {
       let win = window.open("http://localhost:8080", '_blank');
       win.focus();
     }
 
+    /*******************************
+    * log out and clear session
+    ********************************/
     $scope.logout = function() {
-      //clear session
+
       UserExtService.clearSession();
     }
 
@@ -91,8 +107,26 @@ module.exports = function(ext) {
 
   ext.controller('YadaExtController', ['$scope', '$rootScope','YadaExtService', function($scope, $rootScope, YadaExtService){
 
-      
-      $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
+       $scope.yadaScrollIndex = 0;
+       $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
+
+       /*******************************
+       * scroll yada left and right
+       ********************************/
+       $scope.scrollLeft = function() {
+         if ($scope.yadaScrollIndex <= 0) {
+           $scope.yadaScrollIndex = $scope.yadas.length -1;
+         } else {
+           $scope.yadaScrollIndex --;
+         }
+       }
+       $scope.scrollRight = function() {
+         if ($scope.yadaScrollIndex >= $scope.yadas.length -1) {
+           $scope.yadaScrollIndex = 0;
+         } else {
+           $scope.yadaScrollIndex ++;
+         }
+       }
 
   }]);
 }
@@ -158,7 +192,10 @@ module.exports = function(ext) {
       let logStatus = {status: false};
 
       return {
-        // need server and db to post
+
+        /*******************************
+        * Set user
+        ********************************/
         setUser(user) {
 
           $http({
@@ -175,19 +212,26 @@ module.exports = function(ext) {
         },
 
 
-        // return log status
+        /*******************************
+        * Return log status
+        ********************************/
         getLogStatus() {
 
           return logStatus;
         },
 
-        // current user
+        /*******************************
+        * Return current user
+        ********************************/
         getUser() {
 
           return userObj;
         },
 
-        // clear out user information and reset status
+        /*******************************
+        * clear session and user info
+        * reset log status and redirect to ext home
+        ********************************/
         clearSession() {
           $http({
             url: 'http://localhost:8080/logout',
@@ -225,23 +269,45 @@ module.exports = function(ext) {
 
       let yadas = [];
       let scrapes = [];
+      let blankYada = [{
+        content: "You should write a Yada for this article.",
+        user: {
+          username: "Noone, but it could be you!"
+        }
+     }];
 
       return {
 
+        /*******************************
+        * Grab yadas from DB
+        ********************************/
         getYadas(extUrl) {
 
           let currentUrl = 'http://localhost:8080/lemmieSeeTheYadas?url=' + extUrl;
           $http({
               url: currentUrl,
               method: 'GET'
-            }).then(function(response){
+            }).then(function success(response){
+
               currentYadas = response.data;
-              angular.copy(currentYadas, yadas);
-            })
+              if(currentYadas === '') {
+                console.log("blank array on getYadas");
+                angular.copy(blankYada, yadas);
+              } else {
+                  angular.copy(currentYadas, yadas);
+              }
+
+            }, function error(response){
+              console.log("error on getYadas");
+              angular.copy(blankYada, yadas);
+            });
             console.log(yadas);
             return yadas;
         },
 
+        /*******************************
+        * Grab scraped text by sending current tabs url
+        ********************************/
         scrapeIt(extUrl) {
 
           let scrapeUrl = 'http://localhost:8080/lemmieYada?url=' + extUrl;
@@ -256,7 +322,10 @@ module.exports = function(ext) {
             return scrapes;
         },
 
-        sendYada(extUrl, yadaText) {
+        /*******************************
+        * posts new yadas from editor
+        ********************************/
+        sendYada(extUrl, yadaText, callback) {
 
           $http({
             url: "http://localhost:8080/addYada",
@@ -265,7 +334,7 @@ module.exports = function(ext) {
               yada: {content: `${yadaText}`},
               link: {url: `${extUrl}`}
             }
-          })
+          }).then(callback)
 
         }
 

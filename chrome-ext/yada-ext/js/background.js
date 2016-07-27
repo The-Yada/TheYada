@@ -1,3 +1,8 @@
+/*******************************
+* BACKGROUND & CONTEXT MENU
+* (chrome extension background file)
+********************************/
+
 var x = false;
 
 
@@ -32,6 +37,24 @@ function updateState(tab){
     }
 }
 
+/*******************************
+* CONTEXT MENU
+********************************/
+chrome.runtime.onInstalled.addListener(function() {
+  // displays the yada overlay
+  chrome.contextMenus.create({
+   title: "Show me the Yada",
+   contexts:["all"],  // ContextType
+   id: "showYada"
+  });
+});
 
+/*******************************
+* EVENT LISTENERS
+********************************/
+// clicking chrome extension icon
 chrome.browserAction.onClicked.addListener(updateState);
+// disable on tab action
 chrome.tabs.onActivated.addListener(disableBrowserAction);
+// toggles view with context menu
+chrome.contextMenus.onClicked.addListener(updateState);
