@@ -18,6 +18,9 @@ module.exports = function(ext) {
 
       return {
 
+        /*******************************
+        * Grab yadas from DB
+        ********************************/
         getYadas(extUrl) {
 
           let currentUrl = 'http://localhost:8080/lemmieSeeTheYadas?url=' + extUrl;
@@ -42,6 +45,9 @@ module.exports = function(ext) {
             return yadas;
         },
 
+        /*******************************
+        * Grab scraped text by sending current tabs url
+        ********************************/
         scrapeIt(extUrl) {
 
           let scrapeUrl = 'http://localhost:8080/lemmieYada?url=' + extUrl;
@@ -56,6 +62,9 @@ module.exports = function(ext) {
             return scrapes;
         },
 
+        /*******************************
+        * posts new yadas from editor
+        ********************************/
         sendYada(extUrl, yadaText, callback) {
 
           $http({

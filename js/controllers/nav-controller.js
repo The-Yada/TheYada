@@ -11,9 +11,16 @@ module.exports = function(app) {
     * menu collapse
     *********************************/
     $scope.logStatus = UserService.getLogStatus();
-    // $scope.user = UserService.getUser();
-    // $scope.isCollapsed = false;
 
+    // display user name on home page vvvvvv
+          // $scope.user = UserService.getUser();
+
+    // collpasable menu vvvvvvv
+          // $scope.isCollapsed = false;
+
+    /*******************************
+    * get yadas from server for home page
+    ********************************/
     $scope.home = function() {
       YadaService.getTopYadas();
     }

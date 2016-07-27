@@ -1,3 +1,7 @@
+<!---#################################
+  INDEX
+################################## -->
+
 <!DOCTYPE html>
 <html ng-app="YadaWebApp">
 
@@ -9,12 +13,13 @@
     <title>The Yada</title>
     <link  rel="icon" href="./assets/yada-icon.png" media="screen" title="no title" charset="utf-8">
 
-    <!-- import STYLES & SCRIPTS-->
+    <!-- SCRIPTS-->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-cookies.min.js" charset="utf-8"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
 
+    <!-- STYLES -->
     <link href='https://fonts.googleapis.com/css?family=Aldrich' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="styles.css">
@@ -43,6 +48,8 @@
 
     <!-- MAIN -->
     <section class="main-container">
+      
+        <!-- ANGULAR VIEWS -->
         <main class="views" ng-view id="view">
 
 
@@ -54,8 +61,7 @@
     </section>
 
 
-    <!--MY SCRIPTS-->
-
+    <!--MY SCRIPTS [angular app]-->
     <script src="app.js" charset="utf-8"></script>
 </body>
 

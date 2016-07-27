@@ -1,18 +1,24 @@
 <!---#################################
   HOME TEMPLATE
 ################################## -->
+
+<!-- FITLER BUTTONS -->
 <div class="filterBox">
   <button ng-click="hot()" type="button" name="hot">Hot</button>
   <button ng-click="controversial()" type="button" name="controversial">Controversial</button>
   <button ng-click="new()" type="button" name="new">New</button>
 </div>
+
+<!-- SEARCH BOX -->
 <div class="searchBox">
   <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
   <button ng-click="search(searchString)" type="button" name="search">Search</button>
 </div>
+
+<!-- LIST OF LINKS WRAPPER -->
 <ul class="data-ctrl">
-    <!-- save for filtering vvvvv -->
-    <!-- add this >> to ng-repeat: '| searchFor:searchString' -->
+
+    <!-- LINKS -->
     <li ng-repeat="links in yadas">
           <div class="link-home">
               <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
@@ -20,6 +26,7 @@
               <p># of yadas: {{links.yadaList.length}}</p>
           </div>
 
+          <!-- YADAS -->
           <div class="yadas-home" ng-repeat="yada in links.yadaList">
 
             <span class="content-home">{{yada.content}}</span></br>

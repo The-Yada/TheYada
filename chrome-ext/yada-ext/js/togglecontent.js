@@ -1,4 +1,11 @@
-// find iframe by id and destroy it
+/*******************************
+* TOGGLE CONTENT
+* (chrome extension content file)
+********************************/
+
+/*******************************
+* find iframe by id and destroy it
+********************************/
 
 (function() {
   let f = document.getElementById('frame');

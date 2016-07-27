@@ -13,8 +13,7 @@
   ],
   "background": {
     "scripts": [
-      "js/background.js",
-      "js/context-menu.js"
+      "js/background.js"
     ],
     "persistent": false
   },

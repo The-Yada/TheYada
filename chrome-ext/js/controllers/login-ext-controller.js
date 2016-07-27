@@ -7,10 +7,13 @@
 module.exports = function(ext) {
 
   ext.controller('LoginExtController', ['$scope', 'UserExtService', function($scope, UserExtService){
+
     $scope.username = '';
     $scope.userObj = UserExtService.getUser();
 
-
+    /*******************************
+    * Login
+    ********************************/
       $scope.login = function() {
         //start session
         //block user input *ADD* condition if user has been created
