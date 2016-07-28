@@ -13,11 +13,15 @@ public class User {
     @GeneratedValue
     int id;
 
-    @Column(nullable = false)
-    String username;
+    @Column
+    String nickname;
 
     @Column(nullable = false)
-    String password;
+    String name;
+
+    @Column(nullable = false)
+    String email;
+
 
     @Column
     int karma;
@@ -28,12 +32,11 @@ public class User {
     public User() {
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public User(String nickname, String name, String email, int karma) {
+        this.nickname = nickname;
+        this.name = name;
+        this.email = email;
+        this.karma = karma;
     }
 
     public int getId() {
@@ -44,12 +47,28 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getKarma() {
@@ -59,31 +78,11 @@ public class User {
     public void setKarma(int karma) {
         this.karma = karma;
     }
-
-    public User(String username, int karma) {
-
-        this.username = username;
-        this.karma = karma;
-    }
-
     public List<YadaUserJoin> getYadaUserJoinList() {
         return yadaUserJoinList;
     }
 
     public void setYadaUserJoinList(List<YadaUserJoin> yadaUserJoinList) {
         this.yadaUserJoinList = yadaUserJoinList;
-    }
-
-    public User(int id, String username, int karma) {
-
-        this.id = id;
-        this.username = username;
-        this.karma = karma;
-    }
-
-    public User(String username, String password, int karma) {
-        this.username = username;
-        this.password = password;
-        this.karma = karma;
     }
 }
