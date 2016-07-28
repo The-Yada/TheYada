@@ -6,9 +6,31 @@
 
 
   <div class="login">
+        <div class="jumbotron">
+      <h2 class="text-center"><img src="" alt="logo"></h2>
+      <h2 class="text-center">Login</h2>
+      <p class="text-center">{{message}}</p>
+    </div>
 
-  <input type="text" ng-model='username' name="username" placeholder="username" value="">
-  <input type="password" ng-model='password' name="password" placeholder="password" value="">
-  <button class="login-button" type="submit" ng-click="login()" name="button">Login</button>
+    <div class="container">
+      <div class="col-md-6 col-md-3">
+        <div id="login-container">
+          <!-- <form>
+            <fieldset>
+              <input class="form-control" type="text" name="user" ng-model="user" ng-disabled="loading" />
+              <br>
+              <input class="form-control" type="password" name="pass" ng-model="pass" ng-disabled="loading" />
+              <br>
+              <button class="btn btn-primary" type="submit" ng-disabled="loading" ng-click="login()">Login</button>
+              <button class="btn btn-primary" type="submit" ng-disabled="loading" ng-click="signup()">Sign Up</button>
+            </fieldset>
+          </form> -->
+          <button class="login-button" type="submit" ng-click="googleLogin()" name="button">Login with Google</button>
+          <br/>
+        </div>
+      </div>
+    </div>
+
+
 
   </div>
