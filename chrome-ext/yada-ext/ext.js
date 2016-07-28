@@ -105,7 +105,7 @@ module.exports = function(ext) {
 
 module.exports = function(ext) {
 
-  ext.controller('YadaExtController', ['$scope', '$rootScope','YadaExtService', function($scope, $rootScope, YadaExtService){
+  ext.controller('YadaExtController', ['$scope', '$rootScope','$location','YadaExtService', function($scope, $rootScope, $location, YadaExtService){
 
        $scope.yadaScrollIndex = 0;
        $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
@@ -126,6 +126,26 @@ module.exports = function(ext) {
          } else {
            $scope.yadaScrollIndex ++;
          }
+       }
+
+       /*******************************
+       * up and down voting
+       ********************************/
+       $scope.upIt = function (yada) {
+           YadaExtService.upKarma(yada, function() {
+
+                 $scope.yadas = YadaExtService.updateYadas();
+                 $location.path("/");
+           });
+
+       }
+       $scope.downIt = function (yada) {
+           YadaExtService.downKarma(yada, function() {
+
+               $scope.yadas = YadaExtService.updateYadas();
+               $location.path("/");
+           });
+
        }
 
   }]);
@@ -265,7 +285,7 @@ module.exports = function(ext) {
 
 module.exports = function(ext) {
 
-  ext.factory('YadaExtService', ['$http','$location', function($http, $location){
+  ext.factory('YadaExtService', ['$http','$rootScope','$location', function($http, $rootScope, $location){
 
       let yadas = [];
       let scrapes = [];
@@ -320,6 +340,56 @@ module.exports = function(ext) {
             })
             console.log(scrapes);
             return scrapes;
+        },
+
+        /*******************************
+        * up voting yada
+        ********************************/
+        upKarma(yada, callback) {
+
+            $http({
+              url: 'http://localhost:8080/upVote',
+              method: 'POST',
+              data: yada
+            }).then(function(response){
+              console.log("up vote update", response.data);
+              console.log("filter url", $rootScope.extUrl);
+              let link = response.data.filter(function(link){
+                  return link.url === $rootScope.extUrl;
+              });
+              console.log("after filter", link);
+
+              angular.copy(link[0].yadaList, yadas);
+              // callback();
+            }).then(callback)
+        },
+        /*******************************
+        * down voting yada
+        ********************************/
+        downKarma(yada, callback) {
+
+          $http({
+            url: 'http://localhost:8080/downVote',
+            method: 'POST',
+            data: yada
+          }).then(function(response){
+            console.log("down vote update", response.data);
+            console.log("filter url", $rootScope.extUrl);
+            let link = response.data.filter(function(link){
+                return link.url === $rootScope.extUrl;
+            });
+            console.log("after filter", link);
+
+            angular.copy(link[0].yadaList, yadas);
+            // callback();
+          }).then(callback)
+        },
+        /*******************************
+        * update w/out new server request
+        ********************************/
+        updateYadas() {
+          console.log("updating");
+          return yadas;
         },
 
         /*******************************

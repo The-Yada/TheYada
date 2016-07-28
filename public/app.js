@@ -3,6 +3,7 @@
 * Home Controller
 *
 
+
 sorting buttons
 home == Hot
 /controversialLinks
@@ -66,6 +67,9 @@ module.exports = function(app) {
     }
     $scope.new = function() {
         $scope.yadas = YadaService.filter('new');
+    }
+    $scope.top = function() {
+        $scope.yadas = YadaService.filter('top');
     }
 
   }])
