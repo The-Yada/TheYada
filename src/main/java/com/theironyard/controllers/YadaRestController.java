@@ -59,18 +59,16 @@ public class YadaRestController {
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<User> login(@RequestBody User user, HttpSession session) throws Exception {
-        User userFromDatabase = users.findFirstByUsername(user.getUsername());
+        User userFromDatabase = users.findFirstByEmail(user.getEmail());
 
         if (userFromDatabase == null) {
-            user.setPassword(PasswordStorage.createHash(user.getPassword()));
-            user.setUsername(user.getUsername());
+            user.setEmail(user.getEmail());
+            user.setName(user.getName());
+            user.setNickname(user.getNickname());
             users.save(user);
         }
-        else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDatabase.getPassword())) {
-            throw new Exception("BAD PASS");
-        }
 
-        session.setAttribute("username", user.getUsername());
+        session.setAttribute("nickname", user.getNickname());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -112,6 +110,8 @@ public class YadaRestController {
 
         return links.findAllByOrderByControversyScoreDesc();
     }
+    //hit this route to find top users yadas
+
 
     //hit this route when searching through content of yadas
     @RequestMapping(path = "/searchYadas", method = RequestMethod.GET)
@@ -154,12 +154,12 @@ public class YadaRestController {
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
     public ResponseEntity upVote(HttpSession session, @RequestBody Yada yada) throws Exception {
 
-        String username = (String) session.getAttribute("username");
-        User user = users.findFirstByUsername(username);
+        String email = (String) session.getAttribute("email");
+        User user = users.findFirstByEmail(email);
 
         Yada yadaToUpVote = yadas.findOne(yada.getId());
 
-        if (username != null) {
+        if (email != null) {
 
             if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
                 YadaUserJoin yuj = new YadaUserJoin(user, yada);
@@ -271,12 +271,12 @@ public class YadaRestController {
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public ResponseEntity downVote(HttpSession session, @RequestBody Yada yada) {
 
-            String username = (String) session.getAttribute("username");
-            User user = users.findFirstByUsername(username);
+        String email = (String) session.getAttribute("email");
+        User user = users.findFirstByEmail(email);
 
             Yada yadaToDownVote = yadas.findOne(yada.getId());
 
-            if (username != null) {
+            if (email != null) {
 
                 if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
                     YadaUserJoin yuj = new YadaUserJoin(user, yada);
@@ -419,8 +419,10 @@ public class YadaRestController {
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
     public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
+        String email = (String) session.getAttribute("email");
+
+            if (email == null) {
+
             return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
         }
 
@@ -431,7 +433,7 @@ public class YadaRestController {
             link = links.save(link);
         }
 
-        User user = users.findFirstByUsername(username);
+        User user = users.findFirstByEmail(email);
         Yada yada = new Yada(yl.getYada().getContent(), 1, LocalDateTime.now(), 0, 1, 0, user, link);
         yadas.save(yada);
         YadaUserJoin yuj = new YadaUserJoin(user, yada, true, false);
