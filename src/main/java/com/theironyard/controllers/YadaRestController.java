@@ -174,6 +174,7 @@ public class YadaRestController {
                     link.setTotalVotes(link.getTotalVotes() + 1);
                     link.setUpVotes(link.getUpVotes() + 1);
 
+                    users.save(yadaAuthor);
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
@@ -202,6 +203,7 @@ public class YadaRestController {
                     link.setUpVotes(link.getUpVotes() + 1);
                     link.setDownVotes(link.getDownVotes() - 1);
 
+                    users.save(yadaAuthor);
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
@@ -223,6 +225,7 @@ public class YadaRestController {
                     link.setTotalVotes(link.getTotalVotes() + 1);
 
 
+                    users.save(yadaAuthor);
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
@@ -242,6 +245,7 @@ public class YadaRestController {
                     link.setUpVotes(link.getUpVotes() - 1);
                     link.setTotalVotes(link.getTotalVotes() - 1);
 
+                    users.save(yadaAuthor);
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
@@ -286,6 +290,7 @@ public class YadaRestController {
                         link.setDownVotes(link.getDownVotes() + 1);
                         link.setTotalVotes(link.getTotalVotes() + 1);
 
+                        users.save(yadaAuthor);
                         yadas.save(yadaToDownVote);
                         yadaUserJoinRepo.save(yuj);
                         links.save(link);
@@ -315,6 +320,7 @@ public class YadaRestController {
                         link.setDownVotes(link.getDownVotes() + 1);
                         link.setUpVotes(link.getUpVotes() - 1);
 
+                        users.save(yadaAuthor);
                         yadas.save(yadaToDownVote);
                         yadaUserJoinRepo.save(yuj);
                         links.save(link);
@@ -336,6 +342,7 @@ public class YadaRestController {
                         link.setTotalVotes(link.getTotalVotes() + 1);
 
 
+                        users.save(yadaAuthor);
                         yadas.save(yadaToDownVote);
                         yadaUserJoinRepo.save(yuj);
                         links.save(link);
@@ -356,6 +363,7 @@ public class YadaRestController {
                         link.setTotalVotes(link.getTotalVotes() - 1);
 
 
+                        users.save(yadaAuthor);
                         yadas.save(yadaToDownVote);
                         yadaUserJoinRepo.save(yuj);
                         links.save(link);
@@ -423,6 +431,9 @@ public class YadaRestController {
         Yada yada = new Yada(yl.getYada().getContent(), 1, LocalDateTime.now(), 0, 1, 0, user, link);
         yadas.save(yada);
         YadaUserJoin yuj = new YadaUserJoin(user, yada, true, false);
+
+        user.setKarma(user.getKarma() + 1);
+        users.save(user);
 
         if (link.getYadaList() == null) {
             ArrayList<Yada> newYadaListInLink = new ArrayList<>();
