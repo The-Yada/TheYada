@@ -68,6 +68,9 @@ module.exports = function(app) {
     $scope.new = function() {
         $scope.yadas = YadaService.filter('new');
     }
+    $scope.new = function() {
+        $scope.yadas = YadaService.filter('top');
+    }
 
   }])
 }
