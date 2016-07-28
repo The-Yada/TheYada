@@ -5,12 +5,16 @@
 
 module.exports = function(app) {
 
-  app.controller('NavController', ['$scope', '$location', 'YadaService', 'UserService', function($scope, $location, YadaService, UserService){
+  app.controller('NavController', ['$scope','$location', 'YadaService', 'UserService', function($scope, $location, YadaService, UserService){
 
+    $scope.logStatus = UserService.getLogStatus();
+
+    $scope.isAuthenticated = function() {
+
+    };
     /*******************************
     * menu collapse
     *********************************/
-    $scope.logStatus = UserService.getLogStatus();
 
     // display user name on home page vvvvvv
           // $scope.user = UserService.getUser();
