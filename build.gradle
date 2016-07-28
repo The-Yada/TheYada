@@ -42,6 +42,7 @@ dependencies {
 
 	// needed for SQL timestamp
 	compile('org.hibernate:hibernate-java8:5.0.9.Final')
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0")
 
 	// spring security
 	//compile('org.springframework.boot:spring-boot-starter-security')
@@ -51,7 +52,8 @@ dependencies {
 
 	//google oauth client library
 	compile ('com.google.apis:google-api-services-oauth2:v1-rev117-1.22.0')
-	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0")
+	compile ('com.google.api-client:google-api-client:1.19.1')
+
 }
 
 
