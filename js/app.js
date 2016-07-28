@@ -82,6 +82,7 @@ let app = angular.module('YadaWebApp', ['ngRoute', 'auth0', 'angular-storage', '
       // Grab the user's token
       var token = store.get('token');
       // Check if token was actually stored
+      console.log(token);
       if (token) {
         // Check if token is yet to expire
         if (!jwtHelper.isTokenExpired(token)) {
