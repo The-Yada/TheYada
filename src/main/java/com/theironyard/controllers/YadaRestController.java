@@ -92,7 +92,11 @@ public class YadaRestController {
 
         return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
     }
+    @RequestMapping(path = "/topLinks", method = RequestMethod.GET)
+    public ArrayList<Link> getTopLinks() {
 
+        return links.findTop10ByOrderByKarmaDesc();
+    }
     @RequestMapping(path = "/newLinks", method = RequestMethod.GET)
     public ArrayList<Link> getNewYadas() {
 
