@@ -5,7 +5,7 @@
 
 module.exports = function(ext) {
 
-  ext.controller('YadaExtController', ['$scope', '$rootScope','YadaExtService', function($scope, $rootScope, YadaExtService){
+  ext.controller('YadaExtController', ['$scope', '$rootScope','$location','YadaExtService', function($scope, $rootScope, $location, YadaExtService){
 
        $scope.yadaScrollIndex = 0;
        $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
@@ -26,6 +26,26 @@ module.exports = function(ext) {
          } else {
            $scope.yadaScrollIndex ++;
          }
+       }
+
+       /*******************************
+       * up and down voting
+       ********************************/
+       $scope.upIt = function (yada) {
+           YadaExtService.upKarma(yada, function() {
+
+                 $scope.yadas = YadaExtService.updateYadas();
+                 $location.path("/");
+           });
+
+       }
+       $scope.downIt = function (yada) {
+           YadaExtService.downKarma(yada, function() {
+
+               $scope.yadas = YadaExtService.updateYadas();
+               $location.path("/");
+           });
+
        }
 
   }]);
