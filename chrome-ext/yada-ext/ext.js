@@ -35,44 +35,21 @@ module.exports = function(ext) {
 
 module.exports = function(ext) {
 
-  ext.controller('LoginExtController', ['$scope', 'auth', 'UserExtService', function($scope, auth, UserExtService){
+  ext.controller('LoginExtController', ['$scope', 'UserExtService', function($scope, UserExtService){
 
-    $scope.username = '';
     $scope.userObj = UserExtService.getUser();
-
-    // Google Log in
-    function onLoginSuccess(profile, token) {
-        $scope.message.text = '';
-        store.set('profile', profile);
-        store.set('token', token);
-        $location.path('/');
-        $scope.loading = false;
-        UserExtService.setUser({
-          nickname: profile.nickname,
-          name: profile.name,
-          email: profile.email
-        })
-      }
-      function onLoginFailed() {
-        console.log('log fail cont');
-        $scope.message.text = 'invalid credentials';
-        $scope.loading = false;
-      }
 
 
     /*******************************
     * login
     ********************************/
-    $scope.googleLogin = function () {
-        $scope.message = 'loading...';
-        $scope.loading = true;
+    $scope.login = function () {
+      UserExtService.setUser({
+        username: $scope.username,
+        password: $scope.password
+      })
+    }
 
-        auth.signin({
-          popup: true,
-          connection: 'google-oauth2',
-          scope: 'openid name email'
-        }, onLoginSuccess, onLoginFailed);
-      };
 
 
   }])
@@ -84,6 +61,7 @@ module.exports = function(ext) {
 *
 ********************************/
 
+
 module.exports = function(ext) {
 
   ext.controller('NavExtController', ['$scope', '$rootScope','UserExtService', function($scope, $rootScope, UserExtService){
@@ -92,6 +70,7 @@ module.exports = function(ext) {
     /*******************************
     * menu collapse
     *********************************/
+    $scope.user = UserExtService.getUser();
     $scope.logStatus = UserExtService.getLogStatus();
     $scope.isCollapsed = false;
 
@@ -181,15 +160,10 @@ module.exports = function(ext) {
 (function () {
   "use strict";
 
-  var ext = angular.module('YadaExtension', ['ngRoute', 'ngCookies', 'auth0', 'angular-storage', 'angular-jwt'])
+  var ext = angular.module('YadaExtension', ['ngRoute', 'ngCookies', 'angular-storage', 'angular-jwt'])
 
   //Router
-  .config(['$routeProvider', 'authProvider', function ($routeProvider, authProvider) {
-
-    authProvider.init({
-      domain: 'theyada.auth0.com',
-      clientID: 'xSXRJtMJxxV34URgJ5KKKtgl1jdrGSIV'
-    });
+  .config(['$routeProvider', function ($routeProvider) {
 
     $routeProvider.when('/', {
       templateUrl: '/home.html',
@@ -201,62 +175,10 @@ module.exports = function(ext) {
       templateUrl: '/editor.html',
       controller: 'EditorExtController'
     });
-
-    //Called when login is successful
-    authProvider.on('loginSuccess', ['$location', 'profilePromise', 'idToken', 'store', function ($location, profilePromise, idToken, store) {
-      // Successfully log in
-      // Access to user profile and token
-      profilePromise.then(function (profile) {
-        // profile
-        console.log(profile);
-        store.set('profile', profile);
-        store.set('token', idToken);
-      });
-      $location.url('http://localhost:8080');
-    }]);
-
-    //Called when login fails
-    authProvider.on('loginFailure', function () {
-      // If anything goes wrong
-      console.log("log fail");
-    });
-  }]).run(['$rootScope', 'auth', 'store', 'jwtHelper', '$location', 'UserExtService', function ($rootScope, auth, store, jwtHelper, $location, UserExtService) {
+  }]).run(['$rootScope', '$location', 'UserExtService', function ($rootScope, $location, UserExtService) {
     $rootScope.extUrl = document.referrer;
 
-    // Listen to a location change event
-    $rootScope.$on('$locationChangeStart', function () {
-      // Grab the user's token
-      var token = store.get('token');
-      // Check if token was actually stored
-      console.log(token);
-      if (token) {
-        // Check if token is yet to expire
-        if (!jwtHelper.isTokenExpired(token)) {
-          // Check if the user is not authenticated
-          if (!auth.isAuthenticated) {
-
-            // Re-authenticate with the user's profile
-            // Calls authProvider.on('authenticated')
-            auth.authenticate(store.get('profile'), token);
-            var u = store.get('profile');
-            UserExtService.setUser({
-              nickname: u.nickname,
-              name: u.name,
-              email: u.email
-            });
-            console.log("in", UserExtService.getUser());
-          }
-        } else {
-          console.log("hai");
-          // Either show the login page
-          // UserService.getLogStatus();
-          $location.path('/');
-          // .. or
-          // or use the refresh token to get a new idToken
-          // auth.refreshIdToken(token);
-        }
-      }
-    });
+    UserExtService.checkLogStatus();
   }]);
 
   // Services
@@ -300,6 +222,22 @@ module.exports = function(ext) {
             method: 'POST',
             data: user
           }).then(function() {
+            angular.copy(user, userObj);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+        
+        checkLogStatus() {
+          $http({
+            url: 'http://localhost:8080/logStatus',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("user check", response.data);
+
+            let user = response.data
             angular.copy(user, userObj);
             let log = {status: true};
             angular.copy(log, logStatus);

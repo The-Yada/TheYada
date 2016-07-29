@@ -3,6 +3,7 @@
   "description": "pop over news article summaries",
   "version": "2.0",
   "permissions": [
+    "identity",
     "contentSettings",
     "http://*/*",
     "https://*/*",

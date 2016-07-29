@@ -6,7 +6,7 @@
 
 module.exports = function(app) {
 
-  app.factory('UserService', ['$http', 'auth', '$location', function($http, auth, $location) {
+  app.factory('UserService', ['$http', '$location', function($http, $location) {
 
       let userObj = {};
       let logStatus = {status: false};
@@ -23,6 +23,22 @@ module.exports = function(app) {
             method: 'POST',
             data: user
           }).then(function() {
+            angular.copy(user, userObj);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+
+        checkLogStatus() {
+          $http({
+            url: 'http://localhost:8080/logStatus',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("user check", response.data);
+
+            let user = response.data
             angular.copy(user, userObj);
             let log = {status: true};
             angular.copy(log, logStatus);
@@ -63,7 +79,7 @@ module.exports = function(app) {
 
             angular.copy(user, userObj);
             angular.copy(log, logStatus);
-            // location.href = 'https://theyada.auth0.com/v2/logout?federated';
+
             $location.path('/');
           });
 

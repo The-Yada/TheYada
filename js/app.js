@@ -8,19 +8,14 @@
 (function() {
 "use strict"
 
-let app = angular.module('YadaWebApp', ['ngRoute', 'auth0', 'angular-storage', 'angular-jwt'])
+let app = angular.module('YadaWebApp', ['ngRoute', 'angular-storage', 'angular-jwt'])
 
 
 
   /*******************************
   * ROUTER
   *********************************/
-  .config(['$routeProvider', 'authProvider', function($routeProvider, authProvider) {
-
-    authProvider.init({
-        domain: 'theyada.auth0.com',
-        clientID: 'xSXRJtMJxxV34URgJ5KKKtgl1jdrGSIV'
-    });
+  .config(['$routeProvider', function($routeProvider) {
 
     $routeProvider
       .when('/', {
@@ -52,67 +47,16 @@ let app = angular.module('YadaWebApp', ['ngRoute', 'auth0', 'angular-storage', '
         redirectTo: '/404',
       })
 
-      //Called when login is successful
-      authProvider.on('loginSuccess', ['$location', 'profilePromise', 'idToken', 'store', function($location, profilePromise, idToken, store) {
-        // Successfully log in
-        // Access to user profile and token
-        profilePromise.then(function(profile){
-          // profile
-          console.log(profile);
-          store.set('profile', profile);
-          store.set('token', idToken);
-        });
-        $location.url('/');
-      }]);
-
-      //Called when login fails
-      authProvider.on('loginFailure', function() {
-        // If anything goes wrong
-        console.log("log fail");
-      });
-
 
   }])
   /*******************************
   * run function when app is initiated
   * could be used to check for cookies or user log status
   *********************************/
-  .run(['$rootScope', 'auth', 'store', 'jwtHelper', '$location', 'UserService', function($rootScope, auth, store, jwtHelper, $location, UserService) {
-    // Listen to a location change event
-    $rootScope.$on('$locationChangeStart', function() {
-      // Grab the user's token
-      var token = store.get('token');
-      // Check if token was actually stored
-      console.log(token);
-      if (token) {
-        // Check if token is yet to expire
-        if (!jwtHelper.isTokenExpired(token)) {
-          // Check if the user is not authenticated
-          if (!auth.isAuthenticated) {
+  .run(['$rootScope', '$location', 'UserService', function($rootScope, $location, UserService) {
 
-            // Re-authenticate with the user's profile
-            // Calls authProvider.on('authenticated')
-            auth.authenticate(store.get('profile'), token);
-            let u = store.get('profile');
-            UserService.setUser({
-              nickname: u.nickname,
-              name: u.name,
-              email: u.email
-            });
-            console.log("in",UserService.getUser());
-          }
-        } else {
-          console.log("hai");
-          // Either show the login page
-          // UserService.getLogStatus();
-          $location.path('/');
-          // .. or
-          // or use the refresh token to get a new idToken
-          // auth.refreshIdToken(token);
-        }
-      }
+      UserService.checkLogStatus();
 
-    });
   }])
 
   /*******************************

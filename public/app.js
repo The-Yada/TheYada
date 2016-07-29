@@ -84,42 +84,20 @@ module.exports = function(app) {
 
 module.exports = function(app) {
 
-  app.controller('LoginController', ['$scope', 'auth', 'store', '$location','UserService', function($scope, auth, store, $location, UserService){
-    $scope.username = '';
-    $scope.userObj = UserService.getUser();
+  app.controller('LoginController', ['$scope', '$location','UserService', function($scope, $location, UserService){
 
-    // Google Log in
-    function onLoginSuccess(profile, token) {
-        $scope.message.text = '';
-        store.set('profile', profile);
-        store.set('token', token);
-        $location.path('/');
-        $scope.loading = false;
-        UserService.setUser({
-          nickname: profile.nickname,
-          name: profile.name,
-          email: profile.email
-        })
-      }
-      function onLoginFailed() {
-        $scope.message.text = 'invalid credentials';
-        $scope.loading = false;
-      }
+    $scope.userObj = UserService.getUser();
 
 
     /*******************************
     * login
     ********************************/
-    $scope.googleLogin = function () {
-        $scope.message = 'loading...';
-        $scope.loading = true;
-
-        auth.signin({
-          popup: true,
-          connection: 'google-oauth2',
-          scope: 'openid name email'
-        }, onLoginSuccess, onLoginFailed);
-      };
+    $scope.login = function () {
+      UserService.setUser({
+        username: $scope.username,
+        password: $scope.password,
+      })
+    }
 
 
     /*******************************
@@ -146,20 +124,9 @@ module.exports = function(app) {
 
   app.controller('NavController', ['$scope','$location', 'YadaService', 'UserService', function($scope, $location, YadaService, UserService){
 
+    $scope.user = UserService.getUser();
     $scope.logStatus = UserService.getLogStatus();
 
-    $scope.isAuthenticated = function() {
-
-    };
-    /*******************************
-    * menu collapse
-    *********************************/
-
-    // display user name on home page vvvvvv
-          // $scope.user = UserService.getUser();
-
-    // collpasable menu vvvvvvv
-          // $scope.isCollapsed = false;
 
     /*******************************
     * get yadas from server for home page
@@ -184,17 +151,12 @@ module.exports = function(app) {
 (function () {
   "use strict";
 
-  var app = angular.module('YadaWebApp', ['ngRoute', 'auth0', 'angular-storage', 'angular-jwt'])
+  var app = angular.module('YadaWebApp', ['ngRoute', 'angular-storage', 'angular-jwt'])
 
   /*******************************
   * ROUTER
   *********************************/
-  .config(['$routeProvider', 'authProvider', function ($routeProvider, authProvider) {
-
-    authProvider.init({
-      domain: 'theyada.auth0.com',
-      clientID: 'xSXRJtMJxxV34URgJ5KKKtgl1jdrGSIV'
-    });
+  .config(['$routeProvider', function ($routeProvider) {
 
     $routeProvider.when('/', {
       templateUrl: 'home.html',
@@ -212,65 +174,14 @@ module.exports = function(app) {
     }).otherwise({
       redirectTo: '/404'
     });
-
-    //Called when login is successful
-    authProvider.on('loginSuccess', ['$location', 'profilePromise', 'idToken', 'store', function ($location, profilePromise, idToken, store) {
-      // Successfully log in
-      // Access to user profile and token
-      profilePromise.then(function (profile) {
-        // profile
-        console.log(profile);
-        store.set('profile', profile);
-        store.set('token', idToken);
-      });
-      $location.url('/');
-    }]);
-
-    //Called when login fails
-    authProvider.on('loginFailure', function () {
-      // If anything goes wrong
-      console.log("log fail");
-    });
   }])
   /*******************************
   * run function when app is initiated
   * could be used to check for cookies or user log status
   *********************************/
-  .run(['$rootScope', 'auth', 'store', 'jwtHelper', '$location', 'UserService', function ($rootScope, auth, store, jwtHelper, $location, UserService) {
-    // Listen to a location change event
-    $rootScope.$on('$locationChangeStart', function () {
-      // Grab the user's token
-      var token = store.get('token');
-      // Check if token was actually stored
-      console.log(token);
-      if (token) {
-        // Check if token is yet to expire
-        if (!jwtHelper.isTokenExpired(token)) {
-          // Check if the user is not authenticated
-          if (!auth.isAuthenticated) {
+  .run(['$rootScope', '$location', 'UserService', function ($rootScope, $location, UserService) {
 
-            // Re-authenticate with the user's profile
-            // Calls authProvider.on('authenticated')
-            auth.authenticate(store.get('profile'), token);
-            var u = store.get('profile');
-            UserService.setUser({
-              nickname: u.nickname,
-              name: u.name,
-              email: u.email
-            });
-            console.log("in", UserService.getUser());
-          }
-        } else {
-          console.log("hai");
-          // Either show the login page
-          // UserService.getLogStatus();
-          $location.path('/');
-          // .. or
-          // or use the refresh token to get a new idToken
-          // auth.refreshIdToken(token);
-        }
-      }
-    });
+    UserService.checkLogStatus();
   }]);
 
   /*******************************
@@ -327,7 +238,7 @@ module.exports = function (app) {
 
 module.exports = function(app) {
 
-  app.factory('UserService', ['$http', 'auth', '$location', function($http, auth, $location) {
+  app.factory('UserService', ['$http', '$location', function($http, $location) {
 
       let userObj = {};
       let logStatus = {status: false};
@@ -344,6 +255,22 @@ module.exports = function(app) {
             method: 'POST',
             data: user
           }).then(function() {
+            angular.copy(user, userObj);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+
+        checkLogStatus() {
+          $http({
+            url: 'http://localhost:8080/logStatus',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("user check", response.data);
+
+            let user = response.data
             angular.copy(user, userObj);
             let log = {status: true};
             angular.copy(log, logStatus);
@@ -384,7 +311,7 @@ module.exports = function(app) {
 
             angular.copy(user, userObj);
             angular.copy(log, logStatus);
-            // location.href = 'https://theyada.auth0.com/v2/logout?federated';
+
             $location.path('/');
           });
 
