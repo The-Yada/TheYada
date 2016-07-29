@@ -76,7 +76,7 @@ public class YadaRestController {
 
         session.invalidate();
 
-        return new ResponseEntity<>("Please Come Again Soon", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -429,14 +429,14 @@ public class YadaRestController {
         Link link = links.findFirstByUrl(url);
 
         if (user == null) {
-            return new ResponseEntity<>("not logged in", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
 
         if ((yadasByKarma == null)) {
 
-            return new ResponseEntity<>("no yada found for this page", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
