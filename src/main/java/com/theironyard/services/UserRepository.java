@@ -9,6 +9,6 @@ import java.util.ArrayList;
  * Created by will on 7/18/16.
  */
 public interface UserRepository extends CrudRepository<User, Integer>{
-    User findFirstByEmail(String email);
+    User findFirstByUsername(String username);
    // ArrayList<User> findTop10OrderByKarmaDesc();
 }
