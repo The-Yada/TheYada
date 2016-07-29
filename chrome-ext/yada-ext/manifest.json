@@ -3,6 +3,7 @@
   "description": "pop over news article summaries",
   "version": "2.0",
   "permissions": [
+    "identity",
     "contentSettings",
     "http://*/*",
     "https://*/*",
@@ -33,7 +34,8 @@
     "ext.js",
     "js/content.js",
     "js/angular.min.js",
-    "js/angular-route.min.js"
+    "js/angular-route.min.js",
+    "js/auth0-7.0.3.min.js"
 
   ]
 

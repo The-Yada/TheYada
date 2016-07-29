@@ -6,7 +6,7 @@
 
 module.exports = function(app) {
 
-  app.factory('UserService', ['$http', 'auth', '$location', function($http, auth, $location) {
+  app.factory('UserService', ['$http', '$location', function($http, $location) {
 
       let userObj = {};
       let logStatus = {status: false};
@@ -31,18 +31,28 @@ module.exports = function(app) {
           })
         },
 
+        checkLogStatus() {
+          $http({
+            url: 'http://localhost:8080/logStatus',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("user check", response.data);
+
+            let user = response.data
+            angular.copy(user, userObj);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+
 
         /*******************************
         * return log status
         ********************************/
         getLogStatus() {
-          if (auth.isAuthenticated) {
-            logStatus = {status: true};
             return logStatus;
-          } else {
-            logStatus = {status: false};
-            return logStatus;
-          }
         },
 
         /*******************************
@@ -59,20 +69,18 @@ module.exports = function(app) {
         ********************************/
         clearSession() {
           $http({
-            url: '/logout',
+            url: 'http://localhost:8080/logout',
             method: 'POST',
-            data: {
-              user: userObj,
-            }
-          }).then(function() {
-
+          })
+          .then(function(response) {
+            console.log("and then", response);
             user = {};
             let log = {status: false};
 
             angular.copy(user, userObj);
             angular.copy(log, logStatus);
 
-            $location.path('https://theyada.auth0.com/v2/logout?returnTo=http://localhost:8080/');
+            $location.path('/');
           });
 
         },

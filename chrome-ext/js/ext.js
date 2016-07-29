@@ -9,10 +9,11 @@
 (function() {
 "use strict"
 
-  let ext = angular.module('YadaExtension', ['ngRoute'])
+  let ext = angular.module('YadaExtension', ['ngRoute', 'ngCookies', 'angular-storage', 'angular-jwt'])
 
     //Router
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider',function($routeProvider) {
+
         $routeProvider
           .when('/', {
             templateUrl: '/home.html',
@@ -26,11 +27,15 @@
             templateUrl: '/editor.html',
             controller: 'EditorExtController',
           })
-    }])
-    .run(function($rootScope) {
 
+
+    }])
+    .run(['$rootScope','$location', 'UserExtService', function($rootScope, $location, UserExtService) {
       $rootScope.extUrl = document.referrer;
-    });
+
+      UserExtService.checkLogStatus();
+
+    }])
 
 
       // Services
