@@ -55,19 +55,19 @@ public class YadaController {
 
 
 //    }
-    public void parseUsers(String fileName) throws FileNotFoundException {
-        if (users.count() == 0) {
-            File usersFile = new File(fileName);
-            Scanner fileScanner = new Scanner(usersFile);
-            fileScanner.nextLine();
-            while (fileScanner.hasNext()) {
-                String[] columns = fileScanner.nextLine().split(",");
-                User user = new User(columns[0], columns[1], Integer.valueOf(columns[2]));
-                users.save(user);
-
-            }
-        }
-    }
+//    public void parseUsers(String fileName) throws FileNotFoundException {
+//        if (users.count() == 0) {
+//            File usersFile = new File(fileName);
+//            Scanner fileScanner = new Scanner(usersFile);
+//            fileScanner.nextLine();
+//            while (fileScanner.hasNext()) {
+//                String[] columns = fileScanner.nextLine().split(",");
+//                User user = new User(columns[0], columns[1], Integer.valueOf(columns[2]));
+//                users.save(user);
+//
+//            }
+//        }
+//    }
     //parsing links file
     public void parseLinks(String fileName) throws FileNotFoundException {
         if (links.count() == 0) {
