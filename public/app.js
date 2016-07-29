@@ -109,7 +109,6 @@ module.exports = function(app) {
 
     /*******************************
     * login
-    * TODO: keep track of login state
     ********************************/
     $scope.googleLogin = function () {
         $scope.message = 'loading...';
@@ -128,9 +127,7 @@ module.exports = function(app) {
     ********************************/
     $scope.logout = function() {
       //clear session
-      // $auth.logout();
       UserService.clearSession();
-      console.log("loggin out");
     }
 
 
@@ -198,6 +195,7 @@ module.exports = function(app) {
       domain: 'theyada.auth0.com',
       clientID: 'xSXRJtMJxxV34URgJ5KKKtgl1jdrGSIV'
     });
+
     $routeProvider.when('/', {
       templateUrl: 'home.html',
       controller: 'HomeController'
@@ -238,7 +236,7 @@ module.exports = function(app) {
   * run function when app is initiated
   * could be used to check for cookies or user log status
   *********************************/
-  .run(['$rootScope', 'auth', 'store', 'jwtHelper', '$location', function ($rootScope, auth, store, jwtHelper, $location) {
+  .run(['$rootScope', 'auth', 'store', 'jwtHelper', '$location', 'UserService', function ($rootScope, auth, store, jwtHelper, $location, UserService) {
     // Listen to a location change event
     $rootScope.$on('$locationChangeStart', function () {
       // Grab the user's token
@@ -250,16 +248,26 @@ module.exports = function(app) {
         if (!jwtHelper.isTokenExpired(token)) {
           // Check if the user is not authenticated
           if (!auth.isAuthenticated) {
+
             // Re-authenticate with the user's profile
             // Calls authProvider.on('authenticated')
             auth.authenticate(store.get('profile'), token);
+            var u = store.get('profile');
+            UserService.setUser({
+              nickname: u.nickname,
+              name: u.name,
+              email: u.email
+            });
+            console.log("in", UserService.getUser());
           }
         } else {
+          console.log("hai");
           // Either show the login page
-          // $location.path('/');
+          // UserService.getLogStatus();
+          $location.path('/');
           // .. or
           // or use the refresh token to get a new idToken
-          auth.refreshIdToken(token);
+          // auth.refreshIdToken(token);
         }
       }
     });
@@ -349,13 +357,7 @@ module.exports = function(app) {
         * return log status
         ********************************/
         getLogStatus() {
-          if (auth.isAuthenticated) {
-            logStatus = {status: true};
             return logStatus;
-          } else {
-            logStatus = {status: false};
-            return logStatus;
-          }
         },
 
         /*******************************
@@ -372,20 +374,18 @@ module.exports = function(app) {
         ********************************/
         clearSession() {
           $http({
-            url: '/logout',
+            url: 'http://localhost:8080/logout',
             method: 'POST',
-            data: {
-              user: userObj,
-            }
-          }).then(function() {
-
+          })
+          .then(function(response) {
+            console.log("and then", response);
             user = {};
             let log = {status: false};
 
             angular.copy(user, userObj);
             angular.copy(log, logStatus);
-
-            $location.path('https://theyada.auth0.com/v2/logout?returnTo=http://localhost:8080/');
+            // location.href = 'https://theyada.auth0.com/v2/logout?federated';
+            $location.path('/');
           });
 
         },

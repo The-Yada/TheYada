@@ -21,6 +21,7 @@ let app = angular.module('YadaWebApp', ['ngRoute', 'auth0', 'angular-storage', '
         domain: 'theyada.auth0.com',
         clientID: 'xSXRJtMJxxV34URgJ5KKKtgl1jdrGSIV'
     });
+
     $routeProvider
       .when('/', {
         templateUrl: 'home.html',
@@ -76,7 +77,7 @@ let app = angular.module('YadaWebApp', ['ngRoute', 'auth0', 'angular-storage', '
   * run function when app is initiated
   * could be used to check for cookies or user log status
   *********************************/
-  .run(['$rootScope', 'auth', 'store', 'jwtHelper', '$location', function($rootScope, auth, store, jwtHelper, $location) {
+  .run(['$rootScope', 'auth', 'store', 'jwtHelper', '$location', 'UserService', function($rootScope, auth, store, jwtHelper, $location, UserService) {
     // Listen to a location change event
     $rootScope.$on('$locationChangeStart', function() {
       // Grab the user's token
@@ -88,16 +89,26 @@ let app = angular.module('YadaWebApp', ['ngRoute', 'auth0', 'angular-storage', '
         if (!jwtHelper.isTokenExpired(token)) {
           // Check if the user is not authenticated
           if (!auth.isAuthenticated) {
+
             // Re-authenticate with the user's profile
             // Calls authProvider.on('authenticated')
             auth.authenticate(store.get('profile'), token);
+            let u = store.get('profile');
+            UserService.setUser({
+              nickname: u.nickname,
+              name: u.name,
+              email: u.email
+            });
+            console.log("in",UserService.getUser());
           }
         } else {
+          console.log("hai");
           // Either show the login page
-          // $location.path('/');
+          // UserService.getLogStatus();
+          $location.path('/');
           // .. or
           // or use the refresh token to get a new idToken
-          auth.refreshIdToken(token);
+          // auth.refreshIdToken(token);
         }
       }
 

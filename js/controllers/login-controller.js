@@ -31,7 +31,6 @@ module.exports = function(app) {
 
     /*******************************
     * login
-    * TODO: keep track of login state
     ********************************/
     $scope.googleLogin = function () {
         $scope.message = 'loading...';
@@ -50,9 +49,7 @@ module.exports = function(app) {
     ********************************/
     $scope.logout = function() {
       //clear session
-      // $auth.logout();
       UserService.clearSession();
-      console.log("loggin out");
     }
 
 

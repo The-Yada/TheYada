@@ -36,13 +36,7 @@ module.exports = function(app) {
         * return log status
         ********************************/
         getLogStatus() {
-          if (auth.isAuthenticated) {
-            logStatus = {status: true};
             return logStatus;
-          } else {
-            logStatus = {status: false};
-            return logStatus;
-          }
         },
 
         /*******************************
@@ -59,20 +53,18 @@ module.exports = function(app) {
         ********************************/
         clearSession() {
           $http({
-            url: '/logout',
+            url: 'http://localhost:8080/logout',
             method: 'POST',
-            data: {
-              user: userObj,
-            }
-          }).then(function() {
-
+          })
+          .then(function(response) {
+            console.log("and then", response);
             user = {};
             let log = {status: false};
 
             angular.copy(user, userObj);
             angular.copy(log, logStatus);
-
-            $location.path('https://theyada.auth0.com/v2/logout?returnTo=http://localhost:8080/');
+            // location.href = 'https://theyada.auth0.com/v2/logout?federated';
+            $location.path('/');
           });
 
         },

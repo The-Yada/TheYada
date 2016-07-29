@@ -4,29 +4,47 @@
 ********************************/
 
 
+
 module.exports = function(ext) {
 
-  ext.controller('LoginExtController', ['$scope', 'UserExtService', function($scope, UserExtService){
+  ext.controller('LoginExtController', ['$scope', 'auth', 'UserExtService', function($scope, auth, UserExtService){
 
     $scope.username = '';
     $scope.userObj = UserExtService.getUser();
 
-    /*******************************
-    * Login
-    ********************************/
-      $scope.login = function() {
-        //start session
-        //block user input *ADD* condition if user has been created
-        console.log($scope.username);
-        if ($scope.username === '' || $scope.password === '') {
-          console.log("enter your password right", $scope.username);
-          return
-        } else {
-            UserExtService.setUser({username: $scope.username, password: $scope.password});
-            $scope.username = '';
-            $scope.password = '';
-        }
+    // Google Log in
+    function onLoginSuccess(profile, token) {
+        $scope.message.text = '';
+        store.set('profile', profile);
+        store.set('token', token);
+        $location.path('/');
+        $scope.loading = false;
+        UserExtService.setUser({
+          nickname: profile.nickname,
+          name: profile.name,
+          email: profile.email
+        })
       }
+      function onLoginFailed() {
+        console.log('log fail cont');
+        $scope.message.text = 'invalid credentials';
+        $scope.loading = false;
+      }
+
+
+    /*******************************
+    * login
+    ********************************/
+    $scope.googleLogin = function () {
+        $scope.message = 'loading...';
+        $scope.loading = true;
+
+        auth.signin({
+          popup: true,
+          connection: 'google-oauth2',
+          scope: 'openid name email'
+        }, onLoginSuccess, onLoginFailed);
+      };
 
 
   }])
