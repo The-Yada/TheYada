@@ -68,16 +68,19 @@ public class YadaRestController {
             users.save(user);
         }
 
-        session.setAttribute("nickname", user.getNickname());
+        session.setAttribute("email", user.getEmail());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public ResponseEntity<String> logout(HttpSession session) {
+    public ResponseEntity logout(HttpSession session) {
+
+        String email = (String) session.getAttribute("email");
+        User user = users.findFirstByEmail(email);
 
         session.invalidate();
 
-        return new ResponseEntity<>("Please Come Again Soon", HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
 
     }
 
@@ -110,31 +113,31 @@ public class YadaRestController {
 
         return links.findAllByOrderByControversyScoreDesc();
     }
-    //hit this route to find top users yadas
-    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
-    public HashMap<User, ArrayList<Yada>> getTopUsersYadas() {
-        HashMap<User, ArrayList<Yada>> topUsersYadasMap = new HashMap<>();
-
-        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
-
-        for (User user : topUsers) {
-
-            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
-            topUsersYadasMap.put(user, topUsersYadas);
-        }
-        return topUsersYadasMap;
-
-
-//        ArrayList<ArrayList<Yada>> listOfListsOfTopUsersYadas = new ArrayList<>();
+//    //hit this route to find top users yadas
+//    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
+////    public HashMap<User, ArrayList<Yada>> getTopUsersYadas() {
+////        HashMap<User, ArrayList<Yada>> topUsersYadasMap = new HashMap<>();
+////
+////       // ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
+////
+////        for (User user : topUsers) {
+////
+////            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
+////            topUsersYadasMap.put(user, topUsersYadas);
+////        }
+////        return topUsersYadasMap;
 //
-//        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
 //
-//        for (User u : topUsers) {
-//             ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(u.getId());
-//            listOfListsOfTopUsersYadas.add(topUsersYadas);
-//        }
-//        return listOfListsOfTopUsersYadas;
-    }
+////        ArrayList<ArrayList<Yada>> listOfListsOfTopUsersYadas = new ArrayList<>();
+////
+////        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
+////
+////        for (User u : topUsers) {
+////             ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(u.getId());
+////            listOfListsOfTopUsersYadas.add(topUsersYadas);
+////        }
+//////        return listOfListsOfTopUsersYadas;
+////    }
 
     //hit this route when searching through content of yadas
     @RequestMapping(path = "/searchYadas", method = RequestMethod.GET)
@@ -440,6 +443,17 @@ public class YadaRestController {
         }
 
         return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
+    }
+    @RequestMapping(path = "/logStatus", method = RequestMethod.GET)
+    public ResponseEntity checkIfUserIsLoggedIn(HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        User user = users.findFirstByEmail(email);
+
+        if (user == null) {
+            return new ResponseEntity<>("not logged in", HttpStatus.BAD_REQUEST);
+        }
+
+            return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)

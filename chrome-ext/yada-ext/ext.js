@@ -32,29 +32,24 @@ module.exports = function(ext) {
 ********************************/
 
 
+
 module.exports = function(ext) {
 
   ext.controller('LoginExtController', ['$scope', 'UserExtService', function($scope, UserExtService){
 
-    $scope.username = '';
     $scope.userObj = UserExtService.getUser();
 
+
     /*******************************
-    * Login
+    * login
     ********************************/
-      $scope.login = function() {
-        //start session
-        //block user input *ADD* condition if user has been created
-        console.log($scope.username);
-        if ($scope.username === '' || $scope.password === '') {
-          console.log("enter your password right", $scope.username);
-          return
-        } else {
-            UserExtService.setUser({username: $scope.username, password: $scope.password});
-            $scope.username = '';
-            $scope.password = '';
-        }
-      }
+    $scope.login = function () {
+      UserExtService.setUser({
+        username: $scope.username,
+        password: $scope.password
+      })
+    }
+
 
 
   }])
@@ -66,6 +61,7 @@ module.exports = function(ext) {
 *
 ********************************/
 
+
 module.exports = function(ext) {
 
   ext.controller('NavExtController', ['$scope', '$rootScope','UserExtService', function($scope, $rootScope, UserExtService){
@@ -74,6 +70,7 @@ module.exports = function(ext) {
     /*******************************
     * menu collapse
     *********************************/
+    $scope.user = UserExtService.getUser();
     $scope.logStatus = UserExtService.getLogStatus();
     $scope.isCollapsed = false;
 
@@ -163,10 +160,11 @@ module.exports = function(ext) {
 (function () {
   "use strict";
 
-  var ext = angular.module('YadaExtension', ['ngRoute'])
+  var ext = angular.module('YadaExtension', ['ngRoute', 'ngCookies', 'angular-storage', 'angular-jwt'])
 
   //Router
   .config(['$routeProvider', function ($routeProvider) {
+
     $routeProvider.when('/', {
       templateUrl: '/home.html',
       controller: 'YadaExtController'
@@ -177,10 +175,11 @@ module.exports = function(ext) {
       templateUrl: '/editor.html',
       controller: 'EditorExtController'
     });
-  }]).run(function ($rootScope) {
-
+  }]).run(['$rootScope', '$location', 'UserExtService', function ($rootScope, $location, UserExtService) {
     $rootScope.extUrl = document.referrer;
-  });
+
+    UserExtService.checkLogStatus();
+  }]);
 
   // Services
   require('./services/user-ext-service')(ext);
@@ -223,6 +222,22 @@ module.exports = function(ext) {
             method: 'POST',
             data: user
           }).then(function() {
+            angular.copy(user, userObj);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+        
+        checkLogStatus() {
+          $http({
+            url: 'http://localhost:8080/logStatus',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("user check", response.data);
+
+            let user = response.data
             angular.copy(user, userObj);
             let log = {status: true};
             angular.copy(log, logStatus);
