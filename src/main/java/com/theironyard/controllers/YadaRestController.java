@@ -111,7 +111,30 @@ public class YadaRestController {
         return links.findAllByOrderByControversyScoreDesc();
     }
     //hit this route to find top users yadas
+    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
+    public HashMap<User, ArrayList<Yada>> getTopUsersYadas() {
+        HashMap<User, ArrayList<Yada>> topUsersYadasMap = new HashMap<>();
 
+        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
+
+        for (User user : topUsers) {
+
+            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
+            topUsersYadasMap.put(user, topUsersYadas);
+        }
+        return topUsersYadasMap;
+
+
+//        ArrayList<ArrayList<Yada>> listOfListsOfTopUsersYadas = new ArrayList<>();
+//
+//        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
+//
+//        for (User u : topUsers) {
+//             ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(u.getId());
+//            listOfListsOfTopUsersYadas.add(topUsersYadas);
+//        }
+//        return listOfListsOfTopUsersYadas;
+    }
 
     //hit this route when searching through content of yadas
     @RequestMapping(path = "/searchYadas", method = RequestMethod.GET)
@@ -400,9 +423,12 @@ public class YadaRestController {
     //hit this route to display yadas for a given webpage from the chrome extension
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
     public ResponseEntity showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
+        String email = (String) session.getAttribute("email");
+        User user = users.findFirstByEmail(email);
 
         Link link = links.findFirstByUrl(url);
-        if (link == null) {
+
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
