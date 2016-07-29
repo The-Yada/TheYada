@@ -22,6 +22,7 @@ public interface YadaRepository extends CrudRepository<Yada, Integer> {
     List<Yada> findAllByLinkId(int id);
     //ArrayList<Yada> findTop10ByOrderByTimeOfCreationAsc();
     Iterable<Yada> findTop10ByLinkIdOrderByKarmaDesc(int id);
+    ArrayList<Yada> findAllByUserId(int id);
 
     @Query("SELECT y FROM Yada y WHERE LOWER(content) LIKE '%' || LOWER(?) || '%'")
     Iterable<Yada> searchByContent(String searchInput);
