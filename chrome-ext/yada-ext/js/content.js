@@ -28,6 +28,7 @@
     console.log('Creating yada!');
   } else {
     document.getElementById('frame').classList.remove('hidden');
+
   }
 
 })();

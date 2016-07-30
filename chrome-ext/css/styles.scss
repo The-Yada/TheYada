@@ -35,5 +35,34 @@ span {
   padding: 10px;
 }
 
+.content-text {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  transition: all 0.5s ease;
+  h2 {
+    margin: 20px;
+  }
+  img {
+    height: 20px;
+  }
+  button {
+    background: transparent;
+    border: none;
+  }
+  .right-button img {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+  }
+}
+
+.karma-box {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  margin: 30px auto;
+}
+
 @import "navigation";
 @import "editor";

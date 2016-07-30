@@ -10,8 +10,10 @@
     </div>
 
     <div class="yada-editor">
-      <textarea id="editorText" ng-model="editorText" name="editor" placeholder="yada yada..."></textarea>
+      <textarea class="editor-text" ng-trim="false" ng-model="editorText" rows="4" cols="50"  maxlength="256" data-ng-minLength="1" required highlight-on-
+    error placeholder="yada yada..."></textarea>
       <button class="post-button" ng-click="postIt()" type="button" name="button">post</button>
+      <span class="char-count">Characters: {{256-editorText.length}}</span>
     </div>
 
 </section>
