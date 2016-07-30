@@ -176,9 +176,33 @@ module.exports = function(ext) {
       controller: 'EditorExtController'
     });
   }]).run(['$rootScope', '$location', 'UserExtService', function ($rootScope, $location, UserExtService) {
+
+    //stores current url in rootScope
     $rootScope.extUrl = document.referrer;
 
+    //defines entrance animation slide()
+    var mainBox = document.getElementById('mainBox');
+    var slide = function slide() {
+      TweenMax.from(mainBox, 0.7, { left: '150%', autoAlpha: 0 });
+    };
+
+    //default variables to send message to chrome ext (nothing current happening)
+    var chromeId = "oceicbhfpbbeomhchbhoklfhnigpolle";
+    var message = { greeting: "hello from angular land" };
+    chrome.runtime.sendMessage(chromeId, message);
+
+    // sends a request to server to check session info
+    // records session info to persist between refreshes
     UserExtService.checkLogStatus();
+
+    slide();
+
+    // callback and listener for enableBrowserAction()
+    // pretty much just used for animation at this point.
+    var fromExt = function fromExt(msg, sender) {
+      slide();
+    };
+    chrome.runtime.onMessage.addListener(fromExt);
   }]);
 
   // Services
@@ -308,7 +332,8 @@ module.exports = function(ext) {
         content: "You should write a Yada for this article.",
         user: {
           username: "Noone, but it could be you!"
-        }
+        },
+        karma: 0
      }];
 
       return {
