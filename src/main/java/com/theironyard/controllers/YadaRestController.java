@@ -29,6 +29,16 @@ import java.util.*;
  * Created by will on 7/18/16.
  */
 
+/**
+       Master Yada
+           .--.
+ ::\`--._,'.::.`._.--'/::::
+ ::::.  ` __::__ '  .::::::
+ ::::::-:.`'..`'.:-::::::::
+ ::::::::\ `--' /::::::::::
+
+ */
+
 @RestController
 public class YadaRestController {
 
