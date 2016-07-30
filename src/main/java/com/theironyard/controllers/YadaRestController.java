@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -32,9 +31,15 @@ import java.util.*;
 @RestController
 public class YadaRestController {
 
+    /**
+     * Instantiate variables for the HOT sorting algorithm
+     */
     static final double GRAVITY = 1.8;
     static final int SECONDS_IN_TWO_HOURS = 7200;
 
+    /**
+     * Link up repositories to our controller.
+     */
     @Autowired
     UserRepository users;
 
@@ -47,12 +52,30 @@ public class YadaRestController {
     @Autowired
     LinkRepository links;
 
-    // start h2 database
+    /**
+     * Start H2 database web server connection.
+     * Considering deploying with PostgreSQL for the purpose of running stored procedures,
+     * but this is unnecessary in the current state.
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     @PostConstruct
     public void init() throws SQLException, IOException {
         Server.createWebServer().start();
     }
 
+    /**
+     * Route for logging in. Doubles as a registration form.
+     * Would like to refactor and have a separate route for registering an account.
+     * Uses hashing to securely store the password.
+     * More info on password hashing in Java:  https://github.com/defuse/password-hashing
+     *
+     * @param user
+     * @param session
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity login(@RequestBody User user, HttpSession session) throws Exception {
         User userFromDatabase = users.findFirstByUsername(user.getUsername());
@@ -71,6 +94,12 @@ public class YadaRestController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    /**
+     * Logout route: invalidates session to log user out.
+     *
+     * @param session
+     * @return
+     */
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public ResponseEntity<String> logout(HttpSession session) {
 
@@ -80,7 +109,13 @@ public class YadaRestController {
 
     }
 
-    // route which returns a sorted(by highest score) list of all yadaLists(based on url)
+    /**
+     * Route for returning a list of all yada lists for a given URL.
+     * Queries links table and returns links by their "linkscore."
+     * Linkscore is a field in the link entity which is calculated through the generateLinkScore method.
+     *
+     * @return
+     */
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<Link>> getYadaList() {
 
@@ -89,19 +124,37 @@ public class YadaRestController {
 
         return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
     }
-    // this sorts
+
+    /**
+     * Route which finds links solely on overall Karma.
+     * A link's karma can be found by subtracting downvotes from upvotes.
+     *
+     * @return
+     */
     @RequestMapping(path = "/topLinks", method = RequestMethod.GET)
     public ArrayList<Link> getTopLinks() {
 
         return links.findTop10ByOrderByKarmaDesc();
     }
+
+    /**
+     * Route which finds the newest links based on their time of creation.
+     *
+     * @return
+     */
     @RequestMapping(path = "/newLinks", method = RequestMethod.GET)
     public ArrayList<Link> getNewYadas() {
 
         return links.findTop10ByOrderByTimeOfCreationDesc();
     }
 
-    // find controversial yadas inside chrome extension for the article you're on
+    /**
+     * Route which returns a list of controversial links.
+     * Links are determined to be controversial based on their controveryScore.
+     * The controveryScore field is calculated by the generateControversyScore method.
+     *
+     * @return
+     */
     @RequestMapping(path = "/controversialLinks", method = RequestMethod.GET)
     public ArrayList<Link> getControversialYadas() {
 
@@ -110,6 +163,13 @@ public class YadaRestController {
 
         return links.findAllByOrderByControversyScoreDesc();
     }
+
+    /**
+     * Incomplete route to find yadas from a given user.
+     *
+     * @param searchInput
+     * @return
+     */
 //    //hit this route to find top users yadas
 //    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
 //    public HashMap<User, ArrayList<Yada>> getTopUsersYadas() {
@@ -136,7 +196,16 @@ public class YadaRestController {
 ////        return listOfListsOfTopUsersYadas;
 //    }
 
-    //hit this route when searching through content of yadas
+
+    /**
+     * Route which allows users to search for yadas from a search bar based on the content of the yada.
+     * Returns any yada which has the exact string the user enters.
+     * The content field is the user-generated blurb for a given article which is displayed and voted on.
+     * If the user enters no text, currently all yadas are displayed. TODO: Address this.
+     *
+     * @param searchInput
+     * @return
+     */
     @RequestMapping(path = "/searchYadas", method = RequestMethod.GET)
     public ResponseEntity getSearchResults(@RequestParam (value = "searchInput", required = false) String searchInput) {
 
@@ -159,7 +228,15 @@ public class YadaRestController {
         }
         return new ResponseEntity<Iterable<Link>>(linksThatMatchSearchResults, HttpStatus.OK);
     }
-    //hit this route to search by title
+
+    /**
+     * Route which allows users to find links by the title of the article. TODO: implementation
+     * The title of the article is generated when using the Jsoup library to scrape the text from a webpage.
+     * More info/documentation on Jsoup: https://jsoup.org/
+     *
+     * @param searchInput
+     * @return
+     */
     @RequestMapping(path = "/searchTitles", method = RequestMethod.GET)
     public ResponseEntity getSearchResultsOfTitles(@RequestParam (value = "searchInput", required = false) String searchInput) {
         Iterable<Link> linksThatMatchSearchInput = new ArrayList<>();
@@ -173,7 +250,24 @@ public class YadaRestController {
     }
 
 
-    //hit this route so users can upVote yadas
+
+    /**
+     * Route which allows users to upvote yadas.
+     * Operates by an established connection (join) between yadas and users in the YadaUserJoin table.
+     * Upon creation of a yada through the /addYadas POST route, this connection is established for the author.
+     *
+     * Users may upvote, rescind their upvote, or change their vote to an upvote from a downvote.
+     * This action alters the karma at all three levels: link, yada, and user (author of the yada).
+     *
+     * Requires being logged in.
+     *
+     * Might want to refactor this in order to clean this route up and stick the code in its own method.
+     *
+     * @param session
+     * @param yada
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(path = "/upVote", method = RequestMethod.POST)
     public ResponseEntity upVote(HttpSession session, @RequestBody Yada yada) throws Exception {
 
@@ -290,7 +384,23 @@ public class YadaRestController {
 
     }
 
-    //hit this route so users can downvote yadas
+    /**
+     * Route which allows users to downvote yadas.
+     * Operates by an established connection (join) between yadas and users in the YadaUserJoin table.
+     * Upon creation of a yada through the /addYadas POST route, this connection is established for the author.
+     *
+     * Users may downvote, rescind their downvote, or change their vote to a downvote from an upvote.
+     * This action alters the karma at all three levels: link, yada, and user (author of the yada).
+     *
+     * Requires being logged in.
+     *
+     * Might want to refactor this in order to clean this route up and stick the code in its own method.
+     *
+     *
+     * @param session
+     * @param yada
+     * @return
+     */
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public ResponseEntity downVote(HttpSession session, @RequestBody Yada yada) {
 
@@ -410,17 +520,33 @@ public class YadaRestController {
 
     }
 
-    //route which brings user to the editing screen with scraped website text and submission box
+    /**
+     * This route invokes the soupThatSite method which scrapes a website for its title and main body text.
+     * This scraped text is displayed inside the Chrome extension as a convenience to the yada author.
+     * The soupThatSite method is made possible through Jsoup. More info on jsoup here: https://jsoup.org/
+     *
+     * @param url
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<String>> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
 
-        //using jsoup method to grab website text
         ArrayList<String> scrapedSite = soupThatSite(url);
 
         return new ResponseEntity<>(scrapedSite, HttpStatus.OK);
     }
 
-    //hit this route to display yadas for a given webpage from the chrome extension
+    /**
+     * Route which displays yadas for a given webpage while using the Chrome Extension.
+     * Takes in url and finds the top yadas for a given link.
+     *
+     * Requires being logged in.
+     *
+     * @param session
+     * @param url
+     * @return
+     */
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
     public ResponseEntity showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
         String username = (String) session.getAttribute("username");
@@ -441,6 +567,14 @@ public class YadaRestController {
 
         return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
     }
+
+    /**
+     * Route to check if the user is logged in.
+     * Required to persist log in from one tab to the next.
+     *
+     * @param session
+     * @return
+     */
     @RequestMapping(path = "/logStatus", method = RequestMethod.GET)
     public ResponseEntity checkIfUserIsLoggedIn(HttpSession session) {
         String username = (String) session.getAttribute("username");
@@ -456,6 +590,22 @@ public class YadaRestController {
 
     }
 
+    /**
+     * This route enables users to add yadas for an article through the chrome extension.
+     * Populates the link table with a new record if there is no record yet, then creates a yada.
+     * Inserts some starting/default values for each record, and adjusts the author's karma and sets his vote status for that yada.
+     * Creates the YadaUserJoin connection.
+     *
+     * Uses a wrapper object called YadaLink to get two objects in the request body.
+     *
+     * Requires being logged in.
+     *
+     *
+     * @param session
+     * @param yl
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
     public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
@@ -496,7 +646,24 @@ public class YadaRestController {
         return new ResponseEntity<>(updatedYadaList, HttpStatus.OK);
     }
 
-    // sorting algorithm - HOT (time/votes)
+
+    /**
+     * This method defines the algorithm which generates linkscore for each record in the link table.
+     * This value is calculated and updated only upon hitting the front page's GET route.
+     * This might be moved to operate as a stored procedure if we switch to running PostgreSQL instead of H2.
+     *
+     * The sorting algoritm equation is as follows:
+     *  Link score = (link karma - number of yadas) / ((time elapsed since creation + constant of 2 hrs) raised to a constant of 1.8 (Gravity)).
+     *
+     * The design of this algorithm was inspired from reddit's and Hacker News's sorting algorithms.
+     *
+     * More info on reddit's sorting algorithms: https://medium.com/hacking-and-gonzo/how-reddit-ranking-algorithms-work-ef111e33d0d9#.ndo001s22
+     * More info on Hacker News's sorting algorithm: https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d#.i0p8oh1pk
+     *
+     *
+     * @param linkList
+     * @return
+     */
     public List<Link> generateLinkScore(ArrayList<Link> linkList) {
 
         for (Link link : linkList) {
@@ -512,8 +679,22 @@ public class YadaRestController {
         return linkList;
     }
 
-
-    // sorting algorithm - CONTROVERSIAL
+    /**
+     * This method generates the controversyScore field for each link.
+     *
+     * This method runs when users hit the controversy score sorting option and calculates the score and then sorts links.
+     *
+     * The algorithm is as follows:
+     * Controversy Score = (link's total votes) / (higher value of absolute value of (upvotes - downvotes) compared to 1)
+     *
+     * Inspired by reddit's controversial sorting algorithm.
+     *
+     * More info on reddit's controversial algorithm: https://medium.com/hacking-and-gonzo/how-reddit-ranking-algorithms-work-ef111e33d0d9#.m7sca64af
+     *
+     *
+     * @param linkList
+     * @return
+     */
     public List<Link> generateControveryScore(ArrayList<Link> linkList) {
 
         for (Link link : linkList) {
@@ -525,7 +706,22 @@ public class YadaRestController {
         return linkList;
     }
 
-    //this method takes in a url, scrapes the associated site, and returns the scraped content as an arrayList of String
+    /**
+     * This method uses the Jsoup library which scrapes the web for text.
+     * It seems as if most websites are safe to scrape by looking for their H1 element and their paragraph elements.
+     * e.g.: CNN's website is slightly different, and we have accounted for it below.
+     *
+     * Jsoup also prevents against XSS (cross site scripting), and we have employed that functionality in this method.
+     *
+     * Might have to account for other websites in the future if scraping is not done properly.
+     * Could implement a way for users to notify us of a site which is not scraping properly.
+     *
+     * More info on Jsoup here: https://jsoup.org
+     *
+     * @param url
+     * @return
+     * @throws IOException
+     */
     public ArrayList<String> soupThatSite(String url) throws IOException {
 
         ArrayList<String> parsedDoc = new ArrayList<>();
