@@ -14,14 +14,10 @@ public class User {
     int id;
 
     @Column
-    String nickname;
+    String username;
 
-    @Column(nullable = false)
-    String name;
-
-    @Column(nullable = false)
-    String email;
-
+    @Column
+    String password;
 
     @Column
     int karma;
@@ -32,11 +28,31 @@ public class User {
     public User() {
     }
 
-    public User(String nickname, String name, String email, int karma) {
-        this.nickname = nickname;
-        this.name = name;
-        this.email = email;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, String password, int karma) {
+        this.username = username;
+        this.password = password;
         this.karma = karma;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getId() {
@@ -45,30 +61,6 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public int getKarma() {
