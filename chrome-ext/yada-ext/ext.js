@@ -185,6 +185,8 @@ module.exports = function(ext) {
     var slide = function slide() {
       TweenMax.from(mainBox, 0.7, { left: '150%', autoAlpha: 0 });
     };
+    // defines animation wrapper element for the main-container
+    Draggable.create("#mainBox", { type: "x,y", throwProps: "true", edgeResistance: 0.35 });
 
     //default variables to send message to chrome ext (nothing current happening)
     var chromeId = "oceicbhfpbbeomhchbhoklfhnigpolle";
@@ -245,7 +247,9 @@ module.exports = function(ext) {
             url: 'http://localhost:8080/login',
             method: 'POST',
             data: user
-          }).then(function() {
+          }).then(function(response) {
+            console.log("user obj login", response.data);
+            user = response.data;
             angular.copy(user, userObj);
             let log = {status: true};
             angular.copy(log, logStatus);
@@ -253,13 +257,13 @@ module.exports = function(ext) {
             $location.path('/');
           })
         },
-        
+
         checkLogStatus() {
           $http({
             url: 'http://localhost:8080/logStatus',
             method: 'GET'
           }).then(function(response) {
-            console.log("user check", response.data);
+            console.log("user obj check status", response.data);
 
             let user = response.data
             angular.copy(user, userObj);
@@ -392,8 +396,7 @@ module.exports = function(ext) {
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log("up vote update", response.data);
-              console.log("filter url", $rootScope.extUrl);
+              
               let link = response.data.filter(function(link){
                   return link.url === $rootScope.extUrl;
               });

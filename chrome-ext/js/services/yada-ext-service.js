@@ -73,8 +73,7 @@ module.exports = function(ext) {
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log("up vote update", response.data);
-              console.log("filter url", $rootScope.extUrl);
+              
               let link = response.data.filter(function(link){
                   return link.url === $rootScope.extUrl;
               });

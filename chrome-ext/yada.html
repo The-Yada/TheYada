@@ -23,6 +23,8 @@
     <script src="js/angular-jwt.min.js"></script>
     <!-- GSAP animation library-->
     <script src="js/TweenMax.min.js"></script>
+    <!-- GSAP draggable library-->
+    <script src="js/Draggable.min.js"></script>
 
     <!-- LINKS -->
     <link rel="stylesheet" href="css/styles.css" media="screen" title="no title" charset="utf-8">
@@ -43,15 +45,15 @@
       <nav id="navBox" class="bottom-nav" ng-controller="NavExtController">
         <ul>
           <li><a href="#/">home</a></li>
-          <li>
-            <a ng-show="logStatus.status" href="#/editor">editor</a>
+          <li ng-show="logStatus.status">
+            <a href="#/editor">editor</a>
            </li>
           <li id='log'>
               <a ng-show="!logStatus.status" href="#/log-in">Login</a>
               <a ng-click="logout()" ng-show="logStatus.status" href="#/">Logout</a>
             </li>
           <li><a ng-click="toWebsite()" href="#">The Yada Website</a></li>
-          <li ng-show="logStatus.status">welcome, {{user.username}}</li>
+          <span ng-show="logStatus.status">welcome, {{user.username}}</span>
         </ul>
       </nav>
 

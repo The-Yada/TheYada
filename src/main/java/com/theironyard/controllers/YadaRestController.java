@@ -554,10 +554,6 @@ public class YadaRestController {
 
         Link link = links.findFirstByUrl(url);
 
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
         Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
 
         if ((yadasByKarma == null)) {

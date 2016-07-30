@@ -4,6 +4,7 @@
   width: 100%;
   border-top: 5px solid black;
   background-color: white;
+
   ul {
     padding: 0;
     margin: 0 auto;
@@ -12,9 +13,29 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    flex-wrap: wrap;
   }
+
   li {
     margin: 5px;
     font-size: 1.2em;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    &:hover {
+      background-color: rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    &:active {
+      color: black;
+      font-weight: bold;
+    }
+    &:visited {
+      color: black;
+    }
   }
 }

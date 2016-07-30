@@ -22,7 +22,9 @@ module.exports = function(ext) {
             url: 'http://localhost:8080/login',
             method: 'POST',
             data: user
-          }).then(function() {
+          }).then(function(response) {
+            console.log("user obj login", response.data);
+            user = response.data;
             angular.copy(user, userObj);
             let log = {status: true};
             angular.copy(log, logStatus);
@@ -30,13 +32,13 @@ module.exports = function(ext) {
             $location.path('/');
           })
         },
-        
+
         checkLogStatus() {
           $http({
             url: 'http://localhost:8080/logStatus',
             method: 'GET'
           }).then(function(response) {
-            console.log("user check", response.data);
+            console.log("user obj check status", response.data);
 
             let user = response.data
             angular.copy(user, userObj);
