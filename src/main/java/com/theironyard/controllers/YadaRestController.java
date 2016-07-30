@@ -28,6 +28,18 @@ import java.util.*;
  * Created by will on 7/18/16.
  */
 
+/**
+       Master Yada
+           .--.
+ ::\`--._,'.::.`._.--'/::::
+ ::::.  ` __::__ '  .::::::
+ ::::::-:.`'..`'.:-::::::::
+ ::::::::\ `--' /::::::::::
+
+ A long time ago in a galaxy far far away...Yada Yada Yada...He turned out to be his father
+
+ */
+
 @RestController
 public class YadaRestController {
 
@@ -279,7 +291,7 @@ public class YadaRestController {
         if (username != null) {
 
             if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
-                YadaUserJoin yuj = new YadaUserJoin(user, yada);
+                YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId());
 
                 if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
@@ -412,7 +424,7 @@ public class YadaRestController {
             if (username != null) {
 
                 if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
-                    YadaUserJoin yuj = new YadaUserJoin(user, yada);
+                    YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId());
 
                     if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
@@ -626,7 +638,7 @@ public class YadaRestController {
         User user = users.findFirstByUsername(username);
         Yada yada = new Yada(yl.getYada().getContent(), 1, LocalDateTime.now(), 0, 1, 0, user, link);
         yadas.save(yada);
-        YadaUserJoin yuj = new YadaUserJoin(user, yada, true, false);
+        YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId(), true, false);
 
         user.setKarma(user.getKarma() + 1);
         users.save(user);

@@ -23,6 +23,9 @@ public class YadaUserJoin {
     @ManyToOne
     Yada yada;
 
+    @Column
+    int theYadaId;
+
     @Column(nullable = false)
     boolean upvoted = false;
 
@@ -40,9 +43,16 @@ public class YadaUserJoin {
 //    }
 
 
-    public YadaUserJoin(User user, Yada yada, boolean upvoted, boolean downvoted) {
+    public YadaUserJoin(User user, Yada yada, int theYadaId) {
         this.user = user;
         this.yada = yada;
+        this.theYadaId = theYadaId;
+    }
+
+    public YadaUserJoin(User user, Yada yada, int theYadaId, boolean upvoted, boolean downvoted) {
+        this.user = user;
+        this.yada = yada;
+        this.theYadaId = theYadaId;
         this.upvoted = upvoted;
         this.downvoted = downvoted;
     }
