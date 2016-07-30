@@ -7,6 +7,7 @@ import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
 import com.theironyard.utils.PasswordStorage;
 import org.h2.tools.Server;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -52,7 +53,7 @@ public class YadaRestController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<User> login(@RequestBody User user, HttpSession session) throws Exception {
+    public ResponseEntity login(@RequestBody User user, HttpSession session) throws Exception {
         User userFromDatabase = users.findFirstByUsername(user.getUsername());
 
         if (userFromDatabase == null) {
@@ -61,10 +62,11 @@ public class YadaRestController {
             users.save(user);
         }
         else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDatabase.getPassword())) {
-            throw new Exception("BAD PASS");
+            return new ResponseEntity<>("BAD PASS", HttpStatus.FORBIDDEN);
         }
 
         session.setAttribute("username", user.getUsername());
+
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -73,7 +75,7 @@ public class YadaRestController {
 
         session.invalidate();
 
-        return new ResponseEntity<>("Please Come Again Soon", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -86,6 +88,7 @@ public class YadaRestController {
 
         return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
     }
+    // this sorts
     @RequestMapping(path = "/topLinks", method = RequestMethod.GET)
     public ArrayList<Link> getTopLinks() {
 
@@ -106,6 +109,31 @@ public class YadaRestController {
 
         return links.findAllByOrderByControversyScoreDesc();
     }
+//    //hit this route to find top users yadas
+//    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
+//    public HashMap<User, ArrayList<Yada>> getTopUsersYadas() {
+//        HashMap<User, ArrayList<Yada>> topUsersYadasMap = new HashMap<>();
+//
+//        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
+//
+//        for (User user : topUsers) {
+//
+//            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
+//            topUsersYadasMap.put(user, topUsersYadas);
+//        }
+//        return topUsersYadasMap;
+//
+//
+////        ArrayList<ArrayList<Yada>> listOfListsOfTopUsersYadas = new ArrayList<>();
+////
+////        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
+////
+////        for (User u : topUsers) {
+////             ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(u.getId());
+////            listOfListsOfTopUsersYadas.add(topUsersYadas);
+////        }
+////        return listOfListsOfTopUsersYadas;
+//    }
 
     //hit this route when searching through content of yadas
     @RequestMapping(path = "/searchYadas", method = RequestMethod.GET)
@@ -265,8 +293,8 @@ public class YadaRestController {
     @RequestMapping(path = "/downVote", method = RequestMethod.POST)
     public ResponseEntity downVote(HttpSession session, @RequestBody Yada yada) {
 
-            String username = (String) session.getAttribute("username");
-            User user = users.findFirstByUsername(username);
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
 
             Yada yadaToDownVote = yadas.findOne(yada.getId());
 
@@ -394,9 +422,12 @@ public class YadaRestController {
     //hit this route to display yadas for a given webpage from the chrome extension
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
     public ResponseEntity showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
 
         Link link = links.findFirstByUrl(url);
-        if (link == null) {
+
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -404,17 +435,33 @@ public class YadaRestController {
 
         if ((yadasByKarma == null)) {
 
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
+    }
+    @RequestMapping(path = "/logStatus", method = RequestMethod.GET)
+    public ResponseEntity checkIfUserIsLoggedIn(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
+
+        if (user == null) {
+            return new ResponseEntity<>("not logged in", HttpStatus.BAD_REQUEST);
+        }
+
+        else {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+
     }
 
     @RequestMapping(path = "/addYada", method = RequestMethod.POST)
     public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
         String username = (String) session.getAttribute("username");
-        if (username == null) {
+
+            if (username == null) {
+
             return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
         }
 

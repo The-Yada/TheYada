@@ -3,6 +3,7 @@
 *
 ********************************/
 
+
 module.exports = function(ext) {
 
   ext.controller('NavExtController', ['$scope', '$rootScope','UserExtService', function($scope, $rootScope, UserExtService){
@@ -11,6 +12,7 @@ module.exports = function(ext) {
     /*******************************
     * menu collapse
     *********************************/
+    $scope.user = UserExtService.getUser();
     $scope.logStatus = UserExtService.getLogStatus();
     $scope.isCollapsed = false;
 

@@ -13,10 +13,10 @@ public class User {
     @GeneratedValue
     int id;
 
-    @Column(nullable = false)
+    @Column
     String username;
 
-    @Column(nullable = false)
+    @Column
     String password;
 
     @Column
@@ -26,6 +26,25 @@ public class User {
     public List<YadaUserJoin> yadaUserJoinList;
 
     public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, String password, int karma) {
+        this.username = username;
+        this.password = password;
+        this.karma = karma;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -44,14 +63,6 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public int getKarma() {
         return karma;
     }
@@ -59,31 +70,11 @@ public class User {
     public void setKarma(int karma) {
         this.karma = karma;
     }
-
-    public User(String username, int karma) {
-
-        this.username = username;
-        this.karma = karma;
-    }
-
     public List<YadaUserJoin> getYadaUserJoinList() {
         return yadaUserJoinList;
     }
 
     public void setYadaUserJoinList(List<YadaUserJoin> yadaUserJoinList) {
         this.yadaUserJoinList = yadaUserJoinList;
-    }
-
-    public User(int id, String username, int karma) {
-
-        this.id = id;
-        this.username = username;
-        this.karma = karma;
-    }
-
-    public User(String username, String password, int karma) {
-        this.username = username;
-        this.password = password;
-        this.karma = karma;
     }
 }

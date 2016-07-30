@@ -6,11 +6,26 @@
 <html ng-app="YadaExtension">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Yada</title>
 
+
     <!-- SCRIPTS -->
+    <!-- Auth0 JavaScript library -->
+    <script src="js/auth0-7.0.3.min.js"></script>
+    <!-- AngularJS core -->
     <script src="js/angular.min.js"></script>
+    <!-- Angular cookie wrapper library for client cookies -->
+    <script src="js/angular-cookies.min.js"></script>
+    <!-- Angular's Router Library for SPA -->
     <script src="js/angular-route.min.js"></script>
+    <!-- Auth0's Angular SDK Library -->
+    <script src="js/auth0-angular.min.js"></script>
+    <!-- Angular wrapper for localStorage and sessionStorage. Defaults to ng-cookies if not available -->
+    <script src="js/angular.storage.min.js"></script>
+    <!-- Angular wrapper library for JWT-->
+    <script src="js/angular-jwt.min.js"></script>
+    <!-- GSAP animation library-->
     <script src="js/TweenMax.min.js"></script>
 
     <!-- LINKS -->
@@ -41,6 +56,7 @@
               <a ng-click="logout()" ng-show="logStatus.status" href="#/">Logout</a>
             </li>
           <li><a ng-click="toWebsite()" href="#">The Yada Website</a></li>
+          <li>welcome {{user.username}}</li>
         </ul>
       </nav>
 

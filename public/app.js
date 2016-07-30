@@ -84,28 +84,21 @@ module.exports = function(app) {
 
 module.exports = function(app) {
 
-  app.controller('LoginController', ['$scope', 'UserService', function($scope, UserService){
-    $scope.username = '';
+  app.controller('LoginController', ['$scope', '$location','UserService', function($scope, $location, UserService){
+
     $scope.userObj = UserService.getUser();
+
 
     /*******************************
     * login
-    * TODO: keep track of login state
     ********************************/
-      $scope.login = function() {
-        //start session
-        //block user input *ADD* condition if user has been created
-        console.log($scope.username);
-        if ($scope.username === '' || $scope.password === '') {
-          console.log("enter your shit right", $scope.username);
-          return
-        } else {
-            UserService.setUser({username: $scope.username, password: $scope.password});
-            $scope.username = '';
-            $scope.password = '';
+    $scope.login = function () {
+      UserService.setUser({
+        username: $scope.username,
+        password: $scope.password,
+      })
+    }
 
-        }
-      }
 
     /*******************************
     * logout
@@ -129,18 +122,11 @@ module.exports = function(app) {
 
 module.exports = function(app) {
 
-  app.controller('NavController', ['$scope', '$location', 'YadaService', 'UserService', function($scope, $location, YadaService, UserService){
+  app.controller('NavController', ['$scope','$location', 'YadaService', 'UserService', function($scope, $location, YadaService, UserService){
 
-    /*******************************
-    * menu collapse
-    *********************************/
+    $scope.user = UserService.getUser();
     $scope.logStatus = UserService.getLogStatus();
 
-    // display user name on home page vvvvvv
-          // $scope.user = UserService.getUser();
-
-    // collpasable menu vvvvvvv
-          // $scope.isCollapsed = false;
 
     /*******************************
     * get yadas from server for home page
@@ -165,7 +151,7 @@ module.exports = function(app) {
 (function () {
   "use strict";
 
-  var app = angular.module('YadaWebApp', ['ngRoute'])
+  var app = angular.module('YadaWebApp', ['ngRoute', 'angular-storage', 'angular-jwt'])
 
   /*******************************
   * ROUTER
@@ -193,7 +179,10 @@ module.exports = function(app) {
   * run function when app is initiated
   * could be used to check for cookies or user log status
   *********************************/
-  .run(function () {});
+  .run(['$rootScope', '$location', 'UserService', function ($rootScope, $location, UserService) {
+
+    UserService.checkLogStatus();
+  }]);
 
   /*******************************
   * file tree of requirements
@@ -274,13 +263,28 @@ module.exports = function(app) {
           })
         },
 
+        checkLogStatus() {
+          $http({
+            url: 'http://localhost:8080/logStatus',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("user check", response.data);
+
+            let user = response.data
+            angular.copy(user, userObj);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+
 
         /*******************************
         * return log status
         ********************************/
         getLogStatus() {
-
-          return logStatus;
+            return logStatus;
         },
 
         /*******************************
@@ -297,13 +301,11 @@ module.exports = function(app) {
         ********************************/
         clearSession() {
           $http({
-            url: '/logout',
+            url: 'http://localhost:8080/logout',
             method: 'POST',
-            data: {
-              user: userObj,
-            }
-          }).then(function() {
-
+          })
+          .then(function(response) {
+            console.log("and then", response);
             user = {};
             let log = {status: false};
 

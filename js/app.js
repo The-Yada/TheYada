@@ -8,7 +8,7 @@
 (function() {
 "use strict"
 
-let app = angular.module('YadaWebApp', ['ngRoute'])
+let app = angular.module('YadaWebApp', ['ngRoute', 'angular-storage', 'angular-jwt'])
 
 
 
@@ -47,14 +47,17 @@ let app = angular.module('YadaWebApp', ['ngRoute'])
         redirectTo: '/404',
       })
 
+
   }])
   /*******************************
   * run function when app is initiated
   * could be used to check for cookies or user log status
   *********************************/
-  .run(function() {
+  .run(['$rootScope', '$location', 'UserService', function($rootScope, $location, UserService) {
 
-  })
+      UserService.checkLogStatus();
+
+  }])
 
   /*******************************
   * file tree of requirements

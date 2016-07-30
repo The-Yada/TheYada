@@ -31,13 +31,28 @@ module.exports = function(app) {
           })
         },
 
+        checkLogStatus() {
+          $http({
+            url: 'http://localhost:8080/logStatus',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("user check", response.data);
+
+            let user = response.data
+            angular.copy(user, userObj);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+          })
+        },
+
 
         /*******************************
         * return log status
         ********************************/
         getLogStatus() {
-
-          return logStatus;
+            return logStatus;
         },
 
         /*******************************
@@ -54,13 +69,11 @@ module.exports = function(app) {
         ********************************/
         clearSession() {
           $http({
-            url: '/logout',
+            url: 'http://localhost:8080/logout',
             method: 'POST',
-            data: {
-              user: userObj,
-            }
-          }).then(function() {
-
+          })
+          .then(function(response) {
+            console.log("and then", response);
             user = {};
             let log = {status: false};
 
