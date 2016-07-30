@@ -291,7 +291,7 @@ public class YadaRestController {
         if (username != null) {
 
             if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
-                YadaUserJoin yuj = new YadaUserJoin(user, yada);
+                YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId());
 
                 if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
@@ -424,7 +424,7 @@ public class YadaRestController {
             if (username != null) {
 
                 if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
-                    YadaUserJoin yuj = new YadaUserJoin(user, yada);
+                    YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId());
 
                     if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
@@ -638,7 +638,7 @@ public class YadaRestController {
         User user = users.findFirstByUsername(username);
         Yada yada = new Yada(yl.getYada().getContent(), 1, LocalDateTime.now(), 0, 1, 0, user, link);
         yadas.save(yada);
-        YadaUserJoin yuj = new YadaUserJoin(user, yada, true, false);
+        YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId(), true, false);
 
         user.setKarma(user.getKarma() + 1);
         users.save(user);
