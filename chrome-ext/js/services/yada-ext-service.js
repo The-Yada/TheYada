@@ -13,7 +13,8 @@ module.exports = function(ext) {
         content: "You should write a Yada for this article.",
         user: {
           username: "Noone, but it could be you!"
-        }
+        },
+        karma: 0
      }];
 
       return {
