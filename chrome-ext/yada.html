@@ -34,7 +34,7 @@
   <body>
 
     <!-- MAIN -->
-    <section class="main-container">
+    <section id="mainBox" class="main-container">
 
       <!-- ANGULAR VIEWS -->
       <main class="main-view" ng-view>
@@ -44,11 +44,10 @@
       </main>
 
       <!-- NAVIGATION -->
-      <nav class="bottom-nav" ng-controller="NavExtController">
+      <nav id="navBox" class="bottom-nav" ng-controller="NavExtController">
         <ul>
           <li><a href="#/">home</a></li>
           <li>
-            <a ng-show="!logStatus.status" href="#/log-in">login to create your own Yada</a>
             <a ng-show="logStatus.status" href="#/editor">editor</a>
            </li>
           <li id='log'>
@@ -56,7 +55,7 @@
               <a ng-click="logout()" ng-show="logStatus.status" href="#/">Logout</a>
             </li>
           <li><a ng-click="toWebsite()" href="#">The Yada Website</a></li>
-          <li>welcome {{user.username}}</li>
+          <li ng-show="logStatus.status">welcome {{user.username}}</li>
         </ul>
       </nav>
 

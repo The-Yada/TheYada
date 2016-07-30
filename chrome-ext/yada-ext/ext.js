@@ -179,6 +179,9 @@ module.exports = function(ext) {
     $rootScope.extUrl = document.referrer;
 
     UserExtService.checkLogStatus();
+
+    var mainBox = document.getElementById('mainBox');
+    TweenMax.from(mainBox, 0.7, { left: '150%', autoAlpha: 0 });
   }]);
 
   // Services

@@ -35,6 +35,9 @@
 
       UserExtService.checkLogStatus();
 
+      let mainBox = document.getElementById('mainBox');
+      TweenMax.from(mainBox, 0.7, {left: '150%', autoAlpha: 0})
+
     }])
 
 
