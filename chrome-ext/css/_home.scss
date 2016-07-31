@@ -1,0 +1,38 @@
+.content-text {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  transition: all 0.5s ease;
+  h2 {
+    margin: 20px;
+    font-size: 2.4vw;
+  }
+  img {
+    height: 20px;
+  }
+  button {
+    background: transparent;
+    border: none;
+  }
+  .right-button img {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+  }
+}
+
+.author-yadaText {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  span {
+    font-size: 1.5em;
+  }
+}
+
+.karma-box {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  margin: 30px auto;
+}

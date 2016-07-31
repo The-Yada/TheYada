@@ -16,8 +16,13 @@ module.exports = function(ext) {
     * post a yada
     ********************************/
     $scope.postIt = function () {
-      YadaExtService.sendYada($rootScope.extUrl, $scope.editorText, function() {
-        $scope.editorText = '';
+      YadaExtService.sendYada($rootScope.extUrl, $scope.editorText, function(response) {
+        if (response === "success") {
+          $scope.editorText = '';
+        } else {
+          $scope.editorText = 'sorry you have already written a yada for this article';
+        }
+
         $location.path('/');
       });
     };
@@ -185,6 +190,8 @@ module.exports = function(ext) {
     var slide = function slide() {
       TweenMax.from(mainBox, 0.7, { left: '150%', autoAlpha: 0 });
     };
+    // defines animation wrapper element for the main-container
+    Draggable.create("#mainBox", { type: "x,y", throwProps: "true", edgeResistance: 0.35 });
 
     //default variables to send message to chrome ext (nothing current happening)
     var chromeId = "oceicbhfpbbeomhchbhoklfhnigpolle";
@@ -245,7 +252,9 @@ module.exports = function(ext) {
             url: 'http://localhost:8080/login',
             method: 'POST',
             data: user
-          }).then(function() {
+          }).then(function(response) {
+            console.log("user obj login", response.data);
+            user = response.data;
             angular.copy(user, userObj);
             let log = {status: true};
             angular.copy(log, logStatus);
@@ -253,13 +262,13 @@ module.exports = function(ext) {
             $location.path('/');
           })
         },
-        
+
         checkLogStatus() {
           $http({
             url: 'http://localhost:8080/logStatus',
             method: 'GET'
           }).then(function(response) {
-            console.log("user check", response.data);
+            console.log("user obj check status", response.data);
 
             let user = response.data
             angular.copy(user, userObj);
@@ -388,19 +397,16 @@ module.exports = function(ext) {
         upKarma(yada, callback) {
 
             $http({
-              url: 'http://localhost:8080/upVote',
+              url: 'http://localhost:8080/upVoteExt',
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log("up vote update", response.data);
-              console.log("filter url", $rootScope.extUrl);
-              let link = response.data.filter(function(link){
-                  return link.url === $rootScope.extUrl;
-              });
-              console.log("after filter", link);
+              console.log(response.data);
 
-              angular.copy(link[0].yadaList, yadas);
-              // callback();
+              let link = response.data;
+
+              angular.copy(link.yadaList, yadas);
+
             }).then(callback)
         },
         /*******************************
@@ -409,19 +415,16 @@ module.exports = function(ext) {
         downKarma(yada, callback) {
 
           $http({
-            url: 'http://localhost:8080/downVote',
+            url: 'http://localhost:8080/downVoteExt',
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log("down vote update", response.data);
-            console.log("filter url", $rootScope.extUrl);
-            let link = response.data.filter(function(link){
-                return link.url === $rootScope.extUrl;
-            });
-            console.log("after filter", link);
+            console.log(response.data);
 
-            angular.copy(link[0].yadaList, yadas);
-            // callback();
+            let link = response.data;
+
+            angular.copy(link.yadaList, yadas);
+
           }).then(callback)
         },
         /*******************************
@@ -444,7 +447,13 @@ module.exports = function(ext) {
               yada: {content: `${yadaText}`},
               link: {url: `${extUrl}`}
             }
-          }).then(callback)
+          }).then(function success(response) {
+            console.log("success", response);
+            callback('success');
+          }, function error(response){
+            console.log("error", response);
+            callback('error');
+          });
 
         }
 
