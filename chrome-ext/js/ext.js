@@ -40,6 +40,8 @@
       let slide = function() {
         TweenMax.from(mainBox, 0.7, {left: '150%', autoAlpha: 0});
       }
+      // defines animation wrapper element for the main-container
+      Draggable.create("#mainBox", {type:"x,y", throwProps:"true", edgeResistance: 0.35});
 
       //default variables to send message to chrome ext (nothing current happening)
       let chromeId = "oceicbhfpbbeomhchbhoklfhnigpolle";
