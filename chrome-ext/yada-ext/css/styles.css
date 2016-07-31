@@ -1,32 +1,10 @@
-html {
-  background: transparent; }
-
-h2 {
-  font-size: 2em; }
-
-span {
-  font-size: .5em; }
-
-.login-box {
-  width: 100%;
-  height: 50px; }
-
-.main-container {
-  position: absolute;
-  left: 50%;
-  background-color: #85ECFF;
-  margin: 0 auto;
-  margin-left: -35%;
-  margin-top: 30vh;
-  width: 70%;
-  border-radius: 6px;
-  max-height: 60vh;
-  overflow: scroll;
-  box-shadow: 0px 3px 7px 5px rgba(0, 0, 0, 0.1); }
-
-.main-view {
-  padding: 10px; }
-
+/*******************************
+* Variables
+********************************/
+/* Main Primary color */
+/* Main Secondary color (1) */
+/* white */
+/* black */
 .content-text {
   display: inline-flex;
   flex-direction: row;
@@ -34,7 +12,8 @@ span {
   width: 100%;
   transition: all 0.5s ease; }
   .content-text h2 {
-    margin: 20px; }
+    margin: 20px;
+    font-size: 2.4vw; }
   .content-text img {
     height: 20px; }
   .content-text button {
@@ -43,6 +22,13 @@ span {
   .content-text .right-button img {
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1); }
+
+.author-yadaText {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 1.2em; }
+  .author-yadaText span {
+    font-size: 1.5em; }
 
 .karma-box {
   display: flex;
@@ -54,19 +40,51 @@ span {
   position: absolute;
   bottom: 0;
   width: 100%;
-  border-top: 5px solid black;
-  background-color: white; }
+  border-top: 5px solid #171126;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .bottom-nav .username-nav {
+    font-size: 1.5em;
+    padding-top: 2px;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: absolute;
+    bottom: 40px;
+    background: #171126;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    color: white;
+    width: 200px;
+    text-align: center; }
   .bottom-nav ul {
+    width: 100%;
     padding: 0;
-    margin: 0 auto;
+    margin: 0;
     list-style-type: none;
-    color: black;
+    color: #171126;
     display: flex;
     flex-direction: row;
-    justify-content: space-around; }
+    justify-content: space-between;
+    flex-wrap: wrap; }
   .bottom-nav li {
-    margin: 5px;
-    font-size: 1.2em; }
+    box-sizing: border-box;
+    width: 25%;
+    font-size: 1.2em;
+    padding: 10px; }
+    .bottom-nav li:hover {
+      border-left: 3px solid #171126;
+      background-color: rgba(0, 0, 0, 0.1);
+      font-weight: bold;
+      cursor: pointer; }
+  .bottom-nav a {
+    text-decoration: none; }
+    .bottom-nav a:active {
+      color: #171126;
+      font-weight: bold; }
+    .bottom-nav a:visited {
+      color: black; }
 
 .editor-wrapper {
   display: inline-flex;
@@ -78,7 +96,7 @@ span {
   .editor-wrapper .yada-scrape {
     width: 50%;
     height: 250px;
-    border-right: 3px solid black;
+    border-right: 3px solid #171126;
     overflow: scroll;
     position: relative; }
   .editor-wrapper .yada-editor {
@@ -99,3 +117,37 @@ span {
       margin: 0 auto;
       width: 100%;
       background-color: white; }
+
+* {
+  color: #171126; }
+
+html {
+  background: transparent; }
+
+h2 {
+  font-size: 2em; }
+
+span {
+  font-size: .5em; }
+
+.login-box {
+  width: 100%;
+  height: 50px; }
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: #99efff;
+  margin: 20vh auto;
+  width: 70%;
+  border-radius: 6px;
+  min-height: 40vh;
+  max-height: 65vh;
+  overflow: scroll;
+  box-shadow: 0px 3px 7px 5px rgba(0, 0, 0, 0.1); }
+
+.main-view {
+  padding: 10px;
+  margin-bottom: 40px;
+  overflow: hidden; }

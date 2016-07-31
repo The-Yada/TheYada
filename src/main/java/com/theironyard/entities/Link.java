@@ -81,7 +81,7 @@ public class Link {
         this.title = title;
     }
 
-    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int upVotes, int downVotes, double controversyScore, int numberOfYadas, long timeDiffInSeconds, String title, int karma) {
+    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int upVotes, int downVotes, double controversyScore, int numberOfYadas, long timeDiffInSeconds, String title, int karma, List<Yada> yadaList) {
         this.url = url;
         this.timeOfCreation = timeOfCreation;
         this.linkScore = linkScore;
@@ -93,6 +93,7 @@ public class Link {
         this.timeDiffInSeconds = timeDiffInSeconds;
         this.title = title;
         this.karma = karma;
+        this.yadaList = yadaList;
     }
 
     public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int numberOfYadas, long timeDiffInSeconds, List<Yada> yadaList) {
