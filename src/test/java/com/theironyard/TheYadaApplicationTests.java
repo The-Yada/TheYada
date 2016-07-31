@@ -23,7 +23,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TheYadaApplication.class)
@@ -53,6 +52,38 @@ public class TheYadaApplicationTests {
 	}
 
 	@Test
+	public void addYada() throws Exception {
+		User user = new User();
+		ArrayList<Yada> yadasInLink = new ArrayList<>();
+ 		Link link = new Link("www.google.com", LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0,"asldkfja", 1, yadasInLink);
+
+		users.save(user);
+		links.save(link);
+
+		Yada yada = new Yada();
+		yada.setContent("Test Yada");
+		yada.setDownvotes(0);
+		yada.setKarma(1);
+		yada.setUpvotes(1);
+		yada.setUser(user);
+		yada.setTime(LocalDateTime.now());
+		yada.setLink(link);
+		yadas.save(yada);
+
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(yada);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/addYada")
+						.content(json)
+						.contentType("application/json")
+		);
+
+		Assert.assertTrue(yadas.count() == 1);
+	}
+
+	@Test
 	public void testLemmeSeeTheYadas() throws Exception {
 		User user = new User("testName", "testPass");
 
@@ -62,8 +93,8 @@ public class TheYadaApplicationTests {
 
 		mockMvc.perform(
 				MockMvcRequestBuilders.get("/lemmieSeeTheYadas")
-				.content(json)
-				.contentType("application/json")
+						.content(json)
+						.contentType("application/json")
 		);
 
 		Assert.assertTrue(link.getYadaList().size() > 0);
@@ -72,3 +103,5 @@ public class TheYadaApplicationTests {
 	}
 
 }
+
+

@@ -68,6 +68,7 @@ public class Link {
         this.title = title;
         this.karma = karma;
         this.yadaList = yadaList;
+
     }
 
     public int getId() {

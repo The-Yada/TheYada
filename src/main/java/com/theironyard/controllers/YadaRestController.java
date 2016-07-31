@@ -910,7 +910,9 @@ public class YadaRestController {
             else {
                 List<Yada> yadaListInLink = new ArrayList<>();
                     link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1, yadaListInLink);
-                    link = links.save(link);
+
+
+                link = links.save(link);
             }
         }
 
