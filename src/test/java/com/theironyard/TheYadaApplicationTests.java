@@ -1,5 +1,6 @@
 package com.theironyard;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theironyard.entities.Link;
 import com.theironyard.entities.User;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 @SpringApplicationConfiguration(classes = TheYadaApplication.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+
 public class TheYadaApplicationTests {
 
 	@Autowired
@@ -151,6 +153,24 @@ public class TheYadaApplicationTests {
 		//an array list
 	}
 
+	@Test
+	public void eTestTheYadaList() throws Exception {
+
+		ResultActions ra = mockMvc.perform(
+				MockMvcRequestBuilders.get("/theYadaList")
+		);
+
+		MvcResult result = ra.andReturn();
+		MockHttpServletResponse response = result.getResponse();
+		String json = response.getContentAsString();
+
+		ObjectMapper om = new ObjectMapper();
+
+		ArrayList<Link> testList = om.readValue(json, new TypeReference<ArrayList<Link>>(){});
+
+		Assert.assertTrue(testList.size() == 1);
+		//Assert.assertTrue(testList.get(0).getUrl().equals("http://www.google.com"));
+	}
 }
 
 
