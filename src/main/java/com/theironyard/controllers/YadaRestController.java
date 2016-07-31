@@ -896,20 +896,24 @@ public class YadaRestController {
         String strippedUrl = yl.getLink().getUrl();
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
 
+
         if (link == null) {
             if (strippedUrl.contains("?")) {
                 String[] columns = strippedUrl.split("\\?");
                 String usableUrl = columns[0];
+                List<Yada> yadaListInLink = new ArrayList<>();
 
-                link = new Link(usableUrl, LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0));
+                link = new Link(usableUrl, LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1, yadaListInLink);
                 link = links.save(link);
             }
 
             else {
-                    link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0));
+                List<Yada> yadaListInLink = new ArrayList<>();
+                    link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1, yadaListInLink);
                     link = links.save(link);
             }
         }
+
         if (link.getYadaList().size() >= 1) {
             List<Yada> yadasInLink = link.getYadaList();
             for (Yada y : yadasInLink) {
