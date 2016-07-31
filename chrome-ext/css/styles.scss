@@ -1,5 +1,11 @@
+@import "config";
+@import "home";
+@import "navigation";
+@import "editor";
 
-
+* {
+  color: $black;
+}
 html {
   background: transparent;
 }
@@ -21,7 +27,7 @@ span {
   display: flex;
   flex-direction: column;
   position: relative;
-  background-color: #85ECFF;
+  background-color: $blue;
   margin: 20vh auto;
   width: 70%;
   border-radius: 6px;
@@ -36,36 +42,3 @@ span {
   margin-bottom: 40px;
   overflow: hidden;
 }
-
-.content-text {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  transition: all 0.5s ease;
-  h2 {
-    margin: 20px;
-    font-size: 2.4vw;
-  }
-  img {
-    height: 20px;
-  }
-  button {
-    background: transparent;
-    border: none;
-  }
-  .right-button img {
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-  }
-}
-
-.karma-box {
-  display: flex;
-  flex-direction: column;
-  width: 100px;
-  margin: 30px auto;
-}
-
-@import "navigation";
-@import "editor";

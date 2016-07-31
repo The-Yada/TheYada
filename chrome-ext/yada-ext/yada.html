@@ -43,6 +43,8 @@
 
       <!-- NAVIGATION -->
       <nav id="navBox" class="bottom-nav" ng-controller="NavExtController">
+        <span class="username-nav" ng-show="logStatus.status">Welcome, {{user.username}}</span>
+
         <ul>
           <li><a href="#/">home</a></li>
           <li ng-show="logStatus.status">
@@ -52,8 +54,7 @@
               <a ng-show="!logStatus.status" href="#/log-in">Login</a>
               <a ng-click="logout()" ng-show="logStatus.status" href="#/">Logout</a>
             </li>
-          <li><a ng-click="toWebsite()" href="#">The Yada Website</a></li>
-          <span ng-show="logStatus.status">welcome, {{user.username}}</span>
+          <li><a ng-click="toWebsite()" href="#">Website</a></li>
         </ul>
       </nav>
 

@@ -69,18 +69,16 @@ module.exports = function(ext) {
         upKarma(yada, callback) {
 
             $http({
-              url: 'http://localhost:8080/upVote',
+              url: 'http://localhost:8080/upVoteExt',
               method: 'POST',
               data: yada
             }).then(function(response){
-              
-              let link = response.data.filter(function(link){
-                  return link.url === $rootScope.extUrl;
-              });
-              console.log("after filter", link);
+              console.log(response.data);
 
-              angular.copy(link[0].yadaList, yadas);
-              // callback();
+              let link = response.data;
+
+              angular.copy(link.yadaList, yadas);
+
             }).then(callback)
         },
         /*******************************
@@ -89,19 +87,16 @@ module.exports = function(ext) {
         downKarma(yada, callback) {
 
           $http({
-            url: 'http://localhost:8080/downVote',
+            url: 'http://localhost:8080/downVoteExt',
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log("down vote update", response.data);
-            console.log("filter url", $rootScope.extUrl);
-            let link = response.data.filter(function(link){
-                return link.url === $rootScope.extUrl;
-            });
-            console.log("after filter", link);
+            console.log(response.data);
 
-            angular.copy(link[0].yadaList, yadas);
-            // callback();
+            let link = response.data;
+
+            angular.copy(link.yadaList, yadas);
+
           }).then(callback)
         },
         /*******************************
@@ -124,7 +119,13 @@ module.exports = function(ext) {
               yada: {content: `${yadaText}`},
               link: {url: `${extUrl}`}
             }
-          }).then(callback)
+          }).then(function success(response) {
+            console.log("success", response);
+            callback('success');
+          }, function error(response){
+            console.log("error", response);
+            callback('error');
+          });
 
         }
 

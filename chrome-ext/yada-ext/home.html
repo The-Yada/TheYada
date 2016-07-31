@@ -1,4 +1,6 @@
-
+<!---#################################
+  HOME EXTENSION
+################################## -->
 
 
 <div id="yadaText">
@@ -11,8 +13,10 @@
       <img src="assets/arrow.png" alt="" />
     </button>
   </div>
+
   </br>
-  <h5>author: <span class="author-yadaText">{{yadas[yadaScrollIndex].user.username}}</span> </h5>
+  <h5 class="author-yadaText">author: <span>{{yadas[yadaScrollIndex].user.username}}</span> </h5>
+
   <div class="karma-box">
     <button ng-click="upIt(yadas[yadaScrollIndex])" class="up-home" type="button" name="up">
       ^ <!-- <img src="assets/arrow.png" alt="" /> -->
