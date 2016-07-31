@@ -59,6 +59,58 @@ public class TheYadaApplicationTests {
 	}
 
 	@Test
+	public void aTestAddYada() throws Exception {
+		User user = new User("joe", "123", 0);
+		users.save(user);
+		Yada yada = new Yada();
+		yada.setContent("content");
+		Link link = new Link();
+		link.setUrl("http://www.google.com");
+		YadaLink yadaLink = new YadaLink(yada, link);
+
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(yadaLink);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/addYada")
+						.sessionAttr("username", "joe")
+						.content(json)
+						.contentType("application/json")
+		);
+		Assert.assertTrue(yadas.count() == 1);
+	}
+
+	@Test
+	public void bTestUpVoteExtension() throws Exception {
+
+		User user = new User("joey", "123");
+
+		ArrayList<Yada> yadasInLink = new ArrayList<>();
+		Link link = new Link("www.google.com", LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0,"alskdj", 1, yadasInLink);
+
+		users.save(user);
+		links.save(link);
+
+		Yada yada = yadas.findOne(0);
+		link.getYadaList().add(yada);
+		links.save(link);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(yada);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/upVoteExt")
+						.sessionAttr("username", "joey")
+						.content(json)
+						.contentType("application/json")
+		);
+
+		Yada yadaThatWasUpvoted = yadas.findOne(0);
+		Assert.assertTrue(yadaThatWasUpvoted.getKarma() == 4);
+	}
+
+	@Test
 	public void aTestLogin() throws Exception {
 		User user = new User("Tom", "password");
 
@@ -103,7 +155,7 @@ public class TheYadaApplicationTests {
 
 		ResultActions ra = mockMvc.perform(
 				MockMvcRequestBuilders.get("/lemmieSeeTheYadas")
-				.param("url", "http://www.google.com")
+						.param("url", "http://www.google.com")
 		);
 
 		MvcResult result = ra.andReturn();
