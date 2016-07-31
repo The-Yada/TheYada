@@ -554,10 +554,6 @@ public class YadaRestController {
 
         Link link = links.findFirstByUrl(url);
 
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
         Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
 
         if ((yadasByKarma == null)) {
@@ -611,7 +607,7 @@ public class YadaRestController {
 
         String username = (String) session.getAttribute("username");
 
-            if (username == null) {
+        if (username == null) {
 
             return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
         }
@@ -624,9 +620,14 @@ public class YadaRestController {
         }
 
         User user = users.findFirstByUsername(username);
+
+        // need to limit user to 1 yada per article
+
         Yada yada = new Yada(yl.getYada().getContent(), 1, LocalDateTime.now(), 0, 1, 0, user, link);
+
+
         yadas.save(yada);
-        YadaUserJoin yuj = new YadaUserJoin(user, yada, true, false);
+        YadaUserJoin yuj = new YadaUserJoin(user, yada, true, false, true);
 
         user.setKarma(user.getKarma() + 1);
         users.save(user);
@@ -638,14 +639,13 @@ public class YadaRestController {
 
         link.getYadaList().add(yada);
         link.setNumberOfYadas(link.getNumberOfYadas() + 1);
-            links.save(link);
-            yadaUserJoinRepo.save(yuj);
+        links.save(link);
+        yadaUserJoinRepo.save(yuj);
 
         Iterable<Yada> updatedYadaList = link.getYadaList();
 
         return new ResponseEntity<>(updatedYadaList, HttpStatus.OK);
     }
-
 
     /**
      * This method defines the algorithm which generates linkscore for each record in the link table.

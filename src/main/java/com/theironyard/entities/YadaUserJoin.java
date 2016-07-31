@@ -29,6 +29,9 @@ public class YadaUserJoin {
     @Column(nullable = false)
     boolean downvoted = false;
 
+    @Column(nullable = false)
+    boolean author;
+
 
     public YadaUserJoin() {
     }
@@ -50,6 +53,14 @@ public class YadaUserJoin {
     public YadaUserJoin(User user, Yada yada) {
         this.user = user;
         this.yada = yada;
+    }
+
+    public YadaUserJoin(User user, Yada yada, boolean upvoted, boolean downvoted, boolean author) {
+        this.user = user;
+        this.yada = yada;
+        this.upvoted = upvoted;
+        this.downvoted = downvoted;
+        this.author = author;
     }
 
     public int getId() {
@@ -92,4 +103,11 @@ public class YadaUserJoin {
         this.downvoted = downvoted;
     }
 
+    public boolean isAuthor() {
+        return author;
+    }
+
+    public void setAuthor(boolean author) {
+        this.author = author;
+    }
 }
