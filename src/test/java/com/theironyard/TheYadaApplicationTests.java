@@ -89,10 +89,9 @@ public class TheYadaApplicationTests {
 		users.save(user);
 		links.save(link);
 
-		Yada yada = new Yada("content", 3, LocalDateTime.now(), 0, 0, 0, user, link);
+		Yada yada = yadas.findOne(0);
 		link.getYadaList().add(yada);
 		links.save(link);
-		yadas.save(yada);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(yada);
@@ -104,7 +103,7 @@ public class TheYadaApplicationTests {
 						.contentType("application/json")
 		);
 
-		Yada yadaThatWasUpvoted = yadas.findOne(8);
+		Yada yadaThatWasUpvoted = yadas.findOne(0);
 		Assert.assertTrue(yadaThatWasUpvoted.getKarma() == 4);
 	}
 
