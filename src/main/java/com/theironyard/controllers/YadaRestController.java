@@ -84,6 +84,7 @@ public class YadaRestController {
         if (userFromDatabase == null) {
             user.setPassword(PasswordStorage.createHash(user.getPassword()));
             user.setUsername(user.getUsername());
+            user.setKarma(0);
             users.save(user);
         }
         else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDatabase.getPassword())) {

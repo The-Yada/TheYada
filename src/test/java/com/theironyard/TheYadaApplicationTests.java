@@ -4,14 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theironyard.entities.Link;
 import com.theironyard.entities.User;
 import com.theironyard.entities.Yada;
+import com.theironyard.entities.YadaLink;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TheYadaApplication.class)
 @WebAppConfiguration
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TheYadaApplicationTests {
 
 	@Autowired
@@ -52,35 +56,55 @@ public class TheYadaApplicationTests {
 	}
 
 	@Test
-	public void addYada() throws Exception {
-		User user = new User();
+	public void aTestAddYada() throws Exception {
+		User user = new User("joe", "123", 0);
+		users.save(user);
+		Yada yada = new Yada();
+		yada.setContent("content");
+		Link link = new Link();
+		link.setUrl("http://www.google.com");
+		YadaLink yadaLink = new YadaLink(yada, link);
+
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(yadaLink);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/addYada")
+						.sessionAttr("username", "joe")
+						.content(json)
+						.contentType("application/json")
+		);
+		Assert.assertTrue(yadas.count() == 1);
+	}
+
+	@Test
+	public void bTestUpVoteExtension() throws Exception {
+
+		User user = new User("joey", "123");
+
 		ArrayList<Yada> yadasInLink = new ArrayList<>();
- 		Link link = new Link("www.google.com", LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0,"asldkfja", 1, yadasInLink);
+		Link link = new Link("www.google.com", LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0,"alskdj", 1, yadasInLink);
 
 		users.save(user);
 		links.save(link);
 
-		Yada yada = new Yada();
-		yada.setContent("Test Yada");
-		yada.setDownvotes(0);
-		yada.setKarma(1);
-		yada.setUpvotes(1);
-		yada.setUser(user);
-		yada.setTime(LocalDateTime.now());
-		yada.setLink(link);
-		yadas.save(yada);
-
+		Yada yada = yadas.findOne(0);
+		link.getYadaList().add(yada);
+		links.save(link);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(yada);
 
 		mockMvc.perform(
-				MockMvcRequestBuilders.post("/addYada")
+				MockMvcRequestBuilders.post("/upVoteExt")
+						.sessionAttr("username", "joey")
 						.content(json)
 						.contentType("application/json")
 		);
 
-		Assert.assertTrue(yadas.count() == 1);
+		Yada yadaThatWasUpvoted = yadas.findOne(0);
+		Assert.assertTrue(yadaThatWasUpvoted.getKarma() == 4);
 	}
 
 }
