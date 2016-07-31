@@ -896,6 +896,7 @@ public class YadaRestController {
         String strippedUrl = yl.getLink().getUrl();
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
 
+
         if (link == null) {
             if (strippedUrl.contains("?")) {
                 String[] columns = strippedUrl.split("\\?");
@@ -908,10 +909,11 @@ public class YadaRestController {
 
             else {
                 List<Yada> yadaListInLink = new ArrayList<>();
-                link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1, yadaListInLink);
-                link = links.save(link);
+                    link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1, yadaListInLink);
+                    link = links.save(link);
             }
         }
+
         if (link.getYadaList().size() >= 1) {
             List<Yada> yadasInLink = link.getYadaList();
             for (Yada y : yadasInLink) {
