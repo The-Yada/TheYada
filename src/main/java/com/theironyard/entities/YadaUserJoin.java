@@ -23,6 +23,9 @@ public class YadaUserJoin {
     @ManyToOne
     Yada yada;
 
+    @Column
+    public Integer theYadaId;
+
     @Column(nullable = false)
     boolean upvoted = false;
 
@@ -30,24 +33,25 @@ public class YadaUserJoin {
     boolean downvoted = false;
 
     @Column(nullable = false)
-    boolean author;
+    boolean author = false;
 
 
     public YadaUserJoin() {
     }
 
-//    public YadaUserJoin(int id, User user, Yada yada) {
-//        this.id = id;
-//        this.user = user;
-//        this.yada = yada;
-//    }
-
-
-    public YadaUserJoin(User user, Yada yada, boolean upvoted, boolean downvoted) {
+    public YadaUserJoin(User user, Yada yada, Integer theYadaId) {
         this.user = user;
         this.yada = yada;
+        this.theYadaId = theYadaId;
+    }
+
+    public YadaUserJoin(User user, Yada yada, Integer theYadaId, boolean upvoted, boolean downvoted, boolean author) {
+        this.user = user;
+        this.yada = yada;
+        this.theYadaId = theYadaId;
         this.upvoted = upvoted;
         this.downvoted = downvoted;
+        this.author = author;
     }
 
     public YadaUserJoin(User user, Yada yada) {
@@ -55,11 +59,19 @@ public class YadaUserJoin {
         this.yada = yada;
     }
 
-    public YadaUserJoin(User user, Yada yada, boolean upvoted, boolean downvoted, boolean author) {
-        this.user = user;
-        this.yada = yada;
-        this.upvoted = upvoted;
-        this.downvoted = downvoted;
+    public Integer getTheYadaId() {
+        return theYadaId;
+    }
+
+    public void setTheYadaId(Integer theYadaId) {
+        this.theYadaId = theYadaId;
+    }
+
+    public boolean isAuthor() {
+        return author;
+    }
+
+    public void setAuthor(boolean author) {
         this.author = author;
     }
 
@@ -103,11 +115,4 @@ public class YadaUserJoin {
         this.downvoted = downvoted;
     }
 
-    public boolean isAuthor() {
-        return author;
-    }
-
-    public void setAuthor(boolean author) {
-        this.author = author;
-    }
 }

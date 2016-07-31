@@ -28,6 +28,7 @@ import java.util.*;
  * Created by will on 7/18/16.
  */
 
+
 @RestController
 public class YadaRestController {
 
@@ -279,7 +280,7 @@ public class YadaRestController {
         if (username != null) {
 
             if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
-                YadaUserJoin yuj = new YadaUserJoin(user, yada);
+                YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId());
 
                 if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
@@ -307,6 +308,7 @@ public class YadaRestController {
                 }
             }
             else {
+
                 YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
 
                 if (!yuj.isUpvoted() && yuj.isDownvoted()) {
@@ -407,116 +409,116 @@ public class YadaRestController {
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
-            Yada yadaToDownVote = yadas.findOne(yada.getId());
+        Yada yadaToDownVote = yadas.findOne(yada.getId());
 
-            if (username != null) {
+        if (username != null) {
 
-                if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
-                    YadaUserJoin yuj = new YadaUserJoin(user, yada);
+            if (yadaUserJoinRepo.findByUserAndYada(user, yada) == null) {
+                YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId());
 
-                    if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+                if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
 
-                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
-                        yadaToDownVote.setDownvotes(yuj.getYada().getDownvotes() + 1);
-                        User yadaAuthor = yuj.getYada().getUser();
-                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-                        yuj.setDownvoted(true);
+                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
+                    yadaToDownVote.setDownvotes(yuj.getYada().getDownvotes() + 1);
+                    User yadaAuthor = yuj.getYada().getUser();
+                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                    yuj.setDownvoted(true);
 
-                        //link calculations
-                        Link link = links.findOne(yadaToDownVote.getLink().getId());
-                        link.setDownVotes(link.getDownVotes() + 1);
-                        link.setTotalVotes(link.getTotalVotes() + 1);
+                    //link calculations
+                    Link link = links.findOne(yadaToDownVote.getLink().getId());
+                    link.setDownVotes(link.getDownVotes() + 1);
+                    link.setTotalVotes(link.getTotalVotes() + 1);
 
-                        users.save(yadaAuthor);
-                        yadas.save(yadaToDownVote);
-                        yadaUserJoinRepo.save(yuj);
-                        links.save(link);
+                    users.save(yadaAuthor);
+                    yadas.save(yadaToDownVote);
+                    yadaUserJoinRepo.save(yuj);
+                    links.save(link);
 
-                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
-                    }
-                    else {
-                        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-                    }
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
                 else {
-
-                    YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
-
-                    if (yuj.isUpvoted() && !yuj.isDownvoted()) {
-
-                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
-                        yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
-                        yadaToDownVote.setDownvotes(yuj.getYada().getDownvotes() + 1);
-                        User yadaAuthor = yuj.getYada().getUser();
-                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
-                        yuj.setUpvoted(false);
-                        yuj.setDownvoted(true);
-
-                        //link calculations
-                        Link link = links.findOne(yadaToDownVote.getLink().getId());
-                        link.setDownVotes(link.getDownVotes() + 1);
-                        link.setUpVotes(link.getUpVotes() - 1);
-
-                        users.save(yadaAuthor);
-                        yadas.save(yadaToDownVote);
-                        yadaUserJoinRepo.save(yuj);
-                        links.save(link);
-
-                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
-
-                    }
-                    else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
-
-                        yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
-                        yadaToDownVote.setDownvotes(yuj.getYada().getDownvotes() + 1);
-                        User yadaAuthor = yuj.getYada().getUser();
-                        yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
-                        yuj.setDownvoted(true);
-
-                        //link calculations
-                        Link link = links.findOne(yadaToDownVote.getLink().getId());
-                        link.setDownVotes(link.getDownVotes() + 1);
-                        link.setTotalVotes(link.getTotalVotes() + 1);
-
-
-                        users.save(yadaAuthor);
-                        yadas.save(yadaToDownVote);
-                        yadaUserJoinRepo.save(yuj);
-                        links.save(link);
-
-                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
-
-                    }
-                    else if (!yuj.isUpvoted() && yuj.isDownvoted()){
-                        yadaToDownVote.setKarma(yuj.getYada().getKarma() + 1);
-                        yadaToDownVote.setDownvotes(yuj.getYada().getDownvotes() - 1);
-                        User yadaAuthor = yuj.getYada().getUser();
-                        yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
-                        yuj.setDownvoted(false);
-
-                        //link calculations
-                        Link link = links.findOne(yadaToDownVote.getLink().getId());
-                        link.setDownVotes(link.getDownVotes() - 1);
-                        link.setTotalVotes(link.getTotalVotes() - 1);
-
-
-                        users.save(yadaAuthor);
-                        yadas.save(yadaToDownVote);
-                        yadaUserJoinRepo.save(yuj);
-                        links.save(link);
-
-                        return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
-
-                    }
-                    else {
-                        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-                    }
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
             }
             else {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
+                YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
+
+                if (yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 2);
+                    yadaToDownVote.setUpvotes(yuj.getYada().getUpvotes() - 1);
+                    yadaToDownVote.setDownvotes(yuj.getYada().getDownvotes() + 1);
+                    User yadaAuthor = yuj.getYada().getUser();
+                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 2);
+                    yuj.setUpvoted(false);
+                    yuj.setDownvoted(true);
+
+                    //link calculations
+                    Link link = links.findOne(yadaToDownVote.getLink().getId());
+                    link.setDownVotes(link.getDownVotes() + 1);
+                    link.setUpVotes(link.getUpVotes() - 1);
+
+                    users.save(yadaAuthor);
+                    yadas.save(yadaToDownVote);
+                    yadaUserJoinRepo.save(yuj);
+                    links.save(link);
+
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+
+                }
+                else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
+
+                    yadaToDownVote.setKarma(yuj.getYada().getKarma() - 1);
+                    yadaToDownVote.setDownvotes(yuj.getYada().getDownvotes() + 1);
+                    User yadaAuthor = yuj.getYada().getUser();
+                    yadaAuthor.setKarma(yadaAuthor.getKarma() - 1);
+                    yuj.setDownvoted(true);
+
+                    //link calculations
+                    Link link = links.findOne(yadaToDownVote.getLink().getId());
+                    link.setDownVotes(link.getDownVotes() + 1);
+                    link.setTotalVotes(link.getTotalVotes() + 1);
+
+
+                    users.save(yadaAuthor);
+                    yadas.save(yadaToDownVote);
+                    yadaUserJoinRepo.save(yuj);
+                    links.save(link);
+
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+
+                }
+                else if (!yuj.isUpvoted() && yuj.isDownvoted()){
+                    yadaToDownVote.setKarma(yuj.getYada().getKarma() + 1);
+                    yadaToDownVote.setDownvotes(yuj.getYada().getDownvotes() - 1);
+                    User yadaAuthor = yuj.getYada().getUser();
+                    yadaAuthor.setKarma(yadaAuthor.getKarma() + 1);
+                    yuj.setDownvoted(false);
+
+                    //link calculations
+                    Link link = links.findOne(yadaToDownVote.getLink().getId());
+                    link.setDownVotes(link.getDownVotes() - 1);
+                    link.setTotalVotes(link.getTotalVotes() - 1);
+
+
+                    users.save(yadaAuthor);
+                    yadas.save(yadaToDownVote);
+                    yadaUserJoinRepo.save(yuj);
+                    links.save(link);
+
+                    return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
+
+                }
+                else {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
             }
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        }
 
     }
 
@@ -552,16 +554,37 @@ public class YadaRestController {
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
-        Link link = links.findFirstByUrl(url);
 
-        Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
+        if (url.contains("?")) {
+            String[] columns = url.split("\\?");
+            String usableUrl = columns[0];
 
-        if ((yadasByKarma == null)) {
+            Link link = links.findFirstByUrl(usableUrl);
+            Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
 
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if ((yadasByKarma == null)) {
+
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
+
+
         }
 
-        return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
+        else {
+
+            Link link = links.findFirstByUrl(url);
+            Iterable<Yada> yadasByKarma = yadas.findTop10ByLinkIdOrderByKarmaDesc(link.getId());
+
+            if ((yadasByKarma == null)) {
+
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>(yadasByKarma, HttpStatus.OK);
+
+        }
     }
 
     /**
@@ -606,28 +629,34 @@ public class YadaRestController {
     public ResponseEntity addYada(HttpSession session, @RequestBody YadaLink yl) throws Exception {
 
         String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
 
         if (username == null) {
 
             return new ResponseEntity<>("Not So Fast", HttpStatus.FORBIDDEN);
         }
 
+        String strippedUrl = yl.getLink().getUrl();
         Link link = links.findFirstByUrl(yl.getLink().getUrl());
 
         if (link == null) {
-            link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0));
-            link = links.save(link);
+            if (strippedUrl.contains("?")) {
+                String[] columns = strippedUrl.split("\\?");
+                String usableUrl = columns[0];
+
+                link = new Link(usableUrl, LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0));
+                link = links.save(link);
+            }
+
+            else {
+                    link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0));
+                    link = links.save(link);
+            }
         }
 
-        User user = users.findFirstByUsername(username);
-
-        // need to limit user to 1 yada per article
-
         Yada yada = new Yada(yl.getYada().getContent(), 1, LocalDateTime.now(), 0, 1, 0, user, link);
-
-
         yadas.save(yada);
-        YadaUserJoin yuj = new YadaUserJoin(user, yada, true, false, true);
+        YadaUserJoin yuj = new YadaUserJoin(user, yada, yada.getId(), true, false, true);
 
         user.setKarma(user.getKarma() + 1);
         users.save(user);
@@ -639,13 +668,14 @@ public class YadaRestController {
 
         link.getYadaList().add(yada);
         link.setNumberOfYadas(link.getNumberOfYadas() + 1);
-        links.save(link);
-        yadaUserJoinRepo.save(yuj);
+            links.save(link);
+            yadaUserJoinRepo.save(yuj);
 
         Iterable<Yada> updatedYadaList = link.getYadaList();
 
         return new ResponseEntity<>(updatedYadaList, HttpStatus.OK);
     }
+
 
     /**
      * This method defines the algorithm which generates linkscore for each record in the link table.
