@@ -975,7 +975,9 @@ public class YadaRestController {
             // numerator needs to account for personal vote?
             //
             link.setKarma(link.getUpVotes() - link.getDownVotes());
-            link.setLinkScore(((link.getKarma() - link.getYadaList().size()) / (Math.pow(denominator, GRAVITY))));
+            //get yadalist size from db call instead of link.getYadaList().size
+            int count = yadas.countByLink(link);
+            link.setLinkScore(((link.getKarma() - count) / (Math.pow(denominator, GRAVITY))));
             links.save(link);
         }
         return linkList;

@@ -28,6 +28,8 @@ public interface YadaRepository extends CrudRepository<Yada, Integer> {
     Yada findFirstByOrderByIdDesc();
     //Yada findFirstByOrderBy
 
+    int countByLink(Link link);
+
     @Query("SELECT y FROM Yada y WHERE LOWER(content) LIKE '%' || LOWER(?) || '%'")
     Iterable<Yada> searchByContent(String searchInput);
 

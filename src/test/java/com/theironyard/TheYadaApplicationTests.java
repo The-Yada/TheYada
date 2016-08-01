@@ -131,7 +131,7 @@ public class TheYadaApplicationTests {
 		Assert.assertTrue(yadas.count() == 2);
 	}
 
-	@Transactional
+	@Transactional()
 	@Test
 	public void dTestUpVoteExtension() throws Exception {
 		User user = new User("mike", "123", 0);
@@ -154,7 +154,7 @@ public class TheYadaApplicationTests {
 
 		Yada y = yadas.findOne(yada.getId());
 		Assert.assertTrue(y.getKarma() == 2);
-		yadas.save(y);
+		//yadas.save(y);
 
 
 	}
