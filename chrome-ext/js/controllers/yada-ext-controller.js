@@ -11,10 +11,13 @@ module.exports = function(ext) {
        $scope.yadaScrollIndex = YadaExtService.getIndex();
        $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
        $scope.userObj = UserExtService.checkLogStatus();
+       $scope.yadaId = 0;
 
-       $scope.userVotingState = UserExtService.getUserVotingState();
-      //  $filter('filter')($scope.userObj.yadaUserJoinList, {theYadaId: $scope.yadas[$scope.yadaScrollIndex].id} );
-       $scope.downvoted = false;
+       $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
+
+       $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId);
+      //  $scope.voted = false;
+
 
 
       //  $scope.karmaStatus = function(userJoins, yadaArr, index) {
@@ -66,13 +69,12 @@ module.exports = function(ext) {
        $scope.upIt = function (yada) {
            YadaExtService.upKarma(yada, function() {
 
-                 UserExtService.checkLogStatus();
 
                  $scope.yadas = YadaExtService.updateYadas();
                  $scope.userObj = UserExtService.getUser();
 
-                 $scope.upvoted = $scope.userObj.yadaUserJoinList[$scope.yadaScrollIndex].upvoted;
-                 console.log("up", $scope.upvoted);
+                 $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
+                 console.log("up", $scope.userVotingState);
 
                  $location.path("/");
            });
@@ -81,13 +83,12 @@ module.exports = function(ext) {
        $scope.downIt = function (yada) {
            YadaExtService.downKarma(yada, function() {
 
-              UserExtService.checkLogStatus();
 
               $scope.yadas = YadaExtService.updateYadas();
               $scope.userObj = UserExtService.getUser();
 
-              $scope.downvoted = $scope.userObj.yadaUserJoinList[$scope.yadaScrollIndex].downvoted;
-              console.log("down", $scope.downvoted);
+              $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
+              console.log("down", $scope.userVotingState);
 
                $location.path("/");
            });

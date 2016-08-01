@@ -8,8 +8,9 @@ module.exports = function(ext) {
   ext.factory('YadaExtService', ['$http','$rootScope','$location', 'UserExtService', function($http, $rootScope, $location, UserExtService){
 
       let yadas = [];
-      let scrapes = [];
       let yadaIndex = 0;
+      let scrapes = [];
+      let yadaId = 0;
       let blankYada = [{
         content: "You should write a Yada for this article.",
         user: {
@@ -37,6 +38,8 @@ module.exports = function(ext) {
                 angular.copy(blankYada, yadas);
                 return yadas
               } else {
+                  let yid = currentYadas[yadaIndex].id;
+                  angular.copy(yid, yadaId);
                   angular.copy(currentYadas, yadas);
                   return yadas
               }
@@ -150,6 +153,9 @@ module.exports = function(ext) {
 
         getIndex() {
           return yadaIndex;
+        },
+        getId() {
+          return yadaId;
         }
 
 

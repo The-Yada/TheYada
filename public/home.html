@@ -2,25 +2,30 @@
   HOME TEMPLATE
 ################################## -->
 
-<!-- FITLER BUTTONS -->
-<div class="filterBox">
-  <button ng-click="hot()" type="button" name="hot">Hot</button>
-  <button ng-click="controversial()" type="button" name="controversial">Controversial</button>
-  <button ng-click="new()" type="button" name="new">New</button>
-  <button ng-click="top()" type="button" name="top">Top</button>
-</div>
 
-<!-- SEARCH BOX -->
-<div class="searchBox">
-  <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
-  <button ng-click="search(searchString)" type="button" name="search">Search</button>
-</div>
+<header class="header-home">
+  <!-- FITLER BUTTONS -->
+  <div class="filterBox">
+    <button ng-click="hot()" type="button" name="hot">Hot</button>
+    <button ng-click="controversial()" type="button" name="controversial">Controversial</button>
+    <button ng-click="new()" type="button" name="new">New</button>
+    <button ng-click="top()" type="button" name="top">Top</button>
+  </div>
+
+  <!-- SEARCH BOX -->
+  <div class="searchBox">
+    <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
+    <button ng-click="search(searchString)" type="button" name="search">Search</button>
+  </div>
+</header>
 
 <!-- LIST OF LINKS WRAPPER -->
-<ul class="data-ctrl">
+<ul class="links-list">
 
     <!-- LINKS -->
-    <li ng-repeat="links in yadas">
+    <li ng-repeat="links in yadas"
+        ng-style="{left: 20 * $index + 'px', top: 2 * $index + 'px', 'z-index': (cards.length - $index)}">
+
           <div class="link-home">
               <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
 
@@ -28,7 +33,7 @@
           </div>
 
           <!-- YADAS -->
-          <div class="yadas-home" ng-repeat="yada in links.yadaList">
+          <div ng-show="isCollapsed" class="yadas-home" ng-repeat="yada in links.yadaList">
 
             <span class="content-home">{{yada.content}}</span></br>
             <span class="author-home">author: <b>{{yada.user.username}}</b></span>

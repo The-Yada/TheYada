@@ -113,10 +113,13 @@ module.exports = function(ext) {
        $scope.yadaScrollIndex = YadaExtService.getIndex();
        $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
        $scope.userObj = UserExtService.checkLogStatus();
+       $scope.yadaId = 0;
 
-       $scope.userVotingState = UserExtService.getUserVotingState();
-      //  $filter('filter')($scope.userObj.yadaUserJoinList, {theYadaId: $scope.yadas[$scope.yadaScrollIndex].id} );
-       $scope.downvoted = false;
+       $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
+
+       $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId);
+      //  $scope.voted = false;
+
 
 
       //  $scope.karmaStatus = function(userJoins, yadaArr, index) {
@@ -168,13 +171,12 @@ module.exports = function(ext) {
        $scope.upIt = function (yada) {
            YadaExtService.upKarma(yada, function() {
 
-                 UserExtService.checkLogStatus();
 
                  $scope.yadas = YadaExtService.updateYadas();
                  $scope.userObj = UserExtService.getUser();
 
-                 $scope.upvoted = $scope.userObj.yadaUserJoinList[$scope.yadaScrollIndex].upvoted;
-                 console.log("up", $scope.upvoted);
+                 $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
+                 console.log("up", $scope.userVotingState);
 
                  $location.path("/");
            });
@@ -183,13 +185,12 @@ module.exports = function(ext) {
        $scope.downIt = function (yada) {
            YadaExtService.downKarma(yada, function() {
 
-              UserExtService.checkLogStatus();
 
               $scope.yadas = YadaExtService.updateYadas();
               $scope.userObj = UserExtService.getUser();
 
-              $scope.downvoted = $scope.userObj.yadaUserJoinList[$scope.yadaScrollIndex].downvoted;
-              console.log("down", $scope.downvoted);
+              $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
+              console.log("down", $scope.userVotingState);
 
                $location.path("/");
            });
@@ -284,8 +285,10 @@ module.exports = function(ext) {
   ext.factory('UserExtService', ['$http', '$location', function($http, $location) {
 
       let userObj = {};
+      let userId = undefined;
       let yujList = [];
       let logStatus = {status: false};
+      let votingStatus = {status: 3};
 
       return {
 
@@ -319,7 +322,9 @@ module.exports = function(ext) {
             console.log("user obj check status", response.data);
 
             let user = response.data
+
             angular.copy(user, userObj);
+            angular.copy(user.id, userId);
             let log = {status: true};
             angular.copy(log, logStatus);
 
@@ -346,7 +351,10 @@ module.exports = function(ext) {
           return userObj;
         },
 
-        getUserVotingState() {
+        /*******************************
+        * Return yada user join list
+        ********************************/
+        getYadaUserJoinList() {
           $http({
             url: 'http://localhost:8080/yadaUserJoinList',
             method: 'GET'
@@ -361,7 +369,32 @@ module.exports = function(ext) {
             $location.path('/');
             return yuj
           })
-          return
+          return yujList
+        },
+        /*******************************
+        * Return yada user join list
+        ********************************/
+        getUserVotingState(id) {
+            statusUrl = `http://localhost:8080/votingStatus${id}`
+          $http({
+            url: statusUrl,
+            method: 'GET'
+          }).then(function success(response) {
+            console.log("votingStatus", response.data);
+
+            let status = response.data
+            angular.copy(status, votingStatus);
+
+            $location.path('/');
+            return status
+          }, function error(response){
+
+            console.log("uvs error", response);
+            return votingStatus
+            $location.path('/');
+          });
+
+          return votingStatus;
         },
 
         /*******************************
@@ -378,8 +411,10 @@ module.exports = function(ext) {
           }).then(function() {
 
             user = {};
+            id = undefined;
             let log = {status: false};
 
+            angular.copy(id, userId);
             angular.copy(user, userObj);
             angular.copy(log, logStatus);
 
@@ -405,8 +440,9 @@ module.exports = function(ext) {
   ext.factory('YadaExtService', ['$http','$rootScope','$location', 'UserExtService', function($http, $rootScope, $location, UserExtService){
 
       let yadas = [];
-      let scrapes = [];
       let yadaIndex = 0;
+      let scrapes = [];
+      let yadaId = 0;
       let blankYada = [{
         content: "You should write a Yada for this article.",
         user: {
@@ -434,6 +470,8 @@ module.exports = function(ext) {
                 angular.copy(blankYada, yadas);
                 return yadas
               } else {
+                  let yid = currentYadas[yadaIndex].id;
+                  angular.copy(yid, yadaId);
                   angular.copy(currentYadas, yadas);
                   return yadas
               }
@@ -547,6 +585,9 @@ module.exports = function(ext) {
 
         getIndex() {
           return yadaIndex;
+        },
+        getId() {
+          return yadaId;
         }
 
 

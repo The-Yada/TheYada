@@ -151,19 +151,19 @@ public class YadaRestController {
      * route to find yadas from a given user.
      */
 
-    //hit this route to find top users yadas
-    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
-    public LinkedHashMap<User, ArrayList<Yada>> getTopUsersYadas() {
-        LinkedHashMap<User, ArrayList<Yada>> topUsersYadasMap = new LinkedHashMap<>();
-
-        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
-
-        for (User user : topUsers) {
-            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
-            topUsersYadasMap.put(user, topUsersYadas);
-        }
-        return topUsersYadasMap;
-    }
+//    //hit this route to find top users yadas
+//    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
+//    public LinkedHashMap<User, ArrayList<Yada>> getTopUsersYadas() {
+//        LinkedHashMap<User, ArrayList<Yada>> topUsersYadasMap = new LinkedHashMap<>();
+//
+//        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
+//
+//        for (User user : topUsers) {
+//            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
+//            topUsersYadasMap.put(user, topUsersYadas);
+//        }
+//        return topUsersYadasMap;
+//    }
 
     /**
      * Route which allows users to search for yadas from a search bar based on the content of the yada.
@@ -226,9 +226,9 @@ public class YadaRestController {
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
-        ArrayList<YadaUserJoin> yadaUserJoinsByUser = (ArrayList<YadaUserJoin>) user.getYadaUserJoinList();
+        List<YadaUserJoin> yadaUserJoinsByUser = user.getYadaUserJoinList();
 
-        return new ResponseEntity(yadaUserJoinsByUser, HttpStatus.OK);
+        return new ResponseEntity<>(yadaUserJoinsByUser, HttpStatus.OK);
     }
 
     /**
