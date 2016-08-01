@@ -105,13 +105,12 @@ public class TheYadaApplicationTests {
 	}
 
 	@Test
-	public void bbTestAddYada() throws Exception {
+	public void cTestAddYada2() throws Exception {
 		User user = new User("joe2", "123", 0);
 		users.save(user);
 		Yada yada = new Yada();
 		yada.setContent("content2");
 		Link link = new Link();
-		link.setTimeOfCreation(LocalDateTime.now());
 		link.setUrl("http://www.bbc.com/news/business-36791928");
 		YadaLink yadaLink = new YadaLink(yada, link);
 
