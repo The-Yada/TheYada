@@ -216,6 +216,20 @@ public class YadaRestController {
 
         return new ResponseEntity<Iterable<Link>>(linksThatMatchSearchInput, HttpStatus.OK);
     }
+    /**
+     * This method returns the YadaUserJoin List for a given logged in User
+     */
+
+    @RequestMapping(path = "/yadaUserJoinList", method = RequestMethod.GET)
+    public ResponseEntity getYadaUserJoinList(HttpSession session) {
+
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
+
+        ArrayList<YadaUserJoin> yadaUserJoinsByUser = (ArrayList<YadaUserJoin>) user.getYadaUserJoinList();
+
+        return new ResponseEntity(yadaUserJoinsByUser, HttpStatus.OK);
+    }
 
     /**
      * Route which allows users to upvote yadas.
