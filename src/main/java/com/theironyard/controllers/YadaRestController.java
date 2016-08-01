@@ -1,5 +1,4 @@
 package com.theironyard.controllers;
-
 import com.theironyard.entities.*;
 import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
@@ -7,8 +6,6 @@ import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
 import com.theironyard.utils.PasswordStorage;
 import org.h2.tools.Server;
-
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -212,22 +209,27 @@ public class YadaRestController {
 
         if (searchInput != null) {
             linksThatMatchSearchInput = links.searchByTitle(searchInput);
-
         }
 
         return new ResponseEntity<Iterable<Link>>(linksThatMatchSearchInput, HttpStatus.OK);
     }
 
-//    @RequestMapping(path = "/searchAuthors", method = RequestMethod.GET)
-//    public ResponseEntity getSearchResultsOfAuthors(@RequestParam (value = "searchInput", required = false) String searchInput) {
-//        Iterable<User> authorsThatMatchSearchInput = new ArrayList<>();
-//
-//        if (searchInput != null) {
-//            authorsThatMatchSearchInput = users.searchByAuthor(searchInput);
-//
-//        }
-//
-//    }
+    @RequestMapping(path = "/searchAuthors", method = RequestMethod.GET)
+    public ResponseEntity getSearchResultsOfAuthors(@RequestParam (value = "searchInput", required = false) String searchInput) {
+        Iterable<User> authorsThatMatchSearchInput = new ArrayList<>();
+        HashMap<String, Iterable<Yada>> authorsYadas = new HashMap<>();
+
+        if (searchInput != null) {
+            authorsThatMatchSearchInput = users.searchByAuthor(searchInput);
+
+            for (User u : authorsThatMatchSearchInput) {
+                Iterable<Yada> yadasByAuthor = yadas.findAllByUserIdOrderByKarmaDesc(u.getId());
+                authorsYadas.put(u.getUsername(), yadasByAuthor);
+            }
+        }
+        return new ResponseEntity<>(authorsYadas, HttpStatus.OK);
+    }
+
     @RequestMapping(path = "/voteStatus{id}", method = RequestMethod.GET)
     public HashMap getVoteStatus(HttpSession session, @PathVariable int id) {
         String username = (String) session.getAttribute("username");
@@ -265,9 +267,9 @@ public class YadaRestController {
         String username = (String) session.getAttribute("username");
         User user = users.findFirstByUsername(username);
 
-        ArrayList<YadaUserJoin> yadaUserJoinsByUser = (ArrayList<YadaUserJoin>) user.getYadaUserJoinList();
+        List<YadaUserJoin> yadaUserJoinsByUser = user.getYadaUserJoinList();
 
-        return new ResponseEntity(yadaUserJoinsByUser, HttpStatus.OK);
+        return new ResponseEntity<>(yadaUserJoinsByUser, HttpStatus.OK);
     }
 
     /**
