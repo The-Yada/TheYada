@@ -1,6 +1,7 @@
 package com.theironyard.services;
 
 import com.theironyard.entities.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
@@ -10,5 +11,9 @@ import java.util.ArrayList;
  */
 public interface UserRepository extends CrudRepository<User, Integer>{
     User findFirstByUsername(String username);
-   // ArrayList<User> findTop10OrderByKarmaDesc();
+
+    ArrayList<User> findTop10ByOrderByKarmaDesc();
+
+    @Query("SELECT u FROM User u WHERE LOWER(username) LIKE '%' || LOWER(?) || '%'")
+    Iterable<User> searchByAuthor(String searchInput);
 }

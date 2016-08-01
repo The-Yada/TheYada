@@ -8,6 +8,7 @@ import com.theironyard.services.YadaUserJoinRepository;
 import com.theironyard.utils.PasswordStorage;
 import org.h2.tools.Server;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -151,19 +152,19 @@ public class YadaRestController {
      * route to find yadas from a given user.
      */
 
-//    //hit this route to find top users yadas
-//    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
-//    public LinkedHashMap<User, ArrayList<Yada>> getTopUsersYadas() {
-//        LinkedHashMap<User, ArrayList<Yada>> topUsersYadasMap = new LinkedHashMap<>();
-//
-//        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
-//
-//        for (User user : topUsers) {
-//            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
-//            topUsersYadasMap.put(user, topUsersYadas);
-//        }
-//        return topUsersYadasMap;
-//    }
+    //hit this route to find top users yadas
+    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
+    public LinkedHashMap<User, Iterable<Yada>> getTopUsersYadas() {
+        LinkedHashMap<User, Iterable<Yada>> topUsersYadasMap = new LinkedHashMap<>();
+
+        ArrayList<User> topUsers = users.findTop10ByOrderByKarmaDesc();
+
+        for (User user : topUsers) {
+            Iterable<Yada> topUsersYadas = yadas.findAllByUserIdOrderByKarmaDesc(user.getId());
+            topUsersYadasMap.put(user, topUsersYadas);
+        }
+        return topUsersYadasMap;
+    }
 
     /**
      * Route which allows users to search for yadas from a search bar based on the content of the yada.
@@ -215,6 +216,44 @@ public class YadaRestController {
         }
 
         return new ResponseEntity<Iterable<Link>>(linksThatMatchSearchInput, HttpStatus.OK);
+    }
+
+//    @RequestMapping(path = "/searchAuthors", method = RequestMethod.GET)
+//    public ResponseEntity getSearchResultsOfAuthors(@RequestParam (value = "searchInput", required = false) String searchInput) {
+//        Iterable<User> authorsThatMatchSearchInput = new ArrayList<>();
+//
+//        if (searchInput != null) {
+//            authorsThatMatchSearchInput = users.searchByAuthor(searchInput);
+//
+//        }
+//
+//    }
+    @RequestMapping(path = "/voteStatus{id}", method = RequestMethod.GET)
+    public HashMap getVoteStatus(HttpSession session, @PathVariable int id) {
+        String username = (String) session.getAttribute("username");
+        User user = users.findFirstByUsername(username);
+
+        Yada yada = yadas.findOne(id);
+        YadaUserJoin yuj = yadaUserJoinRepo.findByUserAndYada(user, yada);
+
+        HashMap<String, Integer> voteMap = new HashMap<>();
+
+        if (yuj !=null) {
+
+            if (yuj.isUpvoted()) {
+                voteMap.put("Status", 1);
+                return voteMap;
+
+            } else if (yuj.isDownvoted()) {
+                voteMap.put("Status", 2);
+                return voteMap;
+            }
+        }
+        else {
+            voteMap.put("Status", 3);
+            return voteMap;
+        }
+        return null;
     }
     /**
      * This method returns the YadaUserJoin List for a given logged in User
