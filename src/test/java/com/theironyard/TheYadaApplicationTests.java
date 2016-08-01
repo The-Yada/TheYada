@@ -154,6 +154,34 @@ public class TheYadaApplicationTests {
 
 		Yada y = yadas.findOne(yada.getId());
 		Assert.assertTrue(y.getKarma() == 2);
+		yadas.save(y);
+
+
+	}
+
+	//ask zach in the am why this is not passing..
+	@Transactional
+	@Test
+	public void ddTestDownVoteExtension() throws Exception {
+		User user = new User("mikey", "123", 0);
+		users.save(user);
+
+		Yada yada = yadas.findFirstByOrderByIdDesc();
+		yada.getKarma();
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
+		String json = mapper.writeValueAsString(yada);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/downVoteExt")
+						.sessionAttr("username", "mikey")
+						.content(json)
+						.contentType("application/json")
+		);
+		Yada y = yadas.findOne(yada.getId());
+		y.getKarma();
+		Assert.assertTrue(y.getKarma() == 0);
 
 	}
 
