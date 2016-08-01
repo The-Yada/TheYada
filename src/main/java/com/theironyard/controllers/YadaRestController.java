@@ -57,9 +57,6 @@ public class YadaRestController {
      * Start H2 database web server connection.
      * Considering deploying with PostgreSQL for the purpose of running stored procedures,
      * but this is unnecessary in the current state.
-     *
-     * @throws SQLException
-     * @throws IOException
      */
     @PostConstruct
     public void init() throws SQLException, IOException {
@@ -71,11 +68,6 @@ public class YadaRestController {
      * Would like to refactor and have a separate route for registering an account.
      * Uses hashing to securely store the password.
      * More info on password hashing in Java:  https://github.com/defuse/password-hashing
-     *
-     * @param user
-     * @param session
-     * @return
-     * @throws Exception
      */
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity login(@RequestBody User user, HttpSession session) throws Exception {
@@ -98,9 +90,6 @@ public class YadaRestController {
 
     /**
      * Logout route: invalidates session to log user out.
-     *
-     * @param session
-     * @return
      */
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public ResponseEntity<String> logout(HttpSession session) {
@@ -115,8 +104,6 @@ public class YadaRestController {
      * Route for returning a list of all yada lists for a given URL.
      * Queries links table and returns links by their "linkscore."
      * Linkscore is a field in the link entity which is calculated through the generateLinkScore method.
-     *
-     * @return
      */
     @RequestMapping(path = "/theYadaList", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<Link>> getYadaList() {
@@ -130,8 +117,6 @@ public class YadaRestController {
     /**
      * Route which finds links solely on overall Karma.
      * A link's karma can be found by subtracting downvotes from upvotes.
-     *
-     * @return
      */
     @RequestMapping(path = "/topLinks", method = RequestMethod.GET)
     public ArrayList<Link> getTopLinks() {
@@ -141,8 +126,6 @@ public class YadaRestController {
 
     /**
      * Route which finds the newest links based on their time of creation.
-     *
-     * @return
      */
     @RequestMapping(path = "/newLinks", method = RequestMethod.GET)
     public ArrayList<Link> getNewYadas() {
@@ -154,8 +137,6 @@ public class YadaRestController {
      * Route which returns a list of controversial links.
      * Links are determined to be controversial based on their controveryScore.
      * The controveryScore field is calculated by the generateControversyScore method.
-     *
-     * @return
      */
     @RequestMapping(path = "/controversialLinks", method = RequestMethod.GET)
     public ArrayList<Link> getControversialYadas() {
@@ -167,37 +148,22 @@ public class YadaRestController {
     }
 
     /**
-     * Incomplete route to find yadas from a given user.
-     *
-     * @param searchInput
-     * @return
+     * route to find yadas from a given user.
      */
-//    //hit this route to find top users yadas
-//    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
-//    public HashMap<User, ArrayList<Yada>> getTopUsersYadas() {
-//        HashMap<User, ArrayList<Yada>> topUsersYadasMap = new HashMap<>();
-//
-//        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
-//
-//        for (User user : topUsers) {
-//
-//            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
-//            topUsersYadasMap.put(user, topUsersYadas);
-//        }
-//        return topUsersYadasMap;
-//
-//
-////        ArrayList<ArrayList<Yada>> listOfListsOfTopUsersYadas = new ArrayList<>();
-////
-////        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
-////
-////        for (User u : topUsers) {
-////             ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(u.getId());
-////            listOfListsOfTopUsersYadas.add(topUsersYadas);
-////        }
-////        return listOfListsOfTopUsersYadas;
-//    }
 
+    //hit this route to find top users yadas
+    @RequestMapping(path = "/topUsersYadas", method = RequestMethod.GET)
+    public LinkedHashMap<User, ArrayList<Yada>> getTopUsersYadas() {
+        LinkedHashMap<User, ArrayList<Yada>> topUsersYadasMap = new LinkedHashMap<>();
+
+        ArrayList<User> topUsers = users.findTop10OrderByKarmaDesc();
+
+        for (User user : topUsers) {
+            ArrayList<Yada> topUsersYadas = yadas.findAllByUserId(user.getId());
+            topUsersYadasMap.put(user, topUsersYadas);
+        }
+        return topUsersYadasMap;
+    }
 
     /**
      * Route which allows users to search for yadas from a search bar based on the content of the yada.
@@ -250,8 +216,6 @@ public class YadaRestController {
 
         return new ResponseEntity<Iterable<Link>>(linksThatMatchSearchInput, HttpStatus.OK);
     }
-
-
 
     /**
      * Route which allows users to upvote yadas.
@@ -386,8 +350,6 @@ public class YadaRestController {
         }
 
     }
-
-
 
     /**
      * Route which allows users to downvote yadas.
@@ -641,8 +603,6 @@ public class YadaRestController {
 
     }
 
-
-
     /**
      * Route which allows users to downvote yadas.
      * Operates by an established connection (join) between yadas and users in the YadaUserJoin table.
@@ -779,16 +739,16 @@ public class YadaRestController {
 
     }
 
-
     /**
      * This route invokes the soupThatSite method which scrapes a website for its title and main body text.
-     * This scraped text is displayed inside the Chrome extension as a convenience to the yada author.
+     * The scraped text is displayed inside the Chrome extension as a convenience to the yada author.
      * The soupThatSite method is made possible through Jsoup. More info on jsoup here: https://jsoup.org/
      *
      * @param url
      * @return
      * @throws IOException
      */
+
     @RequestMapping(path = "/lemmieYada", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<String>> letMeYada(@RequestParam (value = "url", required = false) String url) throws IOException {
 
@@ -807,6 +767,7 @@ public class YadaRestController {
      * @param url
      * @return
      */
+
     @RequestMapping(path = "/lemmieSeeTheYadas", method = RequestMethod.GET)
     public ResponseEntity showMeTheYada(HttpSession session, @RequestParam (value = "url", required = false) String url) {
         String username = (String) session.getAttribute("username");
