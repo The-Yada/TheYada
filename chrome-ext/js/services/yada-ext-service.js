@@ -5,10 +5,11 @@
 
 module.exports = function(ext) {
 
-  ext.factory('YadaExtService', ['$http','$rootScope','$location', function($http, $rootScope, $location){
+  ext.factory('YadaExtService', ['$http','$rootScope','$location', 'UserExtService', function($http, $rootScope, $location, UserExtService){
 
       let yadas = [];
       let scrapes = [];
+      let yadaIndex = 0;
       let blankYada = [{
         content: "You should write a Yada for this article.",
         user: {
@@ -29,13 +30,15 @@ module.exports = function(ext) {
               url: currentUrl,
               method: 'GET'
             }).then(function success(response){
-
+              console.log("get", response.data);
               currentYadas = response.data;
               if(currentYadas === '') {
                 console.log("blank array on getYadas");
                 angular.copy(blankYada, yadas);
+                return yadas
               } else {
                   angular.copy(currentYadas, yadas);
+                  return yadas
               }
 
             }, function error(response){
@@ -127,7 +130,28 @@ module.exports = function(ext) {
             callback('error');
           });
 
+        },
+
+        scrollLeft() {
+           if (yadaIndex <= 0) {
+             yadaIndex = yadas.length -1;
+           } else {
+             yadaIndex --;
+           }
+        },
+
+        scrollRight() {
+           if (yadaIndex >= yadas.length -1) {
+             yadaIndex = 0;
+           } else {
+             yadaIndex ++;
+           }
+        },
+
+        getIndex() {
+          return yadaIndex;
         }
+
 
       }
   }]);

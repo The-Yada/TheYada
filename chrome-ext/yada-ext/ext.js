@@ -107,27 +107,59 @@ module.exports = function(ext) {
 
 module.exports = function(ext) {
 
-  ext.controller('YadaExtController', ['$scope', '$rootScope','$location','YadaExtService', function($scope, $rootScope, $location, YadaExtService){
+  ext.controller('YadaExtController', ['$scope', '$filter', '$rootScope','$location','YadaExtService', 'UserExtService', function($scope, $filter, $rootScope, $location, YadaExtService, UserExtService){
+       UserExtService.checkLogStatus();
 
-       $scope.yadaScrollIndex = 0;
+       $scope.yadaScrollIndex = YadaExtService.getIndex();
        $scope.yadas = YadaExtService.getYadas($rootScope.extUrl);
+       $scope.userObj = UserExtService.checkLogStatus();
+
+       $scope.userVotingState = UserExtService.getUserVotingState();
+      //  $filter('filter')($scope.userObj.yadaUserJoinList, {theYadaId: $scope.yadas[$scope.yadaScrollIndex].id} );
+       $scope.downvoted = false;
+
+
+      //  $scope.karmaStatus = function(userJoins, yadaArr, index) {
+       //
+      //        if(userJoins !== null) {
+      //          let arr = [];
+       //
+      //          yadaArr.forEach(function(yada) {
+      //             console.log(yada);
+      //              userJoins.forEach(function(yuj){
+      //                  if (yuj.theYadaId === yada.id) {
+      //                    console.log("what", yuj, yada.id);
+      //                    arr.push(yuj);
+      //                  }
+      //              })
+      //         })
+       //
+      //         return arr.filter(function(e){
+       //
+      //           return e.theYadaId === yadaArr[index].id
+      //         });
+      //       } else {
+      //         return false;
+      //       }
+       //
+      //   return
+      //  }
+
+
 
        /*******************************
        * scroll yada left and right
        ********************************/
        $scope.scrollLeft = function() {
-         if ($scope.yadaScrollIndex <= 0) {
-           $scope.yadaScrollIndex = $scope.yadas.length -1;
-         } else {
-           $scope.yadaScrollIndex --;
-         }
+          YadaExtService.scrollLeft();
+          $scope.yadas = YadaExtService.updateYadas();
+          $scope.yadaScrollIndex = YadaExtService.getIndex();
        }
+
        $scope.scrollRight = function() {
-         if ($scope.yadaScrollIndex >= $scope.yadas.length -1) {
-           $scope.yadaScrollIndex = 0;
-         } else {
-           $scope.yadaScrollIndex ++;
-         }
+         YadaExtService.scrollRight();
+         $scope.yadas = YadaExtService.updateYadas();
+         $scope.yadaScrollIndex = YadaExtService.getIndex();
        }
 
        /*******************************
@@ -136,7 +168,14 @@ module.exports = function(ext) {
        $scope.upIt = function (yada) {
            YadaExtService.upKarma(yada, function() {
 
+                 UserExtService.checkLogStatus();
+
                  $scope.yadas = YadaExtService.updateYadas();
+                 $scope.userObj = UserExtService.getUser();
+
+                 $scope.upvoted = $scope.userObj.yadaUserJoinList[$scope.yadaScrollIndex].upvoted;
+                 console.log("up", $scope.upvoted);
+
                  $location.path("/");
            });
 
@@ -144,7 +183,14 @@ module.exports = function(ext) {
        $scope.downIt = function (yada) {
            YadaExtService.downKarma(yada, function() {
 
-               $scope.yadas = YadaExtService.updateYadas();
+              UserExtService.checkLogStatus();
+
+              $scope.yadas = YadaExtService.updateYadas();
+              $scope.userObj = UserExtService.getUser();
+
+              $scope.downvoted = $scope.userObj.yadaUserJoinList[$scope.yadaScrollIndex].downvoted;
+              console.log("down", $scope.downvoted);
+
                $location.path("/");
            });
 
@@ -181,6 +227,9 @@ module.exports = function(ext) {
       controller: 'EditorExtController'
     });
   }]).run(['$rootScope', '$location', 'UserExtService', function ($rootScope, $location, UserExtService) {
+    // sends a request to server to check session info
+    // records session info to persist between refreshes
+    $rootScope.userObj = UserExtService.checkLogStatus();
 
     //stores current url in rootScope
     $rootScope.extUrl = document.referrer;
@@ -197,10 +246,6 @@ module.exports = function(ext) {
     var chromeId = "oceicbhfpbbeomhchbhoklfhnigpolle";
     var message = { greeting: "hello from angular land" };
     chrome.runtime.sendMessage(chromeId, message);
-
-    // sends a request to server to check session info
-    // records session info to persist between refreshes
-    UserExtService.checkLogStatus();
 
     slide();
 
@@ -239,6 +284,7 @@ module.exports = function(ext) {
   ext.factory('UserExtService', ['$http', '$location', function($http, $location) {
 
       let userObj = {};
+      let yujList = [];
       let logStatus = {status: false};
 
       return {
@@ -260,7 +306,9 @@ module.exports = function(ext) {
             angular.copy(log, logStatus);
 
             $location.path('/');
+            return user;
           })
+          return
         },
 
         checkLogStatus() {
@@ -276,7 +324,9 @@ module.exports = function(ext) {
             angular.copy(log, logStatus);
 
             $location.path('/');
+            return user
           })
+          return
         },
 
 
@@ -294,6 +344,24 @@ module.exports = function(ext) {
         getUser() {
 
           return userObj;
+        },
+
+        getUserVotingState() {
+          $http({
+            url: 'http://localhost:8080/yadaUserJoinList',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("yuj-list get", response.data);
+
+            let yuj = response.data
+            angular.copy(yuj, yujList);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+            return yuj
+          })
+          return
         },
 
         /*******************************
@@ -316,8 +384,9 @@ module.exports = function(ext) {
             angular.copy(log, logStatus);
 
             $location.path('/');
+            return user
           });
-
+          return
         },
       }
 
@@ -333,10 +402,11 @@ module.exports = function(ext) {
 
 module.exports = function(ext) {
 
-  ext.factory('YadaExtService', ['$http','$rootScope','$location', function($http, $rootScope, $location){
+  ext.factory('YadaExtService', ['$http','$rootScope','$location', 'UserExtService', function($http, $rootScope, $location, UserExtService){
 
       let yadas = [];
       let scrapes = [];
+      let yadaIndex = 0;
       let blankYada = [{
         content: "You should write a Yada for this article.",
         user: {
@@ -357,13 +427,15 @@ module.exports = function(ext) {
               url: currentUrl,
               method: 'GET'
             }).then(function success(response){
-
+              console.log("get", response.data);
               currentYadas = response.data;
               if(currentYadas === '') {
                 console.log("blank array on getYadas");
                 angular.copy(blankYada, yadas);
+                return yadas
               } else {
                   angular.copy(currentYadas, yadas);
+                  return yadas
               }
 
             }, function error(response){
@@ -455,7 +527,28 @@ module.exports = function(ext) {
             callback('error');
           });
 
+        },
+
+        scrollLeft() {
+           if (yadaIndex <= 0) {
+             yadaIndex = yadas.length -1;
+           } else {
+             yadaIndex --;
+           }
+        },
+
+        scrollRight() {
+           if (yadaIndex >= yadas.length -1) {
+             yadaIndex = 0;
+           } else {
+             yadaIndex ++;
+           }
+        },
+
+        getIndex() {
+          return yadaIndex;
         }
+
 
       }
   }]);

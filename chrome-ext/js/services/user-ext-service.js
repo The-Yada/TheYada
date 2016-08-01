@@ -9,6 +9,7 @@ module.exports = function(ext) {
   ext.factory('UserExtService', ['$http', '$location', function($http, $location) {
 
       let userObj = {};
+      let yujList = [];
       let logStatus = {status: false};
 
       return {
@@ -30,7 +31,9 @@ module.exports = function(ext) {
             angular.copy(log, logStatus);
 
             $location.path('/');
+            return user;
           })
+          return
         },
 
         checkLogStatus() {
@@ -46,7 +49,9 @@ module.exports = function(ext) {
             angular.copy(log, logStatus);
 
             $location.path('/');
+            return user
           })
+          return
         },
 
 
@@ -64,6 +69,24 @@ module.exports = function(ext) {
         getUser() {
 
           return userObj;
+        },
+
+        getUserVotingState() {
+          $http({
+            url: 'http://localhost:8080/yadaUserJoinList',
+            method: 'GET'
+          }).then(function(response) {
+            console.log("yuj-list get", response.data);
+
+            let yuj = response.data
+            angular.copy(yuj, yujList);
+            let log = {status: true};
+            angular.copy(log, logStatus);
+
+            $location.path('/');
+            return yuj
+          })
+          return
         },
 
         /*******************************
@@ -86,8 +109,9 @@ module.exports = function(ext) {
             angular.copy(log, logStatus);
 
             $location.path('/');
+            return user
           });
-
+          return
         },
       }
 

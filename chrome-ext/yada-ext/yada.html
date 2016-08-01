@@ -42,21 +42,24 @@
       </main>
 
       <!-- NAVIGATION -->
-      <nav id="navBox" class="bottom-nav" ng-controller="NavExtController">
-        <span class="username-nav" ng-show="logStatus.status">Welcome, {{user.username}}</span>
+      <div class="nav-wrapper">
 
-        <ul>
-          <li><a href="#/">home</a></li>
-          <li ng-show="logStatus.status">
-            <a href="#/editor">editor</a>
-           </li>
-          <li id='log'>
-              <a ng-show="!logStatus.status" href="#/log-in">Login</a>
-              <a ng-click="logout()" ng-show="logStatus.status" href="#/">Logout</a>
-            </li>
-          <li><a ng-click="toWebsite()" href="#">Website</a></li>
-        </ul>
-      </nav>
+        <nav id="navBox" class="bottom-nav" ng-controller="NavExtController">
+          <span class="username-nav" ng-show="logStatus.status">Welcome, {{user.username}}</span>
+          <ul>
+            <li><a href="#/">home</a></li>
+            <li ng-show="logStatus.status">
+              <a href="#/editor">editor</a>
+             </li>
+            <li id='log'>
+                <a ng-show="!logStatus.status" href="#/log-in">Login</a>
+                <a ng-click="logout()" ng-show="logStatus.status" href="#/">Logout</a>
+              </li>
+            <li><a ng-click="toWebsite()" href="#">Website</a></li>
+          </ul>
+        </nav>
+      </div>
+
 
     </section>
 
