@@ -55,32 +55,6 @@ public class Link {
     public Link() {
     }
 
-    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int upVotes, int downVotes, int numberOfYadas, long timeDiffInSeconds, String title, int karma) {
-        this.url = url;
-        this.timeOfCreation = timeOfCreation;
-        this.linkScore = linkScore;
-        this.totalVotes = totalVotes;
-        this.upVotes = upVotes;
-        this.downVotes = downVotes;
-        this.numberOfYadas = numberOfYadas;
-        this.timeDiffInSeconds = timeDiffInSeconds;
-        this.title = title;
-        this.karma = karma;
-    }
-
-    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int upVotes, int downVotes, double controversyScore, int numberOfYadas, long timeDiffInSeconds, String title) {
-        this.url = url;
-        this.timeOfCreation = timeOfCreation;
-        this.linkScore = linkScore;
-        this.totalVotes = totalVotes;
-        this.upVotes = upVotes;
-        this.downVotes = downVotes;
-        this.controversyScore = controversyScore;
-        this.numberOfYadas = numberOfYadas;
-        this.timeDiffInSeconds = timeDiffInSeconds;
-        this.title = title;
-    }
-
     public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int upVotes, int downVotes, double controversyScore, int numberOfYadas, long timeDiffInSeconds, String title, int karma, List<Yada> yadaList) {
         this.url = url;
         this.timeOfCreation = timeOfCreation;
@@ -94,16 +68,7 @@ public class Link {
         this.title = title;
         this.karma = karma;
         this.yadaList = yadaList;
-    }
 
-    public Link(String url, LocalDateTime timeOfCreation, double linkScore, int totalVotes, int numberOfYadas, long timeDiffInSeconds, List<Yada> yadaList) {
-        this.url = url;
-        this.timeOfCreation = timeOfCreation;
-        this.linkScore = linkScore;
-        this.totalVotes = totalVotes;
-        this.numberOfYadas = numberOfYadas;
-        this.timeDiffInSeconds = timeDiffInSeconds;
-        this.yadaList = yadaList;
     }
 
     public int getId() {

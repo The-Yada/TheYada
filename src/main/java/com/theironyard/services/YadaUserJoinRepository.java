@@ -5,6 +5,7 @@ import com.theironyard.entities.Yada;
 import com.theironyard.entities.YadaUserJoin;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -12,4 +13,5 @@ import java.util.HashMap;
  */
 public interface YadaUserJoinRepository extends CrudRepository<YadaUserJoin, Integer> {
      YadaUserJoin findByUserAndYada(User user, Yada yada);
+     ArrayList<YadaUserJoin> findAllByUser(User user);
 }
