@@ -89,6 +89,7 @@ public class TheYadaApplicationTests {
 
 
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
 		String json = mapper.writeValueAsString(yadaLink);
 
 		mockMvc.perform(
@@ -142,15 +143,16 @@ public class TheYadaApplicationTests {
 		String json = response.getContentAsString();
 
 		ObjectMapper om = new ObjectMapper();
+		om.findAndRegisterModules();
 
-		Iterable<Yada> testYadaList = om.readValue(json, Iterable.class);
+		Iterable<Yada> testYadaList = om.readValue(json, new TypeReference<Iterable<Yada>>(){});
 
 
 		ArrayList<Yada> testList = (ArrayList<Yada>) testYadaList;
 
 		Assert.assertTrue(testList.size() == 1);
-		//trying to figure out some more assertions for this one.. running into issue when calling any method on...
-		//an array list
+		Assert.assertTrue(testList.get(0).getContent().equals("content"));
+
 	}
 
 	@Test
@@ -165,11 +167,12 @@ public class TheYadaApplicationTests {
 		String json = response.getContentAsString();
 
 		ObjectMapper om = new ObjectMapper();
+		om.findAndRegisterModules();
 
 		ArrayList<Link> testList = om.readValue(json, new TypeReference<ArrayList<Link>>(){});
 
 		Assert.assertTrue(testList.size() == 1);
-		//Assert.assertTrue(testList.get(0).getUrl().equals("http://www.google.com"));
+		Assert.assertTrue(testList.get(0).getUrl().equals("http://www.google.com"));
 	}
 }
 
