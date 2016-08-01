@@ -28,7 +28,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -84,7 +83,7 @@ public class TheYadaApplicationTests {
 		Yada yada = new Yada();
 		yada.setContent("content");
 		Link link = new Link();
-		link.setUrl("http://www.google.com");
+		link.setUrl("http://www.bbc.com/sport/formula1/36879742");
 		YadaLink yadaLink = new YadaLink(yada, link);
 
 
@@ -135,7 +134,7 @@ public class TheYadaApplicationTests {
 
 		ResultActions ra = mockMvc.perform(
 				MockMvcRequestBuilders.get("/lemmieSeeTheYadas")
-						.param("url", "http://www.google.com")
+						.param("url", "http://www.bbc.com/sport/formula1/36879742")
 		);
 
 		MvcResult result = ra.andReturn();
@@ -172,8 +171,29 @@ public class TheYadaApplicationTests {
 		ArrayList<Link> testList = om.readValue(json, new TypeReference<ArrayList<Link>>(){});
 
 		Assert.assertTrue(testList.size() == 1);
-		Assert.assertTrue(testList.get(0).getUrl().equals("http://www.google.com"));
+		Assert.assertTrue(testList.get(0).getUrl().equals("http://www.bbc.com/sport/formula1/36879742"));
 	}
+
+	@Test
+	public void fTestLemmieYada() throws Exception {
+		ResultActions ra = mockMvc.perform(
+				MockMvcRequestBuilders.get("/lemmieYada")
+						.param("url", "http://www.bbc.com/sport/formula1/36879742")
+		);
+
+		MvcResult result = ra.andReturn();
+		MockHttpServletResponse response = result.getResponse();
+		String json = response.getContentAsString();
+
+		ObjectMapper om = new ObjectMapper();
+		om.findAndRegisterModules();
+
+		ArrayList<String> scrapedSite = om.readValue(json, new TypeReference<ArrayList<String>>(){});
+
+		Assert.assertTrue(scrapedSite.get(0).contentEquals("Lewis Hamilton and Nico Rosberg clash off the track at Hungarian GP"));
+	}
+
+
 }
 
 
