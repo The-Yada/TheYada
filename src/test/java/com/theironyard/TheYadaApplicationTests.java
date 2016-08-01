@@ -10,6 +10,7 @@ import com.theironyard.services.LinkRepository;
 import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
+import org.hibernate.Hibernate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
@@ -35,7 +37,6 @@ import java.util.ArrayList;
 @SpringApplicationConfiguration(classes = TheYadaApplication.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-
 public class TheYadaApplicationTests {
 
 	@Autowired
@@ -264,28 +265,31 @@ public class TheYadaApplicationTests {
 		Assert.assertTrue(testNewResults.get(0).getTimeOfCreation().isAfter(testNewResults.get(1).getTimeOfCreation()));
 	}
 
-//	@Test
-//	public void xxTestUpVoteExtension() throws Exception {
-//
-//		User user = new User("joey", "123");
-//
-//		Link link = links.findFirstByUrl("")
-//
-//
-//		ObjectMapper mapper = new ObjectMapper();
-//		mapper.findAndRegisterModules();
-//		String json = mapper.writeValueAsString(yada);
-//
-//		mockMvc.perform(
-//				MockMvcRequestBuilders.post("/upVoteExt")
-//						.sessionAttr("username", "joey")
-//						.content(json)
-//						.contentType("application/json")
-//		);
-//
-//		Yada yadaThatWasUpvoted = yadas.findOne(0);
-//		Assert.assertTrue(yadaThatWasUpvoted.getKarma() == 4);
-//	}
+	@Transactional
+	@Test
+	public void ccTestUpVoteExtension() throws Exception {
+		User user = new User("mike", "123", 0);
+		users.save(user);
+
+		Yada yada = yadas.findFirstByOrderByIdDesc();
+		//Hibernate.initialize(yada.getUser().getYadaUserJoinList());
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
+		String json = mapper.writeValueAsString(yada);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/upVoteExt")
+						.sessionAttr("username", "mike")
+						.content(json)
+						.contentType("application/json")
+		);
+
+
+		Yada y = yadas.findOne(yada.getId());
+		Assert.assertTrue(y.getKarma() == 2);
+
+	}
 
 
 
