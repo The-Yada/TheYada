@@ -131,37 +131,36 @@ public class TheYadaApplicationTests {
 		Assert.assertTrue(yadas.count() == 2);
 	}
 
-//	@Test
-//	public void cTestUpVoteExtension() throws Exception {
-//
-//		User user = new User("joey", "123");
-//
-//		ArrayList<Yada> yadasInLink = new ArrayList<>();
-//		Link link = new Link("www.google.com", LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0,"alskdj", 1, yadasInLink);
-//
-//		users.save(user);
-//		links.save(link);
-//
-//		Yada yada = yadas.findOne(0);
-//		link.getYadaList().add(yada);
-//		links.save(link);
-//
-//		ObjectMapper mapper = new ObjectMapper();
-//		String json = mapper.writeValueAsString(yada);
-//
-//		mockMvc.perform(
-//				MockMvcRequestBuilders.post("/upVoteExt")
-//						.sessionAttr("username", "joey")
-//						.content(json)
-//						.contentType("application/json")
-//		);
-//
-//		Yada yadaThatWasUpvoted = yadas.findOne(0);
-//		Assert.assertTrue(yadaThatWasUpvoted.getKarma() == 4);
-//	}
+	@Transactional
+	@Test
+	public void dTestUpVoteExtension() throws Exception {
+		User user = new User("mike", "123", 0);
+		users.save(user);
+
+		Yada yada = yadas.findFirstByOrderByIdDesc();
+		//Hibernate.initialize(yada.getUser().getYadaUserJoinList());
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
+		String json = mapper.writeValueAsString(yada);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/upVoteExt")
+						.sessionAttr("username", "mike")
+						.content(json)
+						.contentType("application/json")
+		);
+
+
+		Yada y = yadas.findOne(yada.getId());
+		Assert.assertTrue(y.getKarma() == 2);
+
+	}
+
+
 
 	@Test
-	public void dTestLemmeSeeTheYadas() throws Exception {
+	public void eTestLemmeSeeTheYadas() throws Exception {
 
 		ResultActions ra = mockMvc.perform(
 				MockMvcRequestBuilders.get("/lemmieSeeTheYadas")
@@ -186,7 +185,7 @@ public class TheYadaApplicationTests {
 	}
 
 	@Test
-	public void eTestTheYadaList() throws Exception {
+	public void fTestTheYadaList() throws Exception {
 
 		ResultActions ra = mockMvc.perform(
 				MockMvcRequestBuilders.get("/theYadaList")
@@ -206,7 +205,7 @@ public class TheYadaApplicationTests {
 	}
 
 	@Test
-	public void fTestLemmieYada() throws Exception {
+	public void gTestLemmieYada() throws Exception {
 		ResultActions ra = mockMvc.perform(
 				MockMvcRequestBuilders.get("/lemmieYada")
 						.param("url", "http://www.bbc.com/sport/formula1/36879742")
@@ -225,7 +224,7 @@ public class TheYadaApplicationTests {
 	}
 
 	@Test
-	public void gTestTopLinks() throws Exception {
+	public void hTestTopLinks() throws Exception {
 		ResultActions ra = mockMvc.perform(
 				MockMvcRequestBuilders.get("/topLinks")
 		);
@@ -247,7 +246,7 @@ public class TheYadaApplicationTests {
 	}
 
 	@Test
-	public void hTestNewLinks() throws Exception {
+	public void iTestNewLinks() throws Exception {
 		ResultActions ra = mockMvc.perform(
 				MockMvcRequestBuilders.get("/newLinks")
 		);
@@ -265,31 +264,6 @@ public class TheYadaApplicationTests {
 		Assert.assertTrue(testNewResults.get(0).getTimeOfCreation().isAfter(testNewResults.get(1).getTimeOfCreation()));
 	}
 
-	@Transactional
-	@Test
-	public void ccTestUpVoteExtension() throws Exception {
-		User user = new User("mike", "123", 0);
-		users.save(user);
-
-		Yada yada = yadas.findFirstByOrderByIdDesc();
-		//Hibernate.initialize(yada.getUser().getYadaUserJoinList());
-
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.findAndRegisterModules();
-		String json = mapper.writeValueAsString(yada);
-
-		mockMvc.perform(
-				MockMvcRequestBuilders.post("/upVoteExt")
-						.sessionAttr("username", "mike")
-						.content(json)
-						.contentType("application/json")
-		);
-
-
-		Yada y = yadas.findOne(yada.getId());
-		Assert.assertTrue(y.getKarma() == 2);
-
-	}
 
 
 
