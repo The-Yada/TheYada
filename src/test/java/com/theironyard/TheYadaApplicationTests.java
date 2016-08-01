@@ -240,9 +240,6 @@ public class TheYadaApplicationTests {
 
 		Assert.assertTrue(testTopResults.size() == 2);
 		Assert.assertTrue(testTopResults.get(0).getKarma() >= testTopResults.get(1).getKarma());
-
-
-		// want to add a test to make sure that links with higher score are first in the array
 	}
 
 	@Test
@@ -263,9 +260,6 @@ public class TheYadaApplicationTests {
 		Assert.assertTrue(testNewResults.size() == 2);
 		Assert.assertTrue(testNewResults.get(0).getTimeOfCreation().isAfter(testNewResults.get(1).getTimeOfCreation()));
 	}
-
-
-
 
 }
 
