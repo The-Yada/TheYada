@@ -264,6 +264,30 @@ public class TheYadaApplicationTests {
 		Assert.assertTrue(testNewResults.get(0).getTimeOfCreation().isAfter(testNewResults.get(1).getTimeOfCreation()));
 	}
 
+//	@Test
+//	public void xxTestUpVoteExtension() throws Exception {
+//
+//		User user = new User("joey", "123");
+//
+//		Link link = links.findFirstByUrl("")
+//
+//
+//		ObjectMapper mapper = new ObjectMapper();
+//		mapper.findAndRegisterModules();
+//		String json = mapper.writeValueAsString(yada);
+//
+//		mockMvc.perform(
+//				MockMvcRequestBuilders.post("/upVoteExt")
+//						.sessionAttr("username", "joey")
+//						.content(json)
+//						.contentType("application/json")
+//		);
+//
+//		Yada yadaThatWasUpvoted = yadas.findOne(0);
+//		Assert.assertTrue(yadaThatWasUpvoted.getKarma() == 4);
+//	}
+
+
 
 }
 
