@@ -30,6 +30,7 @@ public interface YadaRepository extends CrudRepository<Yada, Integer> {
 
     int countByLink(Link link);
 
+    Iterable<Yada> findAllByUserIdOrderByKarmaDesc(int id);
     @Query("SELECT y FROM Yada y WHERE LOWER(content) LIKE '%' || LOWER(?) || '%'")
     Iterable<Yada> searchByContent(String searchInput);
 
