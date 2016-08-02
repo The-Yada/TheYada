@@ -14,6 +14,8 @@
   .content-text h2 {
     margin: 20px;
     font-size: 2.4vw; }
+    .content-text h2::first-letter {
+      font-size: 200%; }
   .content-text img {
     height: 20px; }
   .content-text button {
@@ -32,19 +34,37 @@
 
 .karma-box {
   display: flex;
-  flex-direction: column;
-  width: 100px;
+  flex-direction: row;
+  justify-content: center;
+  width: 500px;
   margin: 30px auto; }
+  .karma-box button {
+    background: transparent;
+    border: none; }
+
+.up-jelly, .down-jelly {
+  height: 100px;
+  width: 100px; }
+  .up-jelly:hover, .down-jelly:hover {
+    cursor: pointer;
+    transform: scale(1.2); }
+
+.nav-wrapper {
+  display: block;
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  background: white; }
 
 .bottom-nav {
   position: absolute;
-  bottom: 0;
   width: 100%;
   border-top: 5px solid #171126;
   background-color: white;
   display: flex;
   flex-direction: column;
-  align-items: center; }
+  align-items: center;
+  box-shadow: 0 2px 4px 5px rgba(0, 0, 0, 0.2); }
   .bottom-nav .username-nav {
     font-size: 1.5em;
     padding-top: 2px;
@@ -56,8 +76,9 @@
     border-top-left-radius: 100px;
     border-top-right-radius: 100px;
     color: white;
-    width: 200px;
-    text-align: center; }
+    min-width: 200px;
+    text-align: center;
+    box-shadow: 0 -1px 4px 2px rgba(0, 0, 0, 0.2); }
   .bottom-nav ul {
     width: 100%;
     padding: 0;
@@ -71,15 +92,16 @@
   .bottom-nav li {
     box-sizing: border-box;
     width: 25%;
-    font-size: 1.2em;
-    padding: 10px; }
+    font-size: 1.2em; }
     .bottom-nav li:hover {
       border-left: 3px solid #171126;
       background-color: rgba(0, 0, 0, 0.1);
       font-weight: bold;
       cursor: pointer; }
   .bottom-nav a {
-    text-decoration: none; }
+    text-decoration: none;
+    display: block;
+    padding: 10px; }
     .bottom-nav a:active {
       color: #171126;
       font-weight: bold; }
@@ -96,20 +118,28 @@
   .editor-wrapper .yada-scrape {
     width: 50%;
     height: 250px;
+    font-size: 1.2em;
     border-right: 3px solid #171126;
     overflow: scroll;
     position: relative; }
   .editor-wrapper .yada-editor {
+    border-top: 3px solid #171126;
     width: 50%;
     height: 250px;
     flex-direction: column;
     display: flex;
     justify-content: flex-bottom; }
     .editor-wrapper .yada-editor .editor-text {
-      height: 100%; }
+      height: 100%;
+      font-size: 1.2em; }
     .editor-wrapper .yada-editor .post-button {
       width: 100%;
-      height: 50px; }
+      height: 50px;
+      background-color: white;
+      border: 2px solid black; }
+      .editor-wrapper .yada-editor .post-button:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.2); }
     .editor-wrapper .yada-editor .char-count {
       text-align: center;
       font-size: 1.5em;

@@ -9,12 +9,13 @@
   .yada-scrape {
     width: 50%;
     height: 250px;
+    font-size: 1.2em;
     border-right: 3px solid $black;
     overflow: scroll;
     position: relative;
   }
   .yada-editor {
-
+    border-top: 3px solid $black;
     width: 50%;
     height: 250px;
     flex-direction: column;
@@ -22,10 +23,17 @@
     justify-content: flex-bottom;
     .editor-text {
       height: 100%;
+      font-size: 1.2em;
     }
     .post-button {
       width: 100%;
       height: 50px;
+      background-color: white;
+      border: 2px solid black;
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(0,0,0,0.2);
+      }
     }
     .char-count {
       text-align: center;

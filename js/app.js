@@ -8,7 +8,7 @@
 (function() {
 "use strict"
 
-let app = angular.module('YadaWebApp', ['ngRoute', 'angular-storage', 'angular-jwt'])
+let app = angular.module('YadaWebApp', ['ngRoute', 'ngAnimate'])
 
 
 
@@ -78,6 +78,8 @@ let app = angular.module('YadaWebApp', ['ngRoute', 'angular-storage', 'angular-j
   require('./filters/search-filter.js')(app);
 
   // Directives
+  // Animation
+  require('./animations.js')(app);
 
 
 

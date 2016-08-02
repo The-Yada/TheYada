@@ -5,7 +5,7 @@
 
 module.exports = function(ext) {
 
-  ext.controller('EditorExtController', ['$scope', '$rootScope', '$location', 'YadaExtService', function($scope, $rootScope, $location, YadaExtService){
+  ext.controller('EditorExtController', ['$scope', '$rootScope', '$location', 'YadaExtService', 'UserExtService', function($scope, $rootScope, $location, YadaExtService, UserExtService){
 
 
     $scope.scrapedText = YadaExtService.scrapeIt($rootScope.extUrl);
@@ -21,7 +21,7 @@ module.exports = function(ext) {
         } else {
           $scope.editorText = 'sorry you have already written a yada for this article';
         }
-
+        
         $location.path('/');
       });
     };

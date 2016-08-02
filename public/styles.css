@@ -1,30 +1,90 @@
-.logo {
-  width: 100px;
-  height: 100px; }
+/*******************************
+* Variables
+********************************/
+/* Main Primary color */
+/* Main Secondary color (1) */
+/* white */
+/* black */
+.login-button {
+  background-color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 50px;
+  border: 1px solid #171126;
+  border-radius: 3px;
+  padding: 0;
+  cursor: pointer; }
+  .login-button:hover {
+    box-shadow: inset 0 2px 2px 3px rgba(0, 0, 0, 0.3); }
 
-.jumbo {
-  display: inline-flex;
-  justify-content: space-around;
-  width: 100%; }
+.rolo-btn {
+  position: fixed;
+  margin: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 90; }
 
-.link-home {
-  background-color: #72E9FF; }
-  .link-home a {
-    font-size: 1.6em; }
+#toggle {
+  left: 200px; }
 
-.yadas-home {
-  width: 80%;
-  background-color: #E9E3CB; }
+#pause {
+  left: 100px; }
 
-.yadas-home, .link-home {
-  margin-right: 50px;
-  border: 2px solid black;
-  border-radius: 5px;
-  color: #42222F;
-  display: flex;
-  flex-direction: column; }
-  .yadas-home button, .link-home button {
-    width: 50px; }
+#fakeHeight {
+  height: 6000px;
+  width: 1px; }
+
+.slide-wrapper {
+  display: block;
+  z-index: 90;
+  width: 500px;
+  height: 50px;
+  position: fixed;
+  transform: rotate(90deg);
+  left: -20px;
+  top: 370px; }
+  .slide-wrapper #progressSlider {
+    width: 400px;
+    height: 100px;
+    position: fixed; }
+
+.rolo-wrapper {
+  width: 50%;
+  height: 300px;
+  position: fixed;
+  -webkit-font-smoothing: antialiased; }
+
+#rolodex {
+  list-style-type: none;
+  left: 300px;
+  top: 20px;
+  height: 300px;
+  position: absolute; }
+
+#rolodex li {
+  box-sizing: border-box;
+  position: absolute;
+  width: 700px;
+  height: 200px;
+  border: 4px solid #99efff;
+  background: white;
+  box-shadow: 10px 0 15px 5px rgba(0, 0, 0, 0.2);
+  color: #171126; }
+  #rolodex li a {
+    padding: 10px;
+    font-size: 2em;
+    font-weight: bold; }
+    #rolodex li a:visited {
+      color: #171126; }
+
+.header-home {
+  z-index: 100;
+  width: 100%;
+  position: fixed;
+  top: 50px;
+  margin-right: -50%;
+  /* temporariliy hiding*/ }
 
 .searchBox {
   display: flex;
@@ -41,15 +101,30 @@
     width: 100px;
     margin: 0 auto; }
 
-.login-button {
-  background-color: white;
-  background-size: contain;
-  background-repeat: no-repeat;
+.filterBox {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center; }
+
+.quick-wrapper {
+  position: fixed;
+  top: 100px;
+  z-index: 100;
   width: 200px;
-  height: 50px;
-  border: 1px solid black;
-  border-radius: 3px;
-  padding: 0;
-  cursor: pointer; }
-  .login-button:hover {
-    box-shadow: inset 0 2px 2px 3px rgba(0, 0, 0, 0.3); }
+  font-size: .7em; }
+
+body {
+  background-color: #99efff; }
+
+.logo {
+  width: 100px;
+  height: 100px; }
+
+.jumbo {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 100%; }
+
+.views {
+  overflow: scroll; }
