@@ -2,24 +2,20 @@
 * Home Controller
 *
 
-
-sorting buttons
-home == Hot
-/controversialLinks
-/newLinks
-
 ********************************/
 
 module.exports = function(app) {
 
   app.controller('HomeController', ['$scope', '$location', 'YadaService', function($scope, $location, YadaService){
 
+    $scope.isCollapsed = false;
     /*******************************
     * grab the yadas for the ng-repeat in home.html
     *********************************/
 
     $scope.yadas = YadaService.getTopYadas();
     $scope.searchString = "";
+    $scope.colors = ['blue','red', 'green'];
 
 
     /*******************************
@@ -70,6 +66,7 @@ module.exports = function(app) {
     $scope.top = function() {
         $scope.yadas = YadaService.filter('top');
     }
+
 
   }])
 }

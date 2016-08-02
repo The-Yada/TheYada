@@ -18,13 +18,42 @@
   <h5 class="author-yadaText">author: <span>{{yadas[yadaScrollIndex].user.username}}</span> </h5>
 
   <div class="karma-box">
+
     <button ng-click="upIt(yadas[yadaScrollIndex])" class="up-home" type="button" name="up">
-      ^ <!-- <img src="assets/arrow.png" alt="" /> -->
+        <img ng-show="userVotingState.Status === 3 || userVotingState.Status === 2" class="up-jelly" src="assets/yada-jelly-up.svg" alt="" />
+        <img ng-show="userVotingState.Status === 1" class="up-jelly" src="assets/yada-jelly-up-active.svg" alt="" />
     </button>
-    <span class="karma-home">karma: {{yadas[yadaScrollIndex].karma}}</span>
-    <!-- <span class="voting-state">upstate: {{yadas[yadaScrollIndex].user.username}}</span> -->
-    <button ng-click="downIt(yadas[yadaScrollIndex])" class="down-home" type="button" name="down">
-      v <!-- <img src="assets/arrow.png" alt="" /> -->
+    <span>status: {{userVotingState.Status}}</span>
+    <span class="karma-home"><b>karma: {{yadas[yadaScrollIndex].karma}}</b></span>
+    <span class="test">Yada id: <span ng-model="yadaId">{{yadas[yadaScrollIndex].id}}</span></span>
+
+    <button ng-click="downIt(yadas[yadaScrollIndex])" class="down-home" type="button" name="up">
+        <img ng-show="userVotingState.Status === 3 || userVotingState.Status === 1"  class="up-jelly" src="assets/yada-jelly-down.svg" alt="" />
+        <img ng-show="userVotingState.Status === 2"  class="up-jelly" src="assets/yada-jelly-down-active.svg" alt="" />
     </button>
+
+    <!-- <span ng-repeat="join in filterJoins = ( userVotingState | filter:{theYadaId: yadas[yadaScrollIndex].id})" class="test">
+      <p ng-hide="filterJoins.length">
+        nothing to show!
+      </p>
+      <button ng-click="upIt(yadas[yadaScrollIndex])" class="up-home" type="button" name="up">
+
+          <img ng-hide="filterJoins.length" class="up-jelly" src="assets/yada-jelly-up.svg" alt="" />
+
+          <img ng-show="join.upvoted === false || join.downvoted === true"  class="up-jelly" src="assets/yada-jelly-up.svg" alt="" />
+          <img ng-show="join.upvoted === true && join.downvoted === false"  class="up-jelly active-jelly" src="assets/yada-jelly-up-active.svg" alt="" />
+      </button>
+      id: {{join.theYadaId}}
+      upvoted: {{join.upvoted}}
+      downvoted: {{join.downvoted}}
+      <button ng-click="downIt(yadas[yadaScrollIndex])" class="down-home" type="button" name="up">
+
+          <img ng-hide="filterJoins.length"  class="up-jelly" src="assets/yada-jelly-down.svg" alt="" />
+
+          <img ng-show="join.downvoted === false || join.upvoted === true"  class="down-jelly" src="assets/yada-jelly-down.svg" alt="" />
+          <img ng-show="join.downvoted === true && join.upvoted === false"  class="down-jelly active-jelly" src="assets/yada-jelly-down-active.svg" alt="" />
+      </button>
+    </span> -->
+
   </div>
 </div>

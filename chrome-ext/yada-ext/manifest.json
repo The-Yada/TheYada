@@ -29,6 +29,10 @@
   },
   "manifest_version": 2,
   "web_accessible_resources": [
+    "assets/yada-jelly-down.svg",
+    "assets/yada-jelly-up.svg",
+    "assets/yada-jelly-down-active.svg",
+    "assets/yada-jelly-up-active.svg",
     "yada.html",
     "css/frame.css",
     "ext.js",

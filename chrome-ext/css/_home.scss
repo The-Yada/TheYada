@@ -7,6 +7,9 @@
   h2 {
     margin: 20px;
     font-size: 2.4vw;
+    &::first-letter {
+      font-size: 200%;
+    }
   }
   img {
     height: 20px;
@@ -32,7 +35,21 @@
 
 .karma-box {
   display: flex;
-  flex-direction: column;
-  width: 100px;
+  flex-direction: row;
+  justify-content: center;
+  width: 500px;
   margin: 30px auto;
+  button {
+    background: transparent;
+    border: none;
+  }
+}
+
+.up-jelly, .down-jelly {
+  height: 100px;
+  width: 100px;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+  }
 }

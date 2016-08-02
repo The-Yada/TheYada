@@ -2,40 +2,70 @@
   HOME TEMPLATE
 ################################## -->
 
-<!-- FITLER BUTTONS -->
-<div class="filterBox">
-  <button ng-click="hot()" type="button" name="hot">Hot</button>
-  <button ng-click="controversial()" type="button" name="controversial">Controversial</button>
-  <button ng-click="new()" type="button" name="new">New</button>
-  <button ng-click="top()" type="button" name="top">Top</button>
+
+<header class="header-home">
+  <!-- FITLER BUTTONS -->
+  <div class="filterBox">
+    <button id="hotLinks" ng-click="hot()" type="button" name="hot">Hot</button>
+    <button id="contLinks" ng-click="controversial()" type="button" name="controversial">Controversial</button>
+    <button id="newLinks" ng-click="new()" type="button" name="new">New</button>
+    <button id="topLinks" ng-click="top()" type="button" name="top">Top</button>
+  </div>
+
+  <!-- SEARCH BOX -->
+  <div class="searchBox">
+    <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
+    <button ng-click="search(searchString)" type="button" name="search">Search</button>
+  </div>
+</header>
+<!-- SLIDER -->
+<div class="slide-wrapper">
+  <input id="progressSlider" type="range" min="0" max="1" value="0" step="0.001" /><br>
 </div>
 
-<!-- SEARCH BOX -->
-<div class="searchBox">
-  <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
-  <button ng-click="search(searchString)" type="button" name="search">Search</button>
-</div>
+<!-- TIMELINE CONTROLS -->
+  <button class="rolo-btn" id="toggle">Toggle</button>
+  <button class="rolo-btn" id="pause">Pause</button>
+  <button class="rolo-btn" id="resume">resume</button>
+<!-- QUICK LIST -->
 
-<!-- LIST OF LINKS WRAPPER -->
-<ul class="data-ctrl">
-
-    <!-- LINKS -->
-    <li ng-repeat="links in yadas">
-          <div class="link-home">
-              <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
-
-              <p># of yadas: {{links.yadaList.length}}</p>
-          </div>
-
-          <!-- YADAS -->
-          <div class="yadas-home" ng-repeat="yada in links.yadaList">
-
-            <span class="content-home">{{yada.content}}</span></br>
-            <span class="author-home">author: <b>{{yada.user.username}}</b></span>
-
-            <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
-            <span class="karma-home">karma: {{yada.karma}}</span>
-            <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
-          </div>
+<section class="quick-wrapper">
+  <ol class="quick-list">
+    <li class="quickie" ng-repeat="links in yadas | limitTo: 50 ">
+      <button id="link-{{links.id}}" type="button" name="quick">{{links.title}}</button>
     </li>
-</ul>
+  </ol>
+</section>
+
+<!-- ROLODEX -->
+<section class="rolo-wrapper">
+  <ul id="rolodex" class="links-list">
+
+      <!-- LINKS -->
+      <!-- ng-style="{bottom: 20 * $index + 'px', 'z-index': (cards.length - $index)}" -->
+      <li class="box roloAnimation" ng-repeat="links in yadas | limitTo: 50 | orderBy:'-'"
+          data-button="link-{{links.id}}"
+          ng-class="{topLink: $index === 0}">
+
+            <div class="link-home">
+                <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
+
+                <p># of yadas: {{links.yadaList.length}}</p>
+                <p>karma: {{links.karma}}</p>
+            </div>
+
+            <!-- YADAS -->
+            <div ng-show="isCollapsed" class="yadas-home" ng-repeat="yada in links.yadaList">
+
+              <span class="content-home">{{yada.content}}</span></br>
+              <span class="author-home">author: <b>{{yada.user.username}}</b></span>
+
+              <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
+              <span class="karma-home">karma: {{yada.karma}}</span>
+              <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
+            </div>
+      </li>
+  </ul>
+</section>
+
+<div id="fakeHeight"></div>

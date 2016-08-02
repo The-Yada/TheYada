@@ -261,7 +261,8 @@ public class YadaRestController {
             voteMap.put("Status", 3);
             return voteMap;
         }
-        return null;
+        voteMap.put("Status", 3);
+        return voteMap;
     }
 
     /**
@@ -321,11 +322,11 @@ public class YadaRestController {
                     Link link = links.findOne(yadaToUpVote.getLink().getId());
                     link.setTotalVotes(link.getTotalVotes() + 1);
                     link.setUpVotes(link.getUpVotes() + 1);
-
-                    users.save(yadaAuthor);
+                    
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
@@ -352,10 +353,10 @@ public class YadaRestController {
                     link.setUpVotes(link.getUpVotes() + 1);
                     link.setDownVotes(link.getDownVotes() - 1);
 
-                    users.save(yadaAuthor);
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
@@ -373,11 +374,10 @@ public class YadaRestController {
                     link.setUpVotes(link.getUpVotes() + 1);
                     link.setTotalVotes(link.getTotalVotes() + 1);
 
-
-                    users.save(yadaAuthor);
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
@@ -394,10 +394,10 @@ public class YadaRestController {
                     link.setUpVotes(link.getUpVotes() - 1);
                     link.setTotalVotes(link.getTotalVotes() - 1);
 
-                    users.save(yadaAuthor);
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
@@ -450,10 +450,11 @@ public class YadaRestController {
                     link.setDownVotes(link.getDownVotes() + 1);
                     link.setTotalVotes(link.getTotalVotes() + 1);
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToDownVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
                 }
@@ -480,10 +481,11 @@ public class YadaRestController {
                     link.setDownVotes(link.getDownVotes() + 1);
                     link.setUpVotes(link.getUpVotes() - 1);
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToDownVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
 
@@ -501,12 +503,10 @@ public class YadaRestController {
                     link.setDownVotes(link.getDownVotes() + 1);
                     link.setTotalVotes(link.getTotalVotes() + 1);
 
-
-                    users.save(yadaAuthor);
                     yadas.save(yadaToDownVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
-
+                    users.save(yadaAuthor);
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
 
                 }
@@ -522,12 +522,10 @@ public class YadaRestController {
                     link.setDownVotes(link.getDownVotes() - 1);
                     link.setTotalVotes(link.getTotalVotes() - 1);
 
-
-                    users.save(yadaAuthor);
                     yadas.save(yadaToDownVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
-
+                    users.save(yadaAuthor);
                     return new ResponseEntity<>(links.findAllByOrderByLinkScoreDesc(), HttpStatus.OK);
 
                 }
@@ -573,11 +571,11 @@ public class YadaRestController {
                     link.setTotalVotes(link.getTotalVotes() + 1);
                     link.setUpVotes(link.getUpVotes() + 1);
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
-
+                    users.save(yadaAuthor);
                     return new ResponseEntity<>(link, HttpStatus.OK);
                 }
                 else {
@@ -603,11 +601,11 @@ public class YadaRestController {
                     link.setUpVotes(link.getUpVotes() + 1);
                     link.setDownVotes(link.getDownVotes() - 1);
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
-
+                    users.save(yadaAuthor);
                     return new ResponseEntity<>(link, HttpStatus.OK);
                 }
                 else if (!yuj.isUpvoted() && !yuj.isDownvoted()) {
@@ -625,10 +623,11 @@ public class YadaRestController {
                     link.setTotalVotes(link.getTotalVotes() + 1);
 
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(link, HttpStatus.OK);
                 }
@@ -645,10 +644,11 @@ public class YadaRestController {
                     link.setUpVotes(link.getUpVotes() - 1);
                     link.setTotalVotes(link.getTotalVotes() - 1);
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToUpVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(link, HttpStatus.OK);
                 }
@@ -692,10 +692,11 @@ public class YadaRestController {
                     link.setDownVotes(link.getDownVotes() + 1);
                     link.setTotalVotes(link.getTotalVotes() + 1);
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToDownVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(link, HttpStatus.OK);
                 }
@@ -722,10 +723,11 @@ public class YadaRestController {
                     link.setDownVotes(link.getDownVotes() + 1);
                     link.setUpVotes(link.getUpVotes() - 1);
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToDownVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(link, HttpStatus.OK);
 
@@ -744,10 +746,10 @@ public class YadaRestController {
                     link.setTotalVotes(link.getTotalVotes() + 1);
 
 
-                    users.save(yadaAuthor);
                     yadas.save(yadaToDownVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(link, HttpStatus.OK);
 
@@ -765,10 +767,11 @@ public class YadaRestController {
                     link.setTotalVotes(link.getTotalVotes() - 1);
 
 
-                    users.save(yadaAuthor);
+
                     yadas.save(yadaToDownVote);
                     yadaUserJoinRepo.save(yuj);
                     links.save(link);
+                    users.save(yadaAuthor);
 
                     return new ResponseEntity<>(link, HttpStatus.OK);
 
@@ -957,7 +960,9 @@ public class YadaRestController {
             // numerator needs to account for personal vote?
             //
             link.setKarma(link.getUpVotes() - link.getDownVotes());
-            link.setLinkScore(((link.getKarma() - link.getYadaList().size()) / (Math.pow(denominator, GRAVITY))));
+            //get yadalist size from db call instead of link.getYadaList().size
+            int count = yadas.countByLink(link);
+            link.setLinkScore(((link.getKarma() - count) / (Math.pow(denominator, GRAVITY))));
             links.save(link);
         }
         return linkList;

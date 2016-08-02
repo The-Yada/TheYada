@@ -31,6 +31,9 @@
 
     }])
     .run(['$rootScope','$location', 'UserExtService', function($rootScope, $location, UserExtService) {
+      // sends a request to server to check session info
+      // records session info to persist between refreshes
+      $rootScope.userObj = UserExtService.checkLogStatus();
 
       //stores current url in rootScope
       $rootScope.extUrl = document.referrer;
@@ -48,9 +51,7 @@
       let message = {greeting: "hello from angular land"};
       chrome.runtime.sendMessage(chromeId, message);
 
-      // sends a request to server to check session info
-      // records session info to persist between refreshes
-      UserExtService.checkLogStatus();
+
 
       slide();
 

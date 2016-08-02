@@ -5,10 +5,12 @@
 
 module.exports = function(ext) {
 
-  ext.factory('YadaExtService', ['$http','$rootScope','$location', function($http, $rootScope, $location){
+  ext.factory('YadaExtService', ['$http','$rootScope','$location', 'UserExtService', function($http, $rootScope, $location, UserExtService){
 
       let yadas = [];
+      let yadaIndex = 0;
       let scrapes = [];
+      let yadaId = 0;
       let blankYada = [{
         content: "You should write a Yada for this article.",
         user: {
@@ -29,20 +31,25 @@ module.exports = function(ext) {
               url: currentUrl,
               method: 'GET'
             }).then(function success(response){
-
+              console.log("get", response.data);
               currentYadas = response.data;
               if(currentYadas === '') {
                 console.log("blank array on getYadas");
                 angular.copy(blankYada, yadas);
+                return yadas
               } else {
+                  let yid = currentYadas[yadaIndex].id;
+                  console.log("yid", currentYadas[yadaIndex].id, yadaIndex);
+                  angular.copy(yid, yadaId);
                   angular.copy(currentYadas, yadas);
+                  return yadas
               }
 
             }, function error(response){
               console.log("error on getYadas");
               angular.copy(blankYada, yadas);
             });
-            console.log(yadas);
+  
             return yadas;
         },
 
@@ -127,7 +134,35 @@ module.exports = function(ext) {
             callback('error');
           });
 
+        },
+
+        scrollLeft() {
+           if (yadaIndex <= 0) {
+             yadaIndex = yadas.length -1;
+             yadaId = yadas[yadaIndex].id
+           } else {
+             yadaIndex --;
+             yadaId = yadas[yadaIndex].id
+           }
+        },
+
+        scrollRight() {
+           if (yadaIndex >= yadas.length -1) {
+             yadaIndex = 0;
+             yadaId = yadas[yadaIndex].id
+           } else {
+             yadaIndex ++;
+             yadaId = yadas[yadaIndex].id
+           }
+        },
+
+        getIndex() {
+          return yadaIndex;
+        },
+        getYadaId() {
+          return yadaId;
         }
+
 
       }
   }]);
