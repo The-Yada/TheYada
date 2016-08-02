@@ -2,12 +2,6 @@
 * Home Controller
 *
 
-
-sorting buttons
-home == Hot
-/controversialLinks
-/newLinks
-
 ********************************/
 
 module.exports = function(app) {
@@ -21,6 +15,7 @@ module.exports = function(app) {
 
     $scope.yadas = YadaService.getTopYadas();
     $scope.searchString = "";
+    $scope.colors = ['blue','red', 'green'];
 
 
     /*******************************
@@ -71,6 +66,7 @@ module.exports = function(app) {
     $scope.top = function() {
         $scope.yadas = YadaService.filter('top');
     }
+
 
   }])
 }

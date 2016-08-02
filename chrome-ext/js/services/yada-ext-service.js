@@ -39,6 +39,7 @@ module.exports = function(ext) {
                 return yadas
               } else {
                   let yid = currentYadas[yadaIndex].id;
+                  console.log("yid", currentYadas[yadaIndex].id, yadaIndex);
                   angular.copy(yid, yadaId);
                   angular.copy(currentYadas, yadas);
                   return yadas
@@ -48,7 +49,7 @@ module.exports = function(ext) {
               console.log("error on getYadas");
               angular.copy(blankYada, yadas);
             });
-            console.log(yadas);
+  
             return yadas;
         },
 
@@ -138,23 +139,27 @@ module.exports = function(ext) {
         scrollLeft() {
            if (yadaIndex <= 0) {
              yadaIndex = yadas.length -1;
+             yadaId = yadas[yadaIndex].id
            } else {
              yadaIndex --;
+             yadaId = yadas[yadaIndex].id
            }
         },
 
         scrollRight() {
            if (yadaIndex >= yadas.length -1) {
              yadaIndex = 0;
+             yadaId = yadas[yadaIndex].id
            } else {
              yadaIndex ++;
+             yadaId = yadas[yadaIndex].id
            }
         },
 
         getIndex() {
           return yadaIndex;
         },
-        getId() {
+        getYadaId() {
           return yadaId;
         }
 

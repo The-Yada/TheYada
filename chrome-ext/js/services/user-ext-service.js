@@ -99,7 +99,7 @@ module.exports = function(ext) {
         * Return yada user join list
         ********************************/
         getUserVotingState(id) {
-            statusUrl = `http://localhost:8080/votingStatus${id}`
+            statusUrl = `http://localhost:8080/voteStatus${id}`
           $http({
             url: statusUrl,
             method: 'GET'

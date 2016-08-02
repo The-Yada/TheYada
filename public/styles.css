@@ -18,43 +18,73 @@
   .login-button:hover {
     box-shadow: inset 0 2px 2px 3px rgba(0, 0, 0, 0.3); }
 
-.links-list {
-  width: 100%;
-  height: 100vh;
+.rolo-btn {
+  position: fixed;
+  margin: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 90; }
+
+#toggle {
+  left: 200px; }
+
+#pause {
+  left: 100px; }
+
+#fakeHeight {
+  height: 6000px;
+  width: 1px; }
+
+.slide-wrapper {
+  display: block;
+  z-index: 90;
+  width: 500px;
+  height: 50px;
+  position: fixed;
+  transform: rotate(90deg);
+  left: -20px;
+  top: 370px; }
+  .slide-wrapper #progressSlider {
+    width: 400px;
+    height: 100px;
+    position: fixed; }
+
+.rolo-wrapper {
+  width: 50%;
+  height: 300px;
+  position: fixed;
+  -webkit-font-smoothing: antialiased; }
+
+#rolodex {
   list-style-type: none;
-  position: relative;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  margin: 0; }
-  .links-list li {
-    position: absolute; }
+  left: 300px;
+  top: 20px;
+  height: 300px;
+  position: absolute; }
+
+#rolodex li {
+  box-sizing: border-box;
+  position: absolute;
+  width: 700px;
+  height: 200px;
+  border: 4px solid #99efff;
+  background: white;
+  box-shadow: 10px 0 15px 5px rgba(0, 0, 0, 0.2);
+  color: #171126; }
+  #rolodex li a {
+    padding: 10px;
+    font-size: 2em;
+    font-weight: bold; }
+    #rolodex li a:visited {
+      color: #171126; }
 
 .header-home {
+  z-index: 100;
   width: 100%;
   position: fixed;
-  top: 100px;
-  margin-right: -50%; }
-
-.link-home {
-  width: 300px;
-  height: 80vh;
-  background-color: #99efff; }
-  .link-home a {
-    font-size: 1.6em; }
-
-.yadas-home {
-  width: 80%;
-  background-color: white; }
-
-.yadas-home, .link-home {
-  border: 2px solid #171126;
-  border-radius: 5px;
-  color: #5d253b;
-  display: flex;
-  flex-direction: column; }
-  .yadas-home button, .link-home button {
-    width: 50px; }
+  top: 50px;
+  margin-right: -50%;
+  /* temporariliy hiding*/ }
 
 .searchBox {
   display: flex;
@@ -76,6 +106,16 @@
   margin: 0 auto;
   display: flex;
   justify-content: center; }
+
+.quick-wrapper {
+  position: fixed;
+  top: 100px;
+  z-index: 100;
+  width: 200px;
+  font-size: .7em; }
+
+body {
+  background-color: #99efff; }
 
 .logo {
   width: 100px;

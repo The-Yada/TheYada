@@ -15,7 +15,7 @@ module.exports = function(ext) {
 
        $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
 
-       $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId);
+       $scope.userVotingState = UserExtService.getUserVotingState($scope.yadaId);
       //  $scope.voted = false;
 
 
@@ -53,12 +53,14 @@ module.exports = function(ext) {
        ********************************/
        $scope.scrollLeft = function() {
           YadaExtService.scrollLeft();
+          $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId())
           $scope.yadas = YadaExtService.updateYadas();
           $scope.yadaScrollIndex = YadaExtService.getIndex();
        }
 
        $scope.scrollRight = function() {
          YadaExtService.scrollRight();
+         $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId())
          $scope.yadas = YadaExtService.updateYadas();
          $scope.yadaScrollIndex = YadaExtService.getIndex();
        }
@@ -73,6 +75,7 @@ module.exports = function(ext) {
                  $scope.yadas = YadaExtService.updateYadas();
                  $scope.userObj = UserExtService.getUser();
 
+                 $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId())
                  $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
                  console.log("up", $scope.userVotingState);
 
@@ -87,6 +90,7 @@ module.exports = function(ext) {
               $scope.yadas = YadaExtService.updateYadas();
               $scope.userObj = UserExtService.getUser();
 
+              $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId())
               $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
               console.log("down", $scope.userVotingState);
 

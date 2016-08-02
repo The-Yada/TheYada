@@ -253,7 +253,8 @@ public class YadaRestController {
             voteMap.put("Status", 3);
             return voteMap;
         }
-        return null;
+        voteMap.put("Status", 3);
+        return voteMap;
     }
     /**
      * This method returns the YadaUserJoin List for a given logged in User

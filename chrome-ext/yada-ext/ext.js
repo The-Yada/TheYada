@@ -6,7 +6,7 @@
 
 module.exports = function(ext) {
 
-  ext.controller('EditorExtController', ['$scope', '$rootScope', '$location', 'YadaExtService', function($scope, $rootScope, $location, YadaExtService){
+  ext.controller('EditorExtController', ['$scope', '$rootScope', '$location', 'YadaExtService', 'UserExtService', function($scope, $rootScope, $location, YadaExtService, UserExtService){
 
 
     $scope.scrapedText = YadaExtService.scrapeIt($rootScope.extUrl);
@@ -22,7 +22,7 @@ module.exports = function(ext) {
         } else {
           $scope.editorText = 'sorry you have already written a yada for this article';
         }
-
+        
         $location.path('/');
       });
     };
@@ -117,7 +117,7 @@ module.exports = function(ext) {
 
        $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
 
-       $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId);
+       $scope.userVotingState = UserExtService.getUserVotingState($scope.yadaId);
       //  $scope.voted = false;
 
 
@@ -155,12 +155,14 @@ module.exports = function(ext) {
        ********************************/
        $scope.scrollLeft = function() {
           YadaExtService.scrollLeft();
+          $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId())
           $scope.yadas = YadaExtService.updateYadas();
           $scope.yadaScrollIndex = YadaExtService.getIndex();
        }
 
        $scope.scrollRight = function() {
          YadaExtService.scrollRight();
+         $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId())
          $scope.yadas = YadaExtService.updateYadas();
          $scope.yadaScrollIndex = YadaExtService.getIndex();
        }
@@ -175,6 +177,7 @@ module.exports = function(ext) {
                  $scope.yadas = YadaExtService.updateYadas();
                  $scope.userObj = UserExtService.getUser();
 
+                 $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId())
                  $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
                  console.log("up", $scope.userVotingState);
 
@@ -189,6 +192,7 @@ module.exports = function(ext) {
               $scope.yadas = YadaExtService.updateYadas();
               $scope.userObj = UserExtService.getUser();
 
+              $scope.userVotingState = UserExtService.getUserVotingState(YadaExtService.getYadaId())
               $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
               console.log("down", $scope.userVotingState);
 
@@ -375,7 +379,7 @@ module.exports = function(ext) {
         * Return yada user join list
         ********************************/
         getUserVotingState(id) {
-            statusUrl = `http://localhost:8080/votingStatus${id}`
+            statusUrl = `http://localhost:8080/voteStatus${id}`
           $http({
             url: statusUrl,
             method: 'GET'
@@ -471,6 +475,7 @@ module.exports = function(ext) {
                 return yadas
               } else {
                   let yid = currentYadas[yadaIndex].id;
+                  console.log("yid", currentYadas[yadaIndex].id, yadaIndex);
                   angular.copy(yid, yadaId);
                   angular.copy(currentYadas, yadas);
                   return yadas
@@ -480,7 +485,7 @@ module.exports = function(ext) {
               console.log("error on getYadas");
               angular.copy(blankYada, yadas);
             });
-            console.log(yadas);
+  
             return yadas;
         },
 
@@ -570,23 +575,27 @@ module.exports = function(ext) {
         scrollLeft() {
            if (yadaIndex <= 0) {
              yadaIndex = yadas.length -1;
+             yadaId = yadas[yadaIndex].id
            } else {
              yadaIndex --;
+             yadaId = yadas[yadaIndex].id
            }
         },
 
         scrollRight() {
            if (yadaIndex >= yadas.length -1) {
              yadaIndex = 0;
+             yadaId = yadas[yadaIndex].id
            } else {
              yadaIndex ++;
+             yadaId = yadas[yadaIndex].id
            }
         },
 
         getIndex() {
           return yadaIndex;
         },
-        getId() {
+        getYadaId() {
           return yadaId;
         }
 

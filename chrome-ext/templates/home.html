@@ -19,15 +19,17 @@
 
   <div class="karma-box">
 
-
+    <button ng-click="upIt(yadas[yadaScrollIndex])" class="up-home" type="button" name="up">
+        <img ng-show="userVotingState.Status === 3 || userVotingState.Status === 2" class="up-jelly" src="assets/yada-jelly-up.svg" alt="" />
+        <img ng-show="userVotingState.Status === 1" class="up-jelly" src="assets/yada-jelly-up-active.svg" alt="" />
+    </button>
+    <span>status: {{userVotingState.Status}}</span>
     <span class="karma-home"><b>karma: {{yadas[yadaScrollIndex].karma}}</b></span>
     <span class="test">Yada id: <span ng-model="yadaId">{{yadas[yadaScrollIndex].id}}</span></span>
 
-    <button ng-click="upIt(yadas[yadaScrollIndex])" class="up-home" type="button" name="up"> ^
-        <!-- <img ng-show="!voted" class="up-jelly" src="assets/yada-jelly-up.svg" alt="" /> -->
-    </button>
-    <button ng-click="downIt(yadas[yadaScrollIndex])" class="down-home" type="button" name="up"> v
-        <!-- <img ng-show="!voted"  class="up-jelly" src="assets/yada-jelly-down.svg" alt="" /> -->
+    <button ng-click="downIt(yadas[yadaScrollIndex])" class="down-home" type="button" name="up">
+        <img ng-show="userVotingState.Status === 3 || userVotingState.Status === 1"  class="up-jelly" src="assets/yada-jelly-down.svg" alt="" />
+        <img ng-show="userVotingState.Status === 2"  class="up-jelly" src="assets/yada-jelly-down-active.svg" alt="" />
     </button>
 
     <!-- <span ng-repeat="join in filterJoins = ( userVotingState | filter:{theYadaId: yadas[yadaScrollIndex].id})" class="test">
