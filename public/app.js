@@ -390,7 +390,7 @@ module.exports = function(app) {
 
         checkLogStatus() {
           $http({
-            url: 'http://localhost:8080/logStatus',
+            url: 'http://localhost:1776/logStatus',
             method: 'GET'
           }).then(function(response) {
             console.log("user check", response.data);
@@ -426,7 +426,7 @@ module.exports = function(app) {
         ********************************/
         clearSession() {
           $http({
-            url: 'http://localhost:8080/logout',
+            url: 'http://localhost:1776/logout',
             method: 'POST',
           })
           .then(function(response) {
