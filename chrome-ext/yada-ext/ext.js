@@ -84,7 +84,7 @@ module.exports = function(ext) {
     * Redirect to Main Website in new tab
     ********************************/
     $scope.toWebsite = function() {
-      let win = window.open("http://localhost:8080", '_blank');
+      let win = window.open("http://localhost:1776", '_blank');
       win.focus();
     }
 
@@ -118,35 +118,6 @@ module.exports = function(ext) {
        $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
 
        $scope.userVotingState = UserExtService.getUserVotingState($scope.yadaId);
-      //  $scope.voted = false;
-
-
-
-      //  $scope.karmaStatus = function(userJoins, yadaArr, index) {
-       //
-      //        if(userJoins !== null) {
-      //          let arr = [];
-       //
-      //          yadaArr.forEach(function(yada) {
-      //             console.log(yada);
-      //              userJoins.forEach(function(yuj){
-      //                  if (yuj.theYadaId === yada.id) {
-      //                    console.log("what", yuj, yada.id);
-      //                    arr.push(yuj);
-      //                  }
-      //              })
-      //         })
-       //
-      //         return arr.filter(function(e){
-       //
-      //           return e.theYadaId === yadaArr[index].id
-      //         });
-      //       } else {
-      //         return false;
-      //       }
-       //
-      //   return
-      //  }
 
 
 
@@ -302,7 +273,7 @@ module.exports = function(ext) {
         setUser(user) {
 
           $http({
-            url: 'http://localhost:8080/login',
+            url: 'http://localhost:1776/login',
             method: 'POST',
             data: user
           }).then(function(response) {
@@ -320,7 +291,7 @@ module.exports = function(ext) {
 
         checkLogStatus() {
           $http({
-            url: 'http://localhost:8080/logStatus',
+            url: 'http://localhost:1776/logStatus',
             method: 'GET'
           }).then(function(response) {
             console.log("user obj check status", response.data);
@@ -360,7 +331,7 @@ module.exports = function(ext) {
         ********************************/
         getYadaUserJoinList() {
           $http({
-            url: 'http://localhost:8080/yadaUserJoinList',
+            url: 'http://localhost:1776/yadaUserJoinList',
             method: 'GET'
           }).then(function(response) {
             console.log("yuj-list get", response.data);
@@ -379,7 +350,7 @@ module.exports = function(ext) {
         * Return yada user join list
         ********************************/
         getUserVotingState(id) {
-            statusUrl = `http://localhost:8080/voteStatus${id}`
+            statusUrl = `http://localhost:1776/voteStatus${id}`
           $http({
             url: statusUrl,
             method: 'GET'
@@ -407,7 +378,7 @@ module.exports = function(ext) {
         ********************************/
         clearSession() {
           $http({
-            url: 'http://localhost:8080/logout',
+            url: 'http://localhost:1776/logout',
             method: 'POST',
             data: {
               user: userObj,
@@ -462,30 +433,34 @@ module.exports = function(ext) {
         ********************************/
         getYadas(extUrl) {
 
-          let currentUrl = 'http://localhost:8080/lemmieSeeTheYadas?url=' + extUrl;
+          let currentUrl = 'http://localhost:1776/lemmieSeeTheYadas?url=' + extUrl;
           $http({
               url: currentUrl,
               method: 'GET'
             }).then(function success(response){
               console.log("get", response.data);
               currentYadas = response.data;
+
               if(currentYadas === '') {
                 console.log("blank array on getYadas");
                 angular.copy(blankYada, yadas);
                 return yadas
               } else {
+
                   let yid = currentYadas[yadaIndex].id;
-                  console.log("yid", currentYadas[yadaIndex].id, yadaIndex);
-                  angular.copy(yid, yadaId);
+                  UserExtService.getUserVotingState(yid);
+
+                  yadaId = yid;
                   angular.copy(currentYadas, yadas);
+
                   return yadas
               }
 
             }, function error(response){
               console.log("error on getYadas");
               angular.copy(blankYada, yadas);
-            });
-  
+            })
+
             return yadas;
         },
 
@@ -494,7 +469,7 @@ module.exports = function(ext) {
         ********************************/
         scrapeIt(extUrl) {
 
-          let scrapeUrl = 'http://localhost:8080/lemmieYada?url=' + extUrl;
+          let scrapeUrl = 'http://localhost:1776/lemmieYada?url=' + extUrl;
           $http({
               url: scrapeUrl,
               method: 'GET'
@@ -512,15 +487,19 @@ module.exports = function(ext) {
         upKarma(yada, callback) {
 
             $http({
-              url: 'http://localhost:8080/upVoteExt',
+              url: 'http://localhost:1776/upVoteExt',
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log(response.data);
 
-              let link = response.data;
+              let currentYadas = response.data.yadaList;
+              let yid = currentYadas[yadaIndex].id;
 
-              angular.copy(link.yadaList, yadas);
+              UserExtService.getUserVotingState(yid);
+
+              yadaId = yid;
+
+              angular.copy(currentYadas, yadas);
 
             }).then(callback)
         },
@@ -530,15 +509,19 @@ module.exports = function(ext) {
         downKarma(yada, callback) {
 
           $http({
-            url: 'http://localhost:8080/downVoteExt',
+            url: 'http://localhost:1776/downVoteExt',
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log(response.data);
 
-            let link = response.data;
+            let currentYadas = response.data.yadaList;
+            let yid = currentYadas[yadaIndex].id;
 
-            angular.copy(link.yadaList, yadas);
+            UserExtService.getUserVotingState(yid);
+
+            yadaId = yid;
+
+            angular.copy(currentYadas, yadas);
 
           }).then(callback)
         },
@@ -556,7 +539,7 @@ module.exports = function(ext) {
         sendYada(extUrl, yadaText, callback) {
 
           $http({
-            url: "http://localhost:8080/addYada",
+            url: "http://localhost:1776/addYada",
             method: 'POST',
             data: {
               yada: {content: `${yadaText}`},

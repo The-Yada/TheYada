@@ -26,30 +26,34 @@ module.exports = function(ext) {
         ********************************/
         getYadas(extUrl) {
 
-          let currentUrl = 'http://localhost:8080/lemmieSeeTheYadas?url=' + extUrl;
+          let currentUrl = 'http://localhost:1776/lemmieSeeTheYadas?url=' + extUrl;
           $http({
               url: currentUrl,
               method: 'GET'
             }).then(function success(response){
               console.log("get", response.data);
               currentYadas = response.data;
+
               if(currentYadas === '') {
                 console.log("blank array on getYadas");
                 angular.copy(blankYada, yadas);
                 return yadas
               } else {
+
                   let yid = currentYadas[yadaIndex].id;
-                  console.log("yid", currentYadas[yadaIndex].id, yadaIndex);
-                  angular.copy(yid, yadaId);
+                  UserExtService.getUserVotingState(yid);
+
+                  yadaId = yid;
                   angular.copy(currentYadas, yadas);
+
                   return yadas
               }
 
             }, function error(response){
               console.log("error on getYadas");
               angular.copy(blankYada, yadas);
-            });
-  
+            })
+
             return yadas;
         },
 
@@ -58,7 +62,7 @@ module.exports = function(ext) {
         ********************************/
         scrapeIt(extUrl) {
 
-          let scrapeUrl = 'http://localhost:8080/lemmieYada?url=' + extUrl;
+          let scrapeUrl = 'http://localhost:1776/lemmieYada?url=' + extUrl;
           $http({
               url: scrapeUrl,
               method: 'GET'
@@ -76,15 +80,19 @@ module.exports = function(ext) {
         upKarma(yada, callback) {
 
             $http({
-              url: 'http://localhost:8080/upVoteExt',
+              url: 'http://localhost:1776/upVoteExt',
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log(response.data);
 
-              let link = response.data;
+              let currentYadas = response.data.yadaList;
+              let yid = currentYadas[yadaIndex].id;
 
-              angular.copy(link.yadaList, yadas);
+              UserExtService.getUserVotingState(yid);
+
+              yadaId = yid;
+
+              angular.copy(currentYadas, yadas);
 
             }).then(callback)
         },
@@ -94,15 +102,19 @@ module.exports = function(ext) {
         downKarma(yada, callback) {
 
           $http({
-            url: 'http://localhost:8080/downVoteExt',
+            url: 'http://localhost:1776/downVoteExt',
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log(response.data);
 
-            let link = response.data;
+            let currentYadas = response.data.yadaList;
+            let yid = currentYadas[yadaIndex].id;
 
-            angular.copy(link.yadaList, yadas);
+            UserExtService.getUserVotingState(yid);
+
+            yadaId = yid;
+
+            angular.copy(currentYadas, yadas);
 
           }).then(callback)
         },
@@ -120,7 +132,7 @@ module.exports = function(ext) {
         sendYada(extUrl, yadaText, callback) {
 
           $http({
-            url: "http://localhost:8080/addYada",
+            url: "http://localhost:1776/addYada",
             method: 'POST',
             data: {
               yada: {content: `${yadaText}`},

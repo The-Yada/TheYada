@@ -6,12 +6,14 @@
 
 $primary-color: rgba(153,239,255,1);	/* Main Primary color */
 $secondary-color: rgba( 93, 37, 59,1);	/* Main Secondary color (1) */
-
+$tertiary-color: #FFEB00;
 
 // descriptive naming
 
 $white: rgba(255,255,255,1);	/* white */
 $black: rgba(23,17,38,1); /* black */
+
+$yellow: $tertiary-color;
 
 $blue: $primary-color;
 $red: $secondary-color;

@@ -7,7 +7,6 @@
 
 (function() {
 "use strict"
-
 let app = angular.module('YadaWebApp', ['ngRoute', 'ngAnimate'])
 
 
@@ -56,6 +55,7 @@ let app = angular.module('YadaWebApp', ['ngRoute', 'ngAnimate'])
   .run(['$rootScope', '$location', 'UserService', function($rootScope, $location, UserService) {
 
       UserService.checkLogStatus();
+
 
   }])
 

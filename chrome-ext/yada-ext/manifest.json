@@ -7,7 +7,7 @@
     "contentSettings",
     "http://*/*",
     "https://*/*",
-    "http://localhost:8080/*",
+    "http://localhost:1776/*",
     "tabs",
     "activeTab",
     "contextMenus"

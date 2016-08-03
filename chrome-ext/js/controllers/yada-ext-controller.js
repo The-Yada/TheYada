@@ -16,35 +16,6 @@ module.exports = function(ext) {
        $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
 
        $scope.userVotingState = UserExtService.getUserVotingState($scope.yadaId);
-      //  $scope.voted = false;
-
-
-
-      //  $scope.karmaStatus = function(userJoins, yadaArr, index) {
-       //
-      //        if(userJoins !== null) {
-      //          let arr = [];
-       //
-      //          yadaArr.forEach(function(yada) {
-      //             console.log(yada);
-      //              userJoins.forEach(function(yuj){
-      //                  if (yuj.theYadaId === yada.id) {
-      //                    console.log("what", yuj, yada.id);
-      //                    arr.push(yuj);
-      //                  }
-      //              })
-      //         })
-       //
-      //         return arr.filter(function(e){
-       //
-      //           return e.theYadaId === yadaArr[index].id
-      //         });
-      //       } else {
-      //         return false;
-      //       }
-       //
-      //   return
-      //  }
 
 
 

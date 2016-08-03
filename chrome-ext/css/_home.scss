@@ -32,13 +32,28 @@
     font-size: 1.5em;
   }
 }
-
+.karma-label {
+  border: 2px solid black;
+  background-color: white;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  font-size: 2.2vw;
+}
+.karma-home {
+  font-size: 3.5vw;
+  text-align: center;
+}
 .karma-box {
   display: flex;
   flex-direction: row;
   justify-content: center;
   width: 500px;
   margin: 30px auto;
+  margin-bottom: 60px;
   button {
     background: transparent;
     border: none;
