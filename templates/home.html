@@ -43,7 +43,7 @@
 
       <!-- LINKS -->
       <!-- ng-style="{bottom: 20 * $index + 'px', 'z-index': (cards.length - $index)}" -->
-      <li class="box roloAnimation" ng-repeat="links in yadas | limitTo: 50 | orderBy:'-'"
+      <li class="box roloAnimation" ng-repeat="links in yadas | limitTo: 50"
           data-button="link-{{links.id}}"
           ng-class="{topLink: $index === 0}">
 

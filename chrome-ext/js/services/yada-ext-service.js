@@ -39,17 +39,21 @@ module.exports = function(ext) {
                 return yadas
               } else {
                   let yid = currentYadas[yadaIndex].id;
-                  console.log("yid", currentYadas[yadaIndex].id, yadaIndex);
-                  angular.copy(yid, yadaId);
+
+                  UserExtService.getUserVotingState(yid);
+
+                  yadaId = yid;
                   angular.copy(currentYadas, yadas);
+
+
                   return yadas
               }
 
             }, function error(response){
               console.log("error on getYadas");
               angular.copy(blankYada, yadas);
-            });
-  
+            })
+
             return yadas;
         },
 
@@ -80,7 +84,14 @@ module.exports = function(ext) {
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log(response.data);
+
+              let currentYadas = response.data.yadaList;
+
+              let yid = currentYadas[yadaIndex].id;
+
+              UserExtService.getUserVotingState(yid);
+
+              yadaId = yid;
 
               let link = response.data;
 
@@ -98,7 +109,15 @@ module.exports = function(ext) {
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log(response.data);
+
+            let currentYadas = response.data.yadaList;
+
+            let yid = currentYadas[yadaIndex].id;
+
+            UserExtService.getUserVotingState(yid);
+
+            yadaId = yid;
+
 
             let link = response.data;
 

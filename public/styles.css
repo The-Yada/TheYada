@@ -107,6 +107,9 @@
   display: flex;
   justify-content: center; }
 
+#rolodex li:nth-child(1) {
+  border: 5px solid red; }
+
 .quick-wrapper {
   position: fixed;
   height: 80vh;
