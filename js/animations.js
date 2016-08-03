@@ -4,14 +4,23 @@ module.exports = function(app) {
   app.animation('.roloAnimation', [ function() {
 
     return {
+
+      /*******************************
+      * animations and click events
+      ********************************/
+
         enter: function() {
+
+
           let boxes  = Array.from(document.querySelectorAll('.box'));
 
-          let time  = 10;
+          let time  = 15;
           let total = boxes.length;
           let step  = 1 / total;
-          let delay = step * time;
-          // let delay = -1 / total * time;
+
+          // optional: delay [can also reverse by setting '-step' or '-1']
+          // let delay = step * time;
+          let delay = 1 / total * time;
 
           let w1 = 600;
           let w2 = 100;
@@ -32,7 +41,7 @@ module.exports = function(app) {
 
           TweenLite.set("#rolodex", {
             perspective: 200,
-            rotationY: -10,
+            rotationY: 20,
             transformStyle: "preserve-3d"
           });
 
@@ -60,13 +69,8 @@ module.exports = function(app) {
             return tl.add(tween, i * delay);
           }
 
-          /*
-          To get a seamless loop create a tween of the main timeline looping between 4 and 8 seconds
-          I put this tween in a repeating TimelineMax called controlTween
-          */
-
           let controlTween = new TimelineMax({repeat:-1})
-          controlTween.add(timeline.tweenFromTo(10, 20));
+          controlTween.add(timeline.tweenFromTo(15, 30));
 
           controlTween.eventCallback("onUpdate", adjustUI)
           progressSlider.addEventListener("input", update);
@@ -110,6 +114,7 @@ module.exports = function(app) {
             progressSlider.value = scrollPercent;
           });
 
+
         }
 
 
@@ -118,6 +123,3 @@ module.exports = function(app) {
 
   }])
 }
-/*******************************
-* animations
-********************************/
