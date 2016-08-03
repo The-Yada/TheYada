@@ -118,35 +118,6 @@ module.exports = function(ext) {
        $scope.yadaUserJoinList = UserExtService.getYadaUserJoinList();
 
        $scope.userVotingState = UserExtService.getUserVotingState($scope.yadaId);
-      //  $scope.voted = false;
-
-
-
-      //  $scope.karmaStatus = function(userJoins, yadaArr, index) {
-       //
-      //        if(userJoins !== null) {
-      //          let arr = [];
-       //
-      //          yadaArr.forEach(function(yada) {
-      //             console.log(yada);
-      //              userJoins.forEach(function(yuj){
-      //                  if (yuj.theYadaId === yada.id) {
-      //                    console.log("what", yuj, yada.id);
-      //                    arr.push(yuj);
-      //                  }
-      //              })
-      //         })
-       //
-      //         return arr.filter(function(e){
-       //
-      //           return e.theYadaId === yadaArr[index].id
-      //         });
-      //       } else {
-      //         return false;
-      //       }
-       //
-      //   return
-      //  }
 
 
 
@@ -469,23 +440,27 @@ module.exports = function(ext) {
             }).then(function success(response){
               console.log("get", response.data);
               currentYadas = response.data;
+
               if(currentYadas === '') {
                 console.log("blank array on getYadas");
                 angular.copy(blankYada, yadas);
                 return yadas
               } else {
+
                   let yid = currentYadas[yadaIndex].id;
-                  console.log("yid", currentYadas[yadaIndex].id, yadaIndex);
-                  angular.copy(yid, yadaId);
+                  UserExtService.getUserVotingState(yid);
+
+                  yadaId = yid;
                   angular.copy(currentYadas, yadas);
+
                   return yadas
               }
 
             }, function error(response){
               console.log("error on getYadas");
               angular.copy(blankYada, yadas);
-            });
-  
+            })
+
             return yadas;
         },
 
@@ -516,11 +491,15 @@ module.exports = function(ext) {
               method: 'POST',
               data: yada
             }).then(function(response){
-              console.log(response.data);
 
-              let link = response.data;
+              let currentYadas = response.data.yadaList;
+              let yid = currentYadas[yadaIndex].id;
 
-              angular.copy(link.yadaList, yadas);
+              UserExtService.getUserVotingState(yid);
+
+              yadaId = yid;
+
+              angular.copy(currentYadas, yadas);
 
             }).then(callback)
         },
@@ -534,11 +513,15 @@ module.exports = function(ext) {
             method: 'POST',
             data: yada
           }).then(function(response){
-            console.log(response.data);
 
-            let link = response.data;
+            let currentYadas = response.data.yadaList;
+            let yid = currentYadas[yadaIndex].id;
 
-            angular.copy(link.yadaList, yadas);
+            UserExtService.getUserVotingState(yid);
+
+            yadaId = yid;
+
+            angular.copy(currentYadas, yadas);
 
           }).then(callback)
         },

@@ -4,8 +4,9 @@
 ********************************/
 (function() {
 
-  var x = false;
-  var currentId = null;
+  let x = false;
+  let currentId = null;
+  let currentTab = '';
 
   /*******************************
   * hides iframe, reverts icon
@@ -65,8 +66,10 @@
   * sets current tab id
   ********************************/
   function setTab(message, sender) {
-    currentId = sender.tab.id
-    return sender
+    currentId = sender.tab.id;
+    currentTab = sender.tab;
+
+    return sender;
   }
 
   /*******************************

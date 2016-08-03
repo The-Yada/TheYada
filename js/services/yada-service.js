@@ -96,10 +96,15 @@ module.exports = function(app) {
         ********************************/
         searchYadas(searchString, callback) {
 
-            let searchUrl = `/searchYadas?searchInput=${searchString}`;
+            // Default is titleSearch
+            // TODO: searching by content and author
+              // let yadaSearchUrl = `/searchYadas?searchInput=${searchString}`;
+              // ** authors returns hashmap of username and arraylist of yadas
+              // let authorSearchUrl = `/searchAuthors?searchInput=${searchString}`;
 
+            let titleSearchUrl = `/searchTitles?searchInput=${searchString}`;
             $http({
-                url: searchUrl,
+                url: titleSearchUrl,
                 method: 'GET'
               }).then(function(response){
 
