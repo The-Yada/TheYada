@@ -27,7 +27,7 @@
       let msg = {greeting: "let's reload the ext animation"};
 
       chrome.contentSettings.cookies.set({
-        primaryPattern: "http://localhost:8080/*",
+        primaryPattern: "http://localhost:1776/*",
         setting: "session_only"
       });
 
