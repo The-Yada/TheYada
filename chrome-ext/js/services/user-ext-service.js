@@ -22,7 +22,7 @@ module.exports = function(ext) {
         setUser(user) {
 
           $http({
-            url: 'http://localhost:8080/login',
+            url: 'http://localhost:1776/login',
             method: 'POST',
             data: user
           }).then(function(response) {
@@ -40,7 +40,7 @@ module.exports = function(ext) {
 
         checkLogStatus() {
           $http({
-            url: 'http://localhost:8080/logStatus',
+            url: 'http://localhost:1776/logStatus',
             method: 'GET'
           }).then(function(response) {
             console.log("user obj check status", response.data);
@@ -80,7 +80,7 @@ module.exports = function(ext) {
         ********************************/
         getYadaUserJoinList() {
           $http({
-            url: 'http://localhost:8080/yadaUserJoinList',
+            url: 'http://localhost:1776/yadaUserJoinList',
             method: 'GET'
           }).then(function(response) {
             console.log("yuj-list get", response.data);
@@ -99,7 +99,7 @@ module.exports = function(ext) {
         * Return yada user join list
         ********************************/
         getUserVotingState(id) {
-            statusUrl = `http://localhost:8080/voteStatus${id}`
+            statusUrl = `http://localhost:1776/voteStatus${id}`
           $http({
             url: statusUrl,
             method: 'GET'
@@ -127,7 +127,7 @@ module.exports = function(ext) {
         ********************************/
         clearSession() {
           $http({
-            url: 'http://localhost:8080/logout',
+            url: 'http://localhost:1776/logout',
             method: 'POST',
             data: {
               user: userObj,

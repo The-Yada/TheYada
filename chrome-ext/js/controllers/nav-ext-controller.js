@@ -21,7 +21,7 @@ module.exports = function(ext) {
     * Redirect to Main Website in new tab
     ********************************/
     $scope.toWebsite = function() {
-      let win = window.open("http://localhost:8080", '_blank');
+      let win = window.open("http://localhost:1776", '_blank');
       win.focus();
     }
 
