@@ -17,16 +17,17 @@
     <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
     <button ng-click="search(searchString)" type="button" name="search">Search</button>
   </div>
-</header>
-<!-- SLIDER -->
-<div class="slide-wrapper">
-  <input id="progressSlider" type="range" min="0" max="1" value="0" step="0.001" /><br>
-</div>
+  <div class="timeline">
+    <!-- TIMELINE CONTROLS -->
+      <button class="rolo-btn" id="toggle">Toggle</button>
+      <button class="rolo-btn" id="pause">Pause</button>
+      <button class="rolo-btn" id="resume">resume</button>
+  </div>
 
-<!-- TIMELINE CONTROLS -->
-  <button class="rolo-btn" id="toggle">Toggle</button>
-  <button class="rolo-btn" id="pause">Pause</button>
-  <button class="rolo-btn" id="resume">resume</button>
+</header>
+
+
+
 <!-- QUICK LIST -->
 
 <section class="quick-wrapper">
@@ -35,6 +36,10 @@
       <button id="link-{{links.id}}" type="button" name="quick">{{links.title}}</button>
     </li>
   </ol>
+  <!-- SLIDER -->
+  <div class="slide-wrapper">
+    <input id="progressSlider" type="range" min="0" max="1" value="0" step="0.001" /><br>
+  </div>
 </section>
 
 <!-- ROLODEX -->

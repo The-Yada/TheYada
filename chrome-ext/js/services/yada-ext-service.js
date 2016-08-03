@@ -33,18 +33,18 @@ module.exports = function(ext) {
             }).then(function success(response){
               console.log("get", response.data);
               currentYadas = response.data;
+
               if(currentYadas === '') {
                 console.log("blank array on getYadas");
                 angular.copy(blankYada, yadas);
                 return yadas
               } else {
-                  let yid = currentYadas[yadaIndex].id;
 
+                  let yid = currentYadas[yadaIndex].id;
                   UserExtService.getUserVotingState(yid);
 
                   yadaId = yid;
                   angular.copy(currentYadas, yadas);
-
 
                   return yadas
               }
@@ -86,16 +86,13 @@ module.exports = function(ext) {
             }).then(function(response){
 
               let currentYadas = response.data.yadaList;
-
               let yid = currentYadas[yadaIndex].id;
 
               UserExtService.getUserVotingState(yid);
 
               yadaId = yid;
 
-              let link = response.data;
-
-              angular.copy(link.yadaList, yadas);
+              angular.copy(currentYadas, yadas);
 
             }).then(callback)
         },
@@ -111,17 +108,13 @@ module.exports = function(ext) {
           }).then(function(response){
 
             let currentYadas = response.data.yadaList;
-
             let yid = currentYadas[yadaIndex].id;
 
             UserExtService.getUserVotingState(yid);
 
             yadaId = yid;
 
-
-            let link = response.data;
-
-            angular.copy(link.yadaList, yadas);
+            angular.copy(currentYadas, yadas);
 
           }).then(callback)
         },
