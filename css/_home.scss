@@ -1,5 +1,10 @@
-
-
+.views {
+  display: flex;
+  flex-direction: row;
+}
+.rolo-search-container {
+  margin-left: 340px;
+}
 
 #fakeHeight {
   height: 6000px;
@@ -11,128 +16,178 @@
   width: 50%;
   height: 300px;
   margin-left: 35%;
-  top: 0;
+  top: 10%;
   left: 0;
   position: fixed;
   -webkit-font-smoothing:antialiased;
-}
-
-#rolodex {
-  list-style-type: none;
-  top:50px;
-  height: 300px;
-  position: absolute;
-}
-
-#rolodex li {
-  box-sizing: border-box;
-  position: absolute;
-  width: 60vw;
-  height: 230px;
-  border: 4px solid $blue;
-  background: $white;
-  box-shadow: 10px 0 15px 5px rgba(0,0,0,0.2);
-  color: $black;
-  a {
-    padding: 10px;
-    font-size: 2vw;
-    font-weight: bold;
-    &:visited {
-      color: $black;
-    }
-  }
-}
-
-.topLink {
-  // background-color: gold !important;
-
-}
-
-.header-home {
-  z-index: 100;
-  width: 100%;
-  position: fixed;
-  top: 50px;
-  margin-right: -50%;
-  .timeline {
-    display: flex;
-    justify-content: center;
-  }
-  .rolo-btn {
-    font-size: 18px;
-    font-weight: bold;
-  }
-}
-
-.searchBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 400px;
-  margin: 0 auto;
-  input {
-    border-radius: 5px;
-    box-sizing: border-box;
-    padding-left: 10px;
-    font-size: 1.5em;
-  }
-  button {
-    width: 100px;
-    margin: 0 auto;
-  }
-}
-
-.filterBox {
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-}
-
-#rolodex li:nth-child(1) {
-      border: 5px solid red;
-}
-
-
-.quick-wrapper {
-  position: fixed;
-  background-color: $blue;
-  height: 100vh;
-  z-index: 50;
-  font-size: 1em;
-  overflow: scroll;
-  width: 450px;
-  display: flex;
-
-  .quick-list {
-    margin: 0;
-    button {
-      width: 300px;
-      height: 60px;
-      font-weight: bold;
-      text-shadow: 2px 2px rgba(0,0,0,0.1);
-      background-color: rgba(0,0,0,0.3);
-      border: 1px solid $blue;
-    }
-    .quickie {
-      &:hover {
-        transform: translateX(20px);
-      }
-    }
-  }
   .slide-wrapper {
     display: block;
-    z-index: 90;
+    z-index: 900;
     width: 500px;
     height: 50px;
-    margin-left: 185px;
-    margin-top: 420px;
+    left: 200px;
+    margin-top: 376px;
     position: fixed;
     transform: rotate(90deg);
     #progressSlider {
       width:400px;
       height: 100px;
       position: fixed;
+    }
+  }
+}
+
+#rolodex {
+  list-style-type: none;
+  top:0;
+  height: 300px;
+  position: absolute;
+}
+
+#rolodex li {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  position: absolute;
+  padding: 10px;
+  padding-left: 20px;
+  width: 60vw;
+  height: 230px;
+  background: $white;
+  box-shadow: 10px 0 15px 5px rgba(0,0,0,0.2);
+  color: $black;
+  border-right: 50px solid $yellow;
+  border-radius: 20px;
+  a {
+    text-decoration: none;
+    font-size: 2.6vw;
+    font-weight: bold;
+    // background-color: $black;
+    &:visited {
+      color: $black;
+    }
+  }
+}
+
+// .topLink {
+//   background-color: gold !important;
+//
+// }
+
+.header-home {
+  z-index: 10;
+  width: 100%;
+  position: fixed;
+  .timeline {
+    display: flex;
+    align-items: baseline;
+    margin-left: 30px;
+    button {
+      background-color: transparent;
+      border: 2px solid $black;
+      font-size: 2em;
+      border-radius: 10px;
+      margin-left: 5px;
+      &:hover {
+        text-decoration: underline;
+        background-color: rgba(255,255,255,0.3);
+      }
+    }
+  }
+  .rolo-btn {
+    font-size: 18px;
+    font-weight: bold;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.searchBox {
+  display: inline-flex;
+  justify-content: flex-start;
+  width: 100%;
+  flex-direction: column;
+  margin-left: 20px;
+  input {
+    box-sizing: border-box;
+    width: 100%;
+    padding-left: 50px;
+    padding-bottom: 10px;
+    font-size: 2.5em;
+    background: rgba(0,0,0,0.2);
+    border: none;
+    // border-bottom: 2px solid $white;
+  }
+  button {
+    width: 100%;
+    background-color: $yellow;
+    border: 3px solid $black;
+    text-align: left;
+    font-size: 1.5em;
+    padding-left: 30%;
+    &:hover {
+      cursor: pointer;
+      border: 1px solid $black;
+      font-size: 1.7em;
+    }
+  }
+}
+
+.filterBox {
+  width: 100%;
+  margin-left: 30px;
+  height: 50px;
+  display: flex;
+  align-items: flex-end;
+  button {
+    background: transparent;
+    border: none;
+    font-size: 2em;
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+
+// #rolodex li:nth-child(1) {
+//       border: 5px solid $yellow;
+// }
+
+
+.quick-wrapper {
+  position: fixed;
+  background: linear-gradient(to right, $white, transparent);
+  height: 100vh;
+  z-index: 100;
+  font-size: 1em;
+  overflow: scroll;
+  width: 360px;
+  display: flex;
+  border-right: 5px solid black;
+
+  .quick-list {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    button {
+      width: 300px;
+      height: 60px;
+      font-weight: bold;
+      // text-shadow: 2px 2px rgba(0,0,0,0.1);
+      background-color: rgba(255,255,255,0.5);
+      border: 1px solid $black;
+      box-shadow: 15px 0px 12px -4px rgba(0, 0, 0, 0.2);
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .quickie {
+      &:hover {
+        transform: translateX(20px);
+      }
     }
   }
 }

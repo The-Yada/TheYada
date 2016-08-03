@@ -14,7 +14,7 @@ module.exports = function(app) {
 
           let boxes  = Array.from(document.querySelectorAll('.box'));
 
-          let time  = 15;
+          let time  = 50;
           let total = boxes.length;
           let step  = 1 / total;
 
@@ -70,7 +70,7 @@ module.exports = function(app) {
           }
 
           let controlTween = new TimelineMax({repeat:-1})
-          controlTween.add(timeline.tweenFromTo(15, 30));
+          controlTween.add(timeline.tweenFromTo(50, 100));
 
           controlTween.eventCallback("onUpdate", adjustUI)
           progressSlider.addEventListener("input", update);

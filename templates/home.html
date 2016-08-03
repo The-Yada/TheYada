@@ -2,32 +2,6 @@
   HOME TEMPLATE
 ################################## -->
 
-
-<header class="header-home">
-  <!-- FITLER BUTTONS -->
-  <div class="filterBox">
-    <button id="hotLinks" ng-click="hot()" type="button" name="hot">Hot</button>
-    <button id="contLinks" ng-click="controversial()" type="button" name="controversial">Controversial</button>
-    <button id="newLinks" ng-click="new()" type="button" name="new">New</button>
-    <button id="topLinks" ng-click="top()" type="button" name="top">Top</button>
-  </div>
-
-  <!-- SEARCH BOX -->
-  <div class="searchBox">
-    <input class="search" ng-model="searchString" type="text" placeholder="Enter your search">
-    <button ng-click="search(searchString)" type="button" name="search">Search</button>
-  </div>
-  <div class="timeline">
-    <!-- TIMELINE CONTROLS -->
-      <button class="rolo-btn" id="toggle">Toggle</button>
-      <button class="rolo-btn" id="pause">Pause</button>
-      <button class="rolo-btn" id="resume">resume</button>
-  </div>
-
-</header>
-
-
-
 <!-- QUICK LIST -->
 
 <section class="quick-wrapper">
@@ -36,41 +10,73 @@
       <button id="link-{{links.id}}" type="button" name="quick">{{links.title}}</button>
     </li>
   </ol>
-  <!-- SLIDER -->
-  <div class="slide-wrapper">
-    <input id="progressSlider" type="range" min="0" max="1" value="0" step="0.001" /><br>
+</section>
+
+<section class="rolo-search-container">
+
+  <!-- HEADER -->
+  <header class="header-home">
+
+      <!-- SEARCH BOX -->
+      <div class="searchBox">
+        <input class="search" ng-model="searchString" type="text" placeholder="Type to Search">
+        <button ng-click="search(searchString)" type="button" name="search">Click to Search</button>
+      </div>
+
+    <!-- FITLER BUTTONS -->
+    <div class="filterBox">
+      <button id="hotLinks" ng-click="hot()" type="button" name="hot">Hot</button>
+      <button id="contLinks" ng-click="controversial()" type="button" name="controversial">Controversial</button>
+      <button id="newLinks" ng-click="new()" type="button" name="new">New</button>
+      <button id="topLinks" ng-click="top()" type="button" name="top">Top</button>
+    </div>
+
+    <!-- TIMELINE CONTROLS -->
+  <div class="timeline">
+      <button class="rolo-btn" id="toggle">Toggle</button>
+      <button class="rolo-btn" id="pause">Pause</button>
+      <button class="rolo-btn" id="resume">Resume</button>
   </div>
+
+  </header>
+
+
+  <!-- ROLODEX -->
+  <section class="rolo-wrapper">
+    <!-- SLIDER -->
+    <div class="slide-wrapper">
+      <input id="progressSlider" type="range" min="0" max="1" value="0" step="0.001" /><br>
+    </div>
+
+    <ul id="rolodex" class="links-list">
+
+        <!-- LINKS -->
+        <!-- ng-style="{bottom: 20 * $index + 'px', 'z-index': (cards.length - $index)}" -->
+        <li class="box roloAnimation" ng-repeat="links in yadas | limitTo: 50"
+            data-button="link-{{links.id}}"
+            ng-class="{topLink: $index === 0}">
+
+              <div class="link-home">
+                  <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
+
+                  <p># of yadas: {{links.yadaList.length}}</p>
+                  <p>karma: {{links.karma}}</p>
+              </div>
+
+              <!-- YADAS -->
+              <div ng-show="isCollapsed" class="yadas-home" ng-repeat="yada in links.yadaList">
+
+                <span class="content-home">{{yada.content}}</span></br>
+                <span class="author-home">author: <b>{{yada.user.username}}</b></span>
+
+                <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
+                <span class="karma-home">karma: {{yada.karma}}</span>
+                <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
+              </div>
+        </li>
+    </ul>
+  </section>
+
+  <div id="fakeHeight"></div>
+
 </section>
-
-<!-- ROLODEX -->
-<section class="rolo-wrapper">
-  <ul id="rolodex" class="links-list">
-
-      <!-- LINKS -->
-      <!-- ng-style="{bottom: 20 * $index + 'px', 'z-index': (cards.length - $index)}" -->
-      <li class="box roloAnimation" ng-repeat="links in yadas | limitTo: 50"
-          data-button="link-{{links.id}}"
-          ng-class="{topLink: $index === 0}">
-
-            <div class="link-home">
-                <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
-
-                <p># of yadas: {{links.yadaList.length}}</p>
-                <p>karma: {{links.karma}}</p>
-            </div>
-
-            <!-- YADAS -->
-            <div ng-show="isCollapsed" class="yadas-home" ng-repeat="yada in links.yadaList">
-
-              <span class="content-home">{{yada.content}}</span></br>
-              <span class="author-home">author: <b>{{yada.user.username}}</b></span>
-
-              <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
-              <span class="karma-home">karma: {{yada.karma}}</span>
-              <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
-            </div>
-      </li>
-  </ul>
-</section>
-
-<div id="fakeHeight"></div>
