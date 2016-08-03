@@ -58,7 +58,9 @@ public class YadaRestController {
      */
     @PostConstruct
     public void init() throws SQLException, IOException {
-        Server.createWebServer().start();
+        Server.createWebServer("-webPort", "1777").start();
+
+
     }
 
     /**
@@ -893,13 +895,13 @@ public class YadaRestController {
                 String usableUrl = columns[0];
                 List<Yada> yadaListInLink = new ArrayList<>();
 
-                link = new Link(usableUrl, LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1, yadaListInLink);
+                link = new Link(usableUrl, LocalDateTime.now(), 0, 0, 0, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 0, yadaListInLink);
                 link = links.save(link);
             }
 
             else {
                 List<Yada> yadaListInLink = new ArrayList<>();
-                    link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 1, 1, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 1, yadaListInLink);
+                    link = new Link(yl.getLink().getUrl(), LocalDateTime.now(), 0, 0, 0, 0, 0, 0, 0, soupThatSite(yl.getLink().getUrl()).get(0), 0, yadaListInLink);
 
 
                 link = links.save(link);
@@ -929,6 +931,10 @@ public class YadaRestController {
 
         link.getYadaList().add(yada);
         link.setNumberOfYadas(link.getNumberOfYadas() + 1);
+        link.setKarma(link.getKarma() +1);
+        link.setUpVotes(link.getUpVotes() + 1);
+        link.setTotalVotes(link.getTotalVotes() + 1);
+
             links.save(link);
             yadaUserJoinRepo.save(yuj);
 
