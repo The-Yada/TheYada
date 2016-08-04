@@ -8,8 +8,8 @@
   margin-bottom: 20px;
   .yada-scrape {
     width: 50%;
-    height: 250px;
-    font-size: 1.2em;
+    height: 350px;
+    font-size: 1.9vw;
     border-right: 3px solid $black;
     overflow: scroll;
     position: relative;
@@ -17,31 +17,34 @@
   .yada-editor {
     border-top: 3px solid $black;
     width: 50%;
-    height: 250px;
+    height: 350px;
     flex-direction: column;
     display: flex;
     justify-content: flex-bottom;
     .editor-text {
       height: 100%;
-      font-size: 1.2em;
+      font-size: 2.5vw;
     }
     .post-button {
       width: 100%;
       height: 50px;
+      font-size: 1.5em;
       background-color: white;
       border: 2px solid black;
       &:hover {
         cursor: pointer;
-        background-color: rgba(0,0,0,0.2);
+        background-color: $yellow;
       }
     }
     .char-count {
+      box-sizing: border-box;
       text-align: center;
       font-size: 1.5em;
       height: 50px;
       margin: 0 auto;
       width: 100%;
       background-color: $white;
+      border: 2px solid black;
     }
   }
 }

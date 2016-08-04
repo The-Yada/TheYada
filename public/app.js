@@ -92,9 +92,8 @@ module.exports = function(app) {
             let tween = TweenMax.to(linkTitle, 1, {opacity: 0, height: "0px"}).reverse();
             let tween2 = TweenMax.fromTo(yada, 1, {opacity: 0, height: '0px'},{opacity: 1, height: '100px'}).reverse();
             toggleYada.addEventListener("click", function() {
-              tween2.reversed(!tween.reversed());
+              tween2.reversed(!tween.reversed()).delay(1);
               tween.reversed(!tween.reversed());
-
             });
 
             button.addEventListener("click", function() {
@@ -150,15 +149,11 @@ module.exports = function(app) {
 
   app.controller('HomeController', ['$scope', '$location', 'YadaService', function($scope, $location, YadaService){
 
-    $scope.isCollapsed = false;
-
     /*******************************
     * show yada
     ********************************/
-    $scope.showMeYada = function() {
-      console.log("toggs");
-      $scope.isCollapsed = !$scope.isCollapsed;
-    }
+    $scope.isCollapsed = [];
+
 
     /*******************************
     * grab the yadas for the ng-repeat in home.html
