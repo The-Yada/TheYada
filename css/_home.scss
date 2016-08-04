@@ -46,32 +46,80 @@
 
 #rolodex li {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   position: absolute;
-  padding: 10px;
   padding-left: 20px;
   width: 60vw;
   height: 230px;
   background: $white;
   box-shadow: 10px 0 15px 5px rgba(0,0,0,0.2);
   color: $black;
-  border-right: 50px solid $yellow;
+  // border-right: 50px solid $yellow;
   border-radius: 20px;
+  overflow: hidden;
   a {
+    margin-left: 10px;
     text-decoration: none;
-    font-size: 2.6vw;
+    font-size: 3vw;
     font-weight: bold;
     // background-color: $black;
     &:visited {
       color: $black;
     }
+    &:hover {
+      color: red !important;
+    }
+  }
+  .rolo-item-btn {
+    display: flex;
+    flex-direction: column;
+    align-items:  center;
+    height: 100%;
+    width: 80px;
+    background: $yellow;
+    border-left: 3px solid $black;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    h5 {
+      margin: 5px;
+      border: 2px solid $black;
+      background-color: $white;
+      border-radius: 5px;
+      text-align: center;
+      padding: 3px;
+    }
+    button {
+      margin: 5px;
+      border: 2px solid $white;
+      background-color: $black;
+      color: $yellow;
+      border-radius: 5px;
+      text-align: center;
+      padding: 3px;
+      cursor: pointer;
+    }
   }
 }
 
+.toggle-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.yadas-home {
+  opacity: 0;
+  height: 0px;
+}
+
 // .topLink {
-//   background-color: $yellow !important;
+//   border: 3px dashed $black;
 //
+// }
+
+// #rolodex li:nth-child(1) {
+//       border: 5px solid $yellow;
 // }
 
 .header-home {
@@ -89,14 +137,12 @@
       border-radius: 10px;
       margin-left: 5px;
       &:hover {
-        text-decoration: underline;
         background-color: rgba(255,255,255,0.3);
       }
     }
   }
   .rolo-btn {
-    font-size: 18px;
-    font-weight: bold;
+    font-family: serif;
     &:hover {
       cursor: pointer;
     }
@@ -140,6 +186,11 @@
   height: 50px;
   display: flex;
   align-items: flex-end;
+  span {
+    background: transparent;
+    border: none;
+    font-size: 2em;
+  }
   button {
     background: transparent;
     border: none;
@@ -151,10 +202,6 @@
   }
 }
 
-// #rolodex li:nth-child(1) {
-//       border: 5px solid $yellow;
-// }
-
 
 .quick-wrapper {
   position: fixed;
@@ -165,7 +212,7 @@
   overflow: scroll;
   width: 360px;
   display: flex;
-  border-right: 5px solid black;
+  border-right: 3px solid $black;
 
   .quick-list {
     margin: 0;
@@ -185,8 +232,15 @@
       }
     }
     .quickie {
+      font-family: 'Ubuntu', sans-serif;
       &:hover {
         transform: translateX(20px);
+        background-color: $white;
+        box-shadow: inset 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+        border: none !important;
+      }
+      &:active {
+        background-color: $yellow;
       }
     }
   }

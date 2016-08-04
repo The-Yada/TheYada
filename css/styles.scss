@@ -2,6 +2,10 @@
 @import "login";
 @import "home";
 
+* {
+  font-family: $font-primary;
+}
+
 body {
   background-color: $blue;
 }

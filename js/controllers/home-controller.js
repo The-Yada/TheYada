@@ -9,6 +9,15 @@ module.exports = function(app) {
   app.controller('HomeController', ['$scope', '$location', 'YadaService', function($scope, $location, YadaService){
 
     $scope.isCollapsed = false;
+
+    /*******************************
+    * show yada
+    ********************************/
+    $scope.showMeYada = function() {
+      console.log("toggs");
+      $scope.isCollapsed = !$scope.isCollapsed;
+    }
+
     /*******************************
     * grab the yadas for the ng-repeat in home.html
     *********************************/

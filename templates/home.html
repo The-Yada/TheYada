@@ -25,17 +25,21 @@
 
     <!-- FITLER BUTTONS -->
     <div class="filterBox">
+      <!-- <span>Filter by =</span> -->
       <button id="hotLinks" ng-click="hot()" type="button" name="hot">Hot</button>
+      <span> ::</span>
       <button id="contLinks" ng-click="controversial()" type="button" name="controversial">Controversial</button>
+      <span> ::</span>
       <button id="newLinks" ng-click="new()" type="button" name="new">New</button>
+      <span> ::</span>
       <button id="topLinks" ng-click="top()" type="button" name="top">Top</button>
     </div>
 
     <!-- TIMELINE CONTROLS -->
   <div class="timeline">
-      <button class="rolo-btn" id="toggle">Toggle</button>
-      <button class="rolo-btn" id="pause">Pause</button>
-      <button class="rolo-btn" id="resume">Resume</button>
+      <button class="rolo-btn" id="toggle">&#10226; &#10227;</button>
+      <button class="rolo-btn" id="pause">&#10073;&#10073;</button>
+      <button class="rolo-btn" id="resume">&#9654;</button>
   </div>
 
   </header>
@@ -55,23 +59,26 @@
         <li class="box roloAnimation" ng-repeat="links in yadas | limitTo: 50"
             data-button="link-{{links.id}}"
             ng-class="{topLink: $index === 0}">
+              <section class="toggle-wrapper">
+                <!-- TITLE -->
+                <div class="link-home" id="linkTitle-{{$index}}">
+                    <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
+                    <p># of yadas: {{links.yadaList.length}}</p>
+                </div>
+                <!-- YADAS -->
+                <div ng-show="isCollapsed" id="yada-{{$index}}" class="yadas-home">
+                  <div class="yadas-content" ng-repeat="yada in links.yadaList | limitTo: 1">
+                    <span class="content-home">{{yada.content}}</span></br>
+                    <span class="author-home">author: <b>{{yada.user.username}}</b></span>
+                  </div>
+                </div>
+              </section>
 
-              <div class="link-home">
-                  <a class="url-home" ng-href="{{links.url}}">{{links.title}}</a></br>
-
-                  <p># of yadas: {{links.yadaList.length}}</p>
-                  <p>karma: {{links.karma}}</p>
-              </div>
-
-              <!-- YADAS -->
-              <div ng-show="isCollapsed" class="yadas-home" ng-repeat="yada in links.yadaList">
-
-                <span class="content-home">{{yada.content}}</span></br>
-                <span class="author-home">author: <b>{{yada.user.username}}</b></span>
-
-                <button ng-click="upIt(yada)" class="up-home" type="button" name="up">up</button>
-                <span class="karma-home">karma: {{yada.karma}}</span>
-                <button ng-click="downIt(yada)" class="down-home" type="button" name="down">down</button>
+              <!-- li aside -->
+              <div class="rolo-item-btn">
+                  <h4># {{$index + 1}}</h4>
+                  <h5>Karma </br><span>{{links.karma}}</span></h5>
+                  <button ng-click="showMeYada()" id="toggleYada-{{$index}}" type="button" name="button" >Yada?</button>
               </div>
         </li>
     </ul>
