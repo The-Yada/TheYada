@@ -165,7 +165,6 @@
     font-size: 2.5em;
     background: rgba(0,0,0,0.2);
     border: none;
-    // border-bottom: 2px solid $white;
   }
   button {
     width: 100%;
@@ -178,6 +177,7 @@
       cursor: pointer;
       border: 1px solid $black;
       font-size: 1.7em;
+      box-shadow: 0 4px 5px 2px rgba(0,0,0,0.2);
     }
   }
 }
@@ -203,7 +203,33 @@
     }
   }
 }
-
+.title {
+  box-sizing: border-box;
+  text-align: center;
+  position: fixed;
+  color: $black;
+  top: 0;
+  left: 0;
+  font-size: 1.5em;
+  margin: 0;
+  background-color: $blue;
+  width: 360px;
+  // padding-top: 20px;
+  padding-left: 0;
+  height: 95px;
+  border-bottom: 3px solid $black;
+  overflow: hidden;
+  z-index: 999;
+  h1 {
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .logo-jelly {
+    padding-top: 10px;
+    width: 60px;
+    height: 60px;
+  }
+}
 
 .quick-wrapper {
   position: fixed;
@@ -211,6 +237,7 @@
   height: 100vh;
   z-index: 100;
   font-size: 1em;
+  // top: 80px;
   overflow: scroll;
   width: 360px;
   display: flex;
@@ -218,9 +245,10 @@
 
   .quick-list {
     margin: 0;
+    margin-top: 140px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     button {
       width: 300px;
       height: 60px;

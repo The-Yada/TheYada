@@ -5,6 +5,8 @@
 <!-- QUICK LIST -->
 
 <section class="quick-wrapper">
+  <div class="title"><h1>The Yada</h1> <img class="logo-jelly" src="assets/yada-jelly.svg" alt="" /></div>
+
   <ol class="quick-list">
     <li class="quickie" ng-repeat="links in yadas | limitTo: 50 ">
       <button id="link-{{links.id}}" type="button" name="quick">{{links.title}}</button>
@@ -19,7 +21,7 @@
 
       <!-- SEARCH BOX -->
       <div class="searchBox">
-        <input class="search" ng-model="searchString" type="text" placeholder="Type to Search">
+        <input class="search" ng-model="searchString" type="text" placeholder="Type to search ... THE YADA">
         <button ng-click="search(searchString)" type="button" name="search">Click to Search</button>
       </div>
 
