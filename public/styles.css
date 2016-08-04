@@ -130,11 +130,12 @@
       border-radius: 10px;
       margin-left: 5px; }
       .header-home .timeline button:hover {
-        background-color: rgba(255, 255, 255, 0.3); }
+        background-color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        background-color: #FFEB00;
+        box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.2); }
   .header-home .rolo-btn {
     font-family: serif; }
-    .header-home .rolo-btn:hover {
-      cursor: pointer; }
 
 .searchBox {
   display: inline-flex;
