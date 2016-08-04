@@ -59,24 +59,61 @@
 
 #rolodex li {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   position: absolute;
-  padding: 10px;
   padding-left: 20px;
   width: 60vw;
   height: 230px;
   background: white;
   box-shadow: 10px 0 15px 5px rgba(0, 0, 0, 0.2);
   color: #171126;
-  border-right: 50px solid #FFEB00;
-  border-radius: 20px; }
+  border-radius: 20px;
+  overflow: hidden; }
   #rolodex li a {
+    margin-left: 10px;
     text-decoration: none;
-    font-size: 2.6vw;
+    font-size: 3vw;
     font-weight: bold; }
     #rolodex li a:visited {
       color: #171126; }
+    #rolodex li a:hover {
+      color: red !important; }
+  #rolodex li .rolo-item-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 80px;
+    background: #FFEB00;
+    border-left: 3px solid #171126;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px; }
+    #rolodex li .rolo-item-btn h5 {
+      margin: 5px;
+      border: 2px solid #171126;
+      background-color: white;
+      border-radius: 5px;
+      text-align: center;
+      padding: 3px; }
+    #rolodex li .rolo-item-btn button {
+      margin: 5px;
+      border: 2px solid white;
+      background-color: #171126;
+      color: #FFEB00;
+      border-radius: 5px;
+      text-align: center;
+      padding: 3px;
+      cursor: pointer; }
+
+.toggle-wrapper {
+  display: flex;
+  flex-direction: column; }
+
+.yadas-home {
+  opacity: 0;
+  height: 0px; }
 
 .header-home {
   z-index: 10;
@@ -93,13 +130,12 @@
       border-radius: 10px;
       margin-left: 5px; }
       .header-home .timeline button:hover {
-        text-decoration: underline;
-        background-color: rgba(255, 255, 255, 0.3); }
+        background-color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        background-color: #FFEB00;
+        box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.2); }
   .header-home .rolo-btn {
-    font-size: 18px;
-    font-weight: bold; }
-    .header-home .rolo-btn:hover {
-      cursor: pointer; }
+    font-family: serif; }
 
 .searchBox {
   display: inline-flex;
@@ -133,6 +169,10 @@
   height: 50px;
   display: flex;
   align-items: flex-end; }
+  .filterBox span {
+    background: transparent;
+    border: none;
+    font-size: 2em; }
   .filterBox button {
     background: transparent;
     border: none;
@@ -150,7 +190,7 @@
   overflow: scroll;
   width: 360px;
   display: flex;
-  border-right: 5px solid black; }
+  border-right: 3px solid #171126; }
   .quick-wrapper .quick-list {
     margin: 0;
     display: flex;
@@ -165,8 +205,15 @@
       box-shadow: 15px 0px 12px -4px rgba(0, 0, 0, 0.2); }
       .quick-wrapper .quick-list button:hover {
         cursor: pointer; }
-    .quick-wrapper .quick-list .quickie:hover {
-      transform: translateX(20px); }
+    .quick-wrapper .quick-list .quickie {
+      font-family: 'Ubuntu', sans-serif; }
+      .quick-wrapper .quick-list .quickie:hover {
+        transform: translateX(20px);
+        background-color: white;
+        box-shadow: inset 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+        border: none !important; }
+      .quick-wrapper .quick-list .quickie:active {
+        background-color: #FFEB00; }
 
 /* custom input slider */
 input[type=range] {
@@ -257,6 +304,9 @@ input[type=range]:focus::-ms-fill-lower {
 
 input[type=range]:focus::-ms-fill-upper {
   background: #99efff; }
+
+* {
+  font-family: "Fugaz One", cursive; }
 
 body {
   background-color: #99efff; }

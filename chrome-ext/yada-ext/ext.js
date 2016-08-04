@@ -421,7 +421,7 @@ module.exports = function(ext) {
       let blankYada = [{
         content: "You should write a Yada for this article.",
         user: {
-          username: "Noone, but it could be you!"
+          username: "It could be you!"
         },
         karma: 0
      }];

@@ -85,11 +85,24 @@ module.exports = function(app) {
 
           function handleClick(element, i) {
             let button = document.querySelector("#" + element.dataset.button);
+            let toggleYada = document.querySelector("#toggleYada-"+ i);
+            let linkTitle = document.querySelector("#linkTitle-"+ i);
+            let yada = document.querySelector("#yada-"+ i);
+
+            let tween = TweenMax.to(linkTitle, 1, {opacity: 0, height: "0px"}).reverse();
+            let tween2 = TweenMax.fromTo(yada, 1, {opacity: 0, height: '0px'},{opacity: 1, height: '100px'}).reverse();
+            toggleYada.addEventListener("click", function() {
+              tween2.reversed(!tween.reversed());
+              tween.reversed(!tween.reversed());
+
+            });
+
             button.addEventListener("click", function() {
-              console.log("hey clickkie");
               tweenTo(i * step);
             });
           }
+
+
 
           function tweenTo(progress) {
             controlTween.pause();
@@ -116,6 +129,7 @@ module.exports = function(app) {
           });
 
 
+
         }
 
 
@@ -137,6 +151,15 @@ module.exports = function(app) {
   app.controller('HomeController', ['$scope', '$location', 'YadaService', function($scope, $location, YadaService){
 
     $scope.isCollapsed = false;
+
+    /*******************************
+    * show yada
+    ********************************/
+    $scope.showMeYada = function() {
+      console.log("toggs");
+      $scope.isCollapsed = !$scope.isCollapsed;
+    }
+
     /*******************************
     * grab the yadas for the ng-repeat in home.html
     *********************************/
