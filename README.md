@@ -23,11 +23,13 @@ This includes :
 ```sh
 $ java -jar TheYada-0.0.1-SNAPSHOT.jar
 ```
-##### note:
+#####note:
 - that the ports are running http://localhost:1776 [website/server]
 - to access the **`H2 database`**, go to http://localhost:1777  
 
-##### for development:
+
+#####for development:
+
 - **npm** install should give you all the dependencies [see the `package.json`]
 ```sh
 $ npm install
