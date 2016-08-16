@@ -56,7 +56,6 @@
   background: $white;
   box-shadow: 10px 0 15px 5px rgba(0,0,0,0.2);
   color: $black;
-  // border-right: 50px solid $yellow;
   border-radius: 20px;
   overflow: hidden;
   a {
@@ -64,7 +63,7 @@
     text-decoration: none;
     font-size: 3vw;
     font-weight: bold;
-    // background-color: $black;
+    color: $black;
     &:visited {
       color: $black;
     }
@@ -107,12 +106,20 @@
   display: flex;
   flex-direction: column;
 }
+.yadas-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .yadas-home {
+    opacity: 0;
+    height: 0px;
+  }
 
-.yadas-home {
-  opacity: 0;
-  height: 0px;
 }
 
+
+// *** if I want to target top link ****
+//
 // .topLink {
 //   border: 3px dashed $black;
 //
@@ -237,7 +244,6 @@
   height: 100vh;
   z-index: 100;
   font-size: 1em;
-  // top: 80px;
   overflow: scroll;
   width: 360px;
   display: flex;

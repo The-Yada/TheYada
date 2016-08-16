@@ -75,7 +75,8 @@
     margin-left: 10px;
     text-decoration: none;
     font-size: 3vw;
-    font-weight: bold; }
+    font-weight: bold;
+    color: #171126; }
     #rolodex li a:visited {
       color: #171126; }
     #rolodex li a:hover {
@@ -111,9 +112,13 @@
   display: flex;
   flex-direction: column; }
 
-.yadas-home {
-  opacity: 0;
-  height: 0px; }
+.yadas-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; }
+  .yadas-content .yadas-home {
+    opacity: 0;
+    height: 0px; }
 
 .header-home {
   z-index: 10;
