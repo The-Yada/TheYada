@@ -7,7 +7,7 @@
     "contentSettings",
     "http://*/*",
     "https://*/*",
-    "http://localhost:1776/*",
+    "http://www.theyada.us/*",
     "tabs",
     "activeTab",
     "contextMenus"

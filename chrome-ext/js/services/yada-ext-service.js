@@ -26,7 +26,7 @@ module.exports = function(ext) {
         ********************************/
         getYadas(extUrl) {
 
-          let currentUrl = 'http://localhost:1776/lemmieSeeTheYadas?url=' + extUrl;
+          let currentUrl = 'http://www.theyada.us/lemmieSeeTheYadas?url=' + extUrl;
           $http({
               url: currentUrl,
               method: 'GET'
@@ -62,7 +62,7 @@ module.exports = function(ext) {
         ********************************/
         scrapeIt(extUrl) {
 
-          let scrapeUrl = 'http://localhost:1776/lemmieYada?url=' + extUrl;
+          let scrapeUrl = 'http://www.theyada.us/lemmieYada?url=' + extUrl;
           $http({
               url: scrapeUrl,
               method: 'GET'
@@ -80,7 +80,7 @@ module.exports = function(ext) {
         upKarma(yada, callback) {
 
             $http({
-              url: 'http://localhost:1776/upVoteExt',
+              url: 'http://www.theyada.us/upVoteExt',
               method: 'POST',
               data: yada
             }).then(function(response){
@@ -102,7 +102,7 @@ module.exports = function(ext) {
         downKarma(yada, callback) {
 
           $http({
-            url: 'http://localhost:1776/downVoteExt',
+            url: 'http://www.theyada.us/downVoteExt',
             method: 'POST',
             data: yada
           }).then(function(response){
@@ -132,7 +132,7 @@ module.exports = function(ext) {
         sendYada(extUrl, yadaText, callback) {
 
           $http({
-            url: "http://localhost:1776/addYada",
+            url: "http://www.theyada.us/addYada",
             method: 'POST',
             data: {
               yada: {content: `${yadaText}`},

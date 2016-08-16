@@ -27,7 +27,7 @@
       let msg = {greeting: "let's reload the ext animation"};
 
       chrome.contentSettings.cookies.set({
-        primaryPattern: "http://localhost:1776/*",
+        primaryPattern: "http://www.theyada.us/*",
         setting: "session_only"
       });
 
