@@ -5,7 +5,7 @@ import com.theironyard.services.UserRepository;
 import com.theironyard.services.YadaRepository;
 import com.theironyard.services.YadaUserJoinRepository;
 import com.theironyard.utils.PasswordStorage;
-//import org.h2.tools.Server;
+import org.h2.tools.Server;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -58,6 +58,7 @@ public class YadaRestController {
      */
     @PostConstruct
     public void init() throws SQLException, IOException {
+        Server.createWebServer("-webPort", "1777").start();
 
 
     }
