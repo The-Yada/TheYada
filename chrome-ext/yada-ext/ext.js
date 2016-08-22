@@ -84,7 +84,7 @@ module.exports = function(ext) {
     * Redirect to Main Website in new tab
     ********************************/
     $scope.toWebsite = function() {
-      let win = window.open("http://localhost:1776", '_blank');
+      let win = window.open("http://www.theyada.us", '_blank');
       win.focus();
     }
 
@@ -273,7 +273,7 @@ module.exports = function(ext) {
         setUser(user) {
 
           $http({
-            url: 'http://localhost:1776/login',
+            url: 'http://www.theyada.us/login',
             method: 'POST',
             data: user
           }).then(function(response) {
@@ -291,7 +291,7 @@ module.exports = function(ext) {
 
         checkLogStatus() {
           $http({
-            url: 'http://localhost:1776/logStatus',
+            url: 'http://www.theyada.us/logStatus',
             method: 'GET'
           }).then(function(response) {
             console.log("user obj check status", response.data);
@@ -331,7 +331,7 @@ module.exports = function(ext) {
         ********************************/
         getYadaUserJoinList() {
           $http({
-            url: 'http://localhost:1776/yadaUserJoinList',
+            url: 'http://www.theyada.us/yadaUserJoinList',
             method: 'GET'
           }).then(function(response) {
             console.log("yuj-list get", response.data);
@@ -350,7 +350,7 @@ module.exports = function(ext) {
         * Return yada user join list
         ********************************/
         getUserVotingState(id) {
-            statusUrl = `http://localhost:1776/voteStatus${id}`
+            statusUrl = `http://www.theyada.us/voteStatus${id}`
           $http({
             url: statusUrl,
             method: 'GET'
@@ -378,7 +378,7 @@ module.exports = function(ext) {
         ********************************/
         clearSession() {
           $http({
-            url: 'http://localhost:1776/logout',
+            url: 'http://www.theyada.us/logout',
             method: 'POST',
             data: {
               user: userObj,
@@ -433,7 +433,7 @@ module.exports = function(ext) {
         ********************************/
         getYadas(extUrl) {
 
-          let currentUrl = 'http://localhost:1776/lemmieSeeTheYadas?url=' + extUrl;
+          let currentUrl = 'http://www.theyada.us/lemmieSeeTheYadas?url=' + extUrl;
           $http({
               url: currentUrl,
               method: 'GET'
@@ -469,7 +469,7 @@ module.exports = function(ext) {
         ********************************/
         scrapeIt(extUrl) {
 
-          let scrapeUrl = 'http://localhost:1776/lemmieYada?url=' + extUrl;
+          let scrapeUrl = 'http://www.theyada.us/lemmieYada?url=' + extUrl;
           $http({
               url: scrapeUrl,
               method: 'GET'
@@ -487,7 +487,7 @@ module.exports = function(ext) {
         upKarma(yada, callback) {
 
             $http({
-              url: 'http://localhost:1776/upVoteExt',
+              url: 'http://www.theyada.us/upVoteExt',
               method: 'POST',
               data: yada
             }).then(function(response){
@@ -509,7 +509,7 @@ module.exports = function(ext) {
         downKarma(yada, callback) {
 
           $http({
-            url: 'http://localhost:1776/downVoteExt',
+            url: 'http://www.theyada.us/downVoteExt',
             method: 'POST',
             data: yada
           }).then(function(response){
@@ -539,7 +539,7 @@ module.exports = function(ext) {
         sendYada(extUrl, yadaText, callback) {
 
           $http({
-            url: "http://localhost:1776/addYada",
+            url: "http://www.theyada.us/addYada",
             method: 'POST',
             data: {
               yada: {content: `${yadaText}`},

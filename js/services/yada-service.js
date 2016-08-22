@@ -40,7 +40,7 @@ module.exports = function(app) {
         ********************************/
         getTopYadas() {
           $http({
-              url: '/theYadaList',
+              url: 'http://www.theyada.us/theYadaList',
               method: 'GET'
             }).then(function(response){
               yadas = response.data;
@@ -55,7 +55,7 @@ module.exports = function(app) {
         upKarma(yada, callback) {
 
             $http({
-              url: '/upVote',
+              url: 'http://www.theyada.us/upVote',
               method: 'POST',
               data: yada
             }).then(function(response){
@@ -72,7 +72,7 @@ module.exports = function(app) {
         downKarma(yada, callback) {
 
           $http({
-            url: '/downVote',
+            url: 'http:/www.theyada.us/downVote',
             method: 'POST',
             data: yada
           }).then(function(response){
@@ -102,7 +102,7 @@ module.exports = function(app) {
               // ** authors returns hashmap of username and arraylist of yadas
               // let authorSearchUrl = `/searchAuthors?searchInput=${searchString}`;
 
-            let titleSearchUrl = `/searchTitles?searchInput=${searchString}`;
+            let titleSearchUrl = `http://www.theyada.us/searchTitles?searchInput=${searchString}`;
             $http({
                 url: titleSearchUrl,
                 method: 'GET'
@@ -120,7 +120,7 @@ module.exports = function(app) {
         * filter requests
         ********************************/
         filter(sortStyle) {
-          let filterUrl = `/${sortStyle}Links`;
+          let filterUrl = `http://www.theyada.us/${sortStyle}Links`;
 
           $http({
               url: filterUrl,
